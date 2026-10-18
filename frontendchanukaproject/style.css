@@ -261,3 +261,29 @@ button{ font-family: inherit; cursor: pointer; }
   .product-card{ height: 295px; }
   .products-image{ height: 120px; }
 }
+/* FIX LOGIN/SIGNUP BUTTONS */
+.nav {
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+.nav a {
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+}
+.nav a[href*="login"], .nav a[href*="signin"] {
+  border: 1px solid rgba(255,255,255,0.7);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+.nav a[href*="signup"], .nav a[href*="register"] {
+  background: #EAB308;
+  color: #111827 !important;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+@media(max-width: 900px){
+  .nav { gap: 8px; padding: 12px; }
+  .nav a { width: 100%; text-align: center; padding: 10px; }
+}
