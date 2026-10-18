@@ -209,7 +209,41 @@ button{ font-family: inherit; cursor: pointer; }
 .add-to-cart{
   border: none; background-color: #2e37d1; color: white; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 12px;
 }
-
+/* FOOTER - RESTORED ORIGINAL */
+.footer{
+  background:#111827;
+  color:#ddd;
+  padding:40px 20px 20px;
+  margin-top:50px;
+}
+.footer-container{
+  max-width:1280px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:25px;
+}
+.footer-col h4{ color:#fff; margin-bottom:10px; font-size: 15px; }
+.footer-col a{ display:block; color:#aaa; text-decoration:none; margin:5px 0; font-size: 13px; }
+.footer-col a:hover{ color:#FFD700; }
+.footer-bottom{
+  border-top:1px solid #333;
+  margin-top:30px;
+  padding-top:15px;
+  text-align:center;
+  color:#888;
+  font-size: 12px;
+}
+.sell{
+  padding-top: 80px;
+  margin-top: -20px;
+}
+@media(max-width:800px){
+  .footer-container{ grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width:500px){
+  .footer-container{ grid-template-columns: 1fr; }
+}
 /* MOBILE FIXES */
 @media (max-width: 900px) {
   .nav{
