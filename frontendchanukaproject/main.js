@@ -245,11 +245,13 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         checkoutBtn.textContent = "Sending...";
         checkoutBtn.disabled = true;
         showToast("Sending STK push to " + normalized + "...");
-        const res = await fetch('https://backendchanuka.onrender.com/api/stkpush', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: normalized, amount: Math.round(totalPrice) || 1 })
-        });
+    const BACKEND_URL = "https://backendchanuka.onrender.com";
+
+const res = await fetch(`${BACKEND_URL}/api/stkpush`, {
+  method: "POST",
+  headers: {"Content-Type":"application/json"},
+  body: JSON.stringify({ phone: normalized, amount: totalPrice })
+});
         const data = await res.json();
         console.log("Server response:", data);
         if (data.ResponseCode == '0' || data.ResponseCode == 0) {
@@ -260,7 +262,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         }
     } catch (err) {
         console.error(err);
-        showToast("Cannot connect to backend. Is node server.js running on port 3000?");
+  showToast("Cannot connect to Render backend. Error: " + err.message);
     } finally {
         checkoutBtn.textContent = originalText;
         checkoutBtn.disabled = false;
