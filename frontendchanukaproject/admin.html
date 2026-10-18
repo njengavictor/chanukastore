@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Chanuka</title>
+<style>
+body{font-family:Arial;background:#eef1f5;margin:0}
+.box{max-width:420px;margin:80px auto;background:#fff;padding:30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:center}
+.box input{width:100%;padding:14px;margin:15px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box}
+.box button{width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
+#panel{display:none}
+.header{background:#000;color:#fff;padding:15px;display:flex;justify-content:space-between}
+.card{background:#fff;margin:10px;padding:15px;border-radius:10px}
+</style>
+</head>
+<body>
+
+<div id="loginDiv" class="box">
+<h2>Chanuka Admin Only</h2>
+<p>Enter admin key to continue</p>
+<input type="password" id="key" placeholder="Chanuka2026Admin">
+<button onclick="doLogin()">Login</button>
+<p style="font-size:12px;color:#999;margin-top:15px">Default key: Chanuka2026Admin</p>
+<a href="index.html">← Back to shop</a>
+</div>
+
+<div id="panel">
+<div class="header"><b>Chanuka Dashboard</b><button onclick="doLogout()" style="background:#333;color:#fff;border:none;padding:8px;border-radius:6px">Logout</button></div>
+<div style="padding:15px">
+<div style="display:flex;gap:10px">
+<div class="card" style="flex:1"><b id="total">0</b><br>Total</div>
+<div class="card" style="flex:1"><b id="pending">0</b><br>Pending</div>
+<div class="card" style="flex:1"><b id="approved">0</b><br>Approved</div>
+</div>
+<div class="card"><h3>Seller Requests</h3><div id="list">Loading...</div></div>
+</div>
+</div>
+
+<script>
+function doLogin(){
+  var k = document.getElementById("key").value;
+  if(k === "Chanuka2026Admin"){
+    localStorage.setItem("admin_ok","yes");
+    showPanel();
+  } else {
+    alert("Wrong key! Type: Chanuka2026Admin");
+  }
+}
+function showPanel(){
+  document.getElementById("loginDiv").style.display="none";
+  document.getElementById("panel").style.display="block";
+  load();
+}
+function doLogout(){
+  localStorage.removeItem("admin_ok");
+  location.reload();
+}
+function load(){
+  var sellers = JSON.parse(localStorage.getItem("chanuka_sellers") || "[]");
+  document.getElementById("total").innerText = sellers.length;
+  document.getElementById("pending").innerText = sellers.filter(s=>s.status=="pending").length;
+  document.getElementById("approved").innerText = sellers.filter(s=>s.status=="approved").length;
+  var list = document.getElementById("list");
+  if(sellers.length==0){ list.innerHTML="No sellers yet. Go to sell.html and submit a test."; return; }
+  list.innerHTML = sellers.map((s,i)=>`<div style="border-bottom:1px solid #eee;padding:10px 0"><b>${s.name}</b> - ${s.product} - KSH ${s.price}<br><small>${s.phone} | ${s.status}</small><br><button onclick="approve(${i})" style="margin-top:5px;padding:6px 10px;background:#25D366;color:#fff;border:none;border-radius:6px">Approve</button> <button onclick="del(${i})" style="padding:6px 10px;background:red;color:#fff;border:none;border-radius:6px">Delete</button> <a href="https://wa.me/254${s.phone.slice(-9)}" target="_blank" style="padding:6px 10px;background:#0a58ff;color:#fff;text-decoration:none;border-radius:6px">WhatsApp</a></div>`).join("");
+}
+function approve(i){
+  var sellers = JSON.parse(localStorage.getItem("chanuka_sellers") || "[]");
+  sellers[i].status="approved";
+  localStorage.setItem("chanuka_sellers", JSON.stringify(sellers));
+  load();
+}
+function del(i){
+  var sellers = JSON.parse(localStorage.getItem("chanuka_sellers") || "[]");
+  sellers.splice(i,1);
+  localStorage.setItem("chanuka_sellers", JSON.stringify(sellers));
+  load();
+}
+if(localStorage.getItem("admin_ok")==="yes"){ showPanel(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chanuka Market Store</title>
+
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu">
+
+  
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  
+    <header class="header">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <a href="#home">
+                Chanuka<span>-market-store</span>
+            </a>
+        </div>
+        <header style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10">
+  <b>Marketplace</b>
+  <div> <div class="auth-wrap">
+    <a href="login.html" class="btn-login">
+      <i class="fa-solid fa-right-to-bracket"></i> Log In
+    </a>
+    <a href="register.html" class="btn-signup">
+      <i class="fa-solid fa-user-plus"></i> Sign Up
+    </a>
+  </div>
+</header>
+
+
+        <nav class="nav" id="nav">
+
+            <a href="#home">Home</a>
+
+            <a href="#products">Products</a>
+
+            <a href="#categories">Categories</a>
+
+            <a href="#sell">Sell Products</a>
+
+            <a href="#about">About</a>
+            <nav>
+       
+        </nav>
+
+        </nav>
+
+
+
+        <div class="header-actions">
+
+            <!-- CART -->
+            <button class="cart-button" id="cart-button">
+                Cart
+                <span id="cartcount">0</span>
+            </button>
+
+            <button class="menu-button" id="menuButton">
+
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+
+            </button>
+  
+        </div>
+
+    </header>
+
+
+
+    
+    <main>
+<section class="hero" id="home">
+    <div class="hero-content">
+<h2>welcome To Chanuka Market Store</h2>
+<h3>Buy And sell Your Products <span>Near You</span></h3>
+
+<p>
+    Discover wide range of products from people around you affordable prices and guarateed quality <br>BEI YAKO BEI POA!!
+</p>
+<div class="heroBtn">
+
+    <a href="#products" class="makebtn">Browse products</a>
+    <a href="sell.html" class="sellbtn">Sell Your Products</a>
+    <nav>
+</nav>
+</div>
+
+    </div>
+
+<section class="searchsection">
+
+    <div class="search-box">
+        <input 
+        type="search" id="searchinput"
+        placeholder="Search for products"
+        aria-label="search products"
+        >
+ <button id="searchButon">search</button>
+    </div>
+</section>
+
+<!--category section-->
+<section class="categories" id="categories">
+<div class="section-heading">
+
+    <p>Shop By Categories</p>
+    <h3>Explore Categories</h3>
+</div>
+
+<div class="category-buttons">
+    <button class="category-btn active" data-category="All">
+        All
+    </button>
+
+    <button class="category-btn" data-category="Electronics">
+        Electronics
+    </button>
+
+    <button class="category-btn" data-category="Fashion">
+        Fashion
+    </button>
+
+    <button class="category-btn" data-category="Beauty products">
+        Beauty products
+    </button>  
+
+     <button class="category-btn" data-category="Food Stuff">
+        Food Stuff
+    </button>
+
+    <button class="category-btn" data-category="Furniture">
+        Furniture
+    </button>
+
+    
+    <button class="category-btn" data-category="Books & Stationery">
+      Books & Stationery
+    </button>
+
+      <button class="category-btn" data-category="Jewlry & Watches">
+      Jewlry & Watches
+    </button>
+
+     <button class="category-btn" data-category="Groceries & household">
+      Groceries & household
+    </button>
+
+    <button class="category-btn" data-category="Liquor & Dinks">
+      Liquor & Dinks
+    </button>
+
+    
+    <button class="category-btn" data-category="Other Accessories">
+      Other Accessories
+    </button>
+
+</div>
+
+</section>
+<section class="products.section" id="products">
+    <div class="section-heading">
+        <p>Products In The Market</p>
+        <h2>Featured Products</h2>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+        <div
+        class="product-card"
+        data-category="Electronics"
+        data-name="Vitron V619-12 3.1CH Sub Woofer System"
+        >
+
+   <div class="products-image">
+           <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/91/6253723/1.jpg?5227" alt="Vitron V619-12 3.1CH Sub Woofer
+            System ">
+
+            <button class="favorite-button">
+                   ❤️
+            </button>
+
+          
+
+        </div>
+        <div class="product-information">
+            <p class="product-category">
+                Electronics
+            </p>
+            <h3>Vitron V619-12 3.1CH Sub Woofer System</h3>
+            <p class="product-description">
+           
+ Vitron V619-12 3.1CH Sub Woofer System Sorround Sound Multimedia Speaker System with Super Bass and Quality Stereo
+ Brand: Vitron 
+            </p>
+
+        </div>
+
+        <div class="product-button">
+            <strong>KSh 5,199
+  
+    </strong>
+
+      <button
+      class="add-to-cart"
+      data-name="Vitron V619-12 3.1CH Sub Woofer System"
+      data-price="KSh 5199"
+      >
+        Add to cart
+
+      </button>
+
+        </div>
+
+
+       
+    </div>
+    <!--product 2-->
+        <div
+        class="product-card"
+        data-category="Furniture"
+        data-name="Home Office Set"
+        >
+
+   <div class="products-image">
+           <img src="https://kentyfurnitures.co.ke/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-04-at-9.06.37-AM.jpeg" alt="Vitron V619-12 3.1CH Sub Woofer
+            System ">
+
+            <button class="favorite-button">
+                   ❤️
+            </button>
+
+          
+
+        </div>
+        <div class="product-information">
+            <p class="product-category">
+                Furniture
+            </p>
+            <h3>Home Office Set</h3>
+            <p class="product-description">
+           
+  home office set creates a productive and stylish home office. Order yours today and start working from home in comfort and style. 
+            </p>
+
+        </div>
+
+        <div class="product-button">
+            <strong>KSh 18,500.00
+  
+    </strong>
+
+      <button
+      class="add-to-cart"
+      data-name="Home Office Set"
+      data-price="KSh 18,500.00"
+      >
+        Add to cart
+
+      </button>
+
+        </div>
+
+       
+    </div>
+        <div
+        class="product-card"
+        data-category="Liquor & Dinks"
+        data-name="Home Office Set"
+        >
+
+   <div class="products-image">
+           <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/47/283585/1.jpg?6599">
+
+            <button class="favorite-button">
+                   ❤️
+            </button>
+
+          
+
+        </div>
+        <div class="product-information">
+            <p class="product-category">
+               Liquor & Dinks
+            </p>
+            <h3>Liquor & Dinks</h3>
+            <p class="product-description">
+           
+  Jameson Irish whiskey is a triple-distilled blended Irish whiskey, as versatile as it is smooth. Whiskey like Jameson isn't just born smooth and balanced. 
+  First, we take the best of pot still and fine grain whiskeys. Then we triple distil them.
+            </p>
+
+        </div>
+
+        <div class="product-button">
+            <strong>KSh 3,199
+  
+    </strong>
+
+      <button
+      class="add-to-cart"
+      data-name="Liquor & Dinks"
+      data-price="KSh 3,199"
+      >
+        Add to cart
+
+      </button>
+      
+
+        </div>
+
+       
+    </div>
+ </div>
+
+
+
+</section>
+
+
+    </main>
+
+
+
+    <footer class="footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h3 style="color:#FFD700;">Chanuka-market-store</h3>
+      <p>Affordable products for students, families and businesses in Rongai & Gataka. M-Pesa & Cash on Delivery.</p>
+      <div class="socials">FB | its_Victo_r| WhatsApp | TikTok</div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="#">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">FAQs</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <a href="#">Electronics</a>
+      <a href="#">Fashion</a>
+      <a href="#">Furniture</a>
+      <a href="#">Groceries</a>
+      <a href="#">Jewelry & Watches</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Help & Contact</h4>
+      <p>📍 Rongai, Nairobi, Kenya</p>
+      <p>📞 +254 114 044 517</p>
+      <p>✉️ njengavictor@92.gmai.com</p>
+      <p>🕒 Mon-Sat 8am-8pm</p>
+      <a href="#">Shipping Policy</a>
+      <a href="#">Return Policy</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Chanuka Market Store. All Rights Reserved | Pay with M-Pesa | Cash on Delivery Available</p>
+  </div>
+</footer>
+<script src="main.js"></script>
+</body>
+</body>
+</html>
+
