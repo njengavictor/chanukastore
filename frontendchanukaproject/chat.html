@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Seller - Chanuka Market Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        chanuka: {
+                            blue: '#2563eb',
+                            darkblue: '#1e40af',
+                            yellow: '#f59e0b',
+                            green: '#10b981',
+                            mpesa: '#00a859',
+                            dark: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-100 font-sans min-h-full flex flex-col transition-colors duration-200">
+
+    <!-- Header Navigation -->
+    <header class="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Brand Link back to index.html -->
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="bg-chanuka-blue group-hover:bg-blue-700 transition-colors text-white p-2 rounded-xl shadow-md font-bold text-xl flex items-center justify-center w-10 h-10">
+                        <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-0.5 transition-transform"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-black tracking-tight text-chanuka-blue dark:text-blue-400">Chanuka</span>
+                        <span class="text-xl font-black text-chanuka-yellow dark:text-yellow-400">-market</span>
+                        <span class="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/40 text-chanuka-mpesa dark:text-green-400 border border-green-200 dark:border-green-800 ml-2">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> M-Pesa Escrow Active
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Right Utility Controls -->
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-chanuka-blue dark:hover:text-blue-400 flex items-center gap-1">
+                        <i class="fa-solid fa-store"></i> Back to Store
+                    </a>
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                        <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Main Chat Workspace -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full space-y-6">
+
+        <!-- Dynamic Product Context Card & Order Tracker Header -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 dark:border-slate-700 pb-4">
+                <div class="flex items-center space-x-4">
+                    <div class="relative w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 dark:bg-slate-700 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 dark:border-slate-600">
+                        <img id="product-img" src="https://placehold.co/150x150/1e293b/ffffff?text=Product" alt="Product Thumbnail" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <span id="order-id-tag" class="text-xs font-semibold uppercase tracking-wider text-chanuka-blue dark:text-blue-400">Order #CHK-8841</span>
+                        <h2 id="product-title" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Loading product...</h2>
+                        <p class="text-sm font-semibold text-chanuka-mpesa dark:text-green-400">
+                            KSh <span id="product-price">0</span> <span class="text-xs font-normal text-gray-500 dark:text-gray-400">(Paid via M-Pesa Escrow)</span>
+                        </p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Seller: <strong id="seller-name" class="text-gray-700 dark:text-gray-300">Merchant Store</strong></p>
+                    </div>
+                </div>
+
+                <!-- Quick Interactive Escrow Buttons -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="openOtpModal()" class="flex-1 sm:flex-none px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold transition-all shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-key"></i> Show Delivery OTP
+                    </button>
+                    <button onclick="sendLocationPin()" class="flex-1 sm:flex-none px-3 py-2 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-location-dot text-red-500"></i> Share Location
+                    </button>
+                    <button onclick="openDisputeModal()" class="px-3 py-2 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Raise Dispute
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Order Status Progress Stepper -->
+            <div class="pt-4">
+                <div class="flex justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                    <span>1. Order Placed</span>
+                    <span>2. Escrow Locked</span>
+                    <span id="step3-label" class="text-chanuka-blue dark:text-blue-400 font-bold">3. Dispatched</span>
+                    <span id="step4-label">4. Delivered & Released</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 via-chanuka-yellow to-chanuka-mpesa h-full rounded-full transition-all duration-500" style="width: 75%;"></div>
+                </div>
+                <div class="flex justify-between items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-green-500"></i> Funds Held in Chanuka M-Pesa Vault</span>
+                    <span id="order-status-tag" class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300">
+                        In Transit
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat History Window -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-700 flex flex-col h-[520px]">
+            <!-- Chat Header -->
+            <div class="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between bg-gray-50/50 dark:bg-slate-800/50 rounded-t-2xl">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <div id="seller-avatar" class="w-10 h-10 rounded-full bg-chanuka-blue text-white font-bold flex items-center justify-center shadow">
+                            S
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></span>
+                    </div>
+                    <div>
+                        <h3 id="seller-chat-title" class="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-1.5">
+                            Verified Seller
+                            <i class="fa-solid fa-circle-check text-chanuka-blue text-xs" title="Verified Merchant"></i>
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Replies within ~5 mins • Rongai & Nairobi Hub</p>
+                    </div>
+                </div>
+                
+                <!-- Safety Banner -->
+                <div class="hidden sm:flex items-center gap-2 text-xs bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 px-3 py-1.5 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <i class="fa-solid fa-shield-cat text-amber-500"></i>
+                    <span>Never pay off-platform or share your M-Pesa PIN.</span>
+                </div>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="chat-box" class="flex-grow p-4 overflow-y-auto space-y-4 bg-gray-50/30 dark:bg-slate-900/20">
+                <div class="text-center my-2">
+                    <span class="text-[11px] font-medium text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+                        Chanuka Escrow Chat Protected
+                    </span>
+                </div>
+
+                <!-- System Lock Notification -->
+                <div class="flex justify-center">
+                    <div class="bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 text-blue-800 dark:text-blue-300 text-xs px-4 py-2 rounded-xl text-center max-w-md shadow-sm">
+                        <i class="fa-solid fa-lock text-chanuka-blue mr-1"></i>
+                        <strong>Payment Secured:</strong> Payment is held safely in Chanuka Escrow. Release payment only after inspecting your item.
+                    </div>
+                </div>
+
+                <!-- Dynamic Chat Container -->
+                <div id="dynamic-messages" class="space-y-4"></div>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div class="p-3 sm:p-4 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-b-2xl">
+                <form onsubmit="handleBuyerSend(event)" class="flex items-center gap-2">
+                    <button type="button" onclick="triggerMockPhotoUpload()" class="p-2.5 text-gray-500 hover:text-chanuka-blue dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-xl transition-all" title="Attach file or photo">
+                        <i class="fa-solid fa-paperclip text-lg"></i>
+                    </button>
+                    <input id="chat-input" type="text" placeholder="Type a message to seller..." class="flex-grow bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-chanuka-blue border-transparent transition-all">
+                    <button type="submit" class="bg-chanuka-blue hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md flex items-center justify-center">
+                        <span class="hidden sm:inline mr-1">Send</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delivery Confirmation Card -->
+        <div class="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl bg-chanuka-mpesa text-white flex items-center justify-center text-xl font-bold flex-shrink-0">
+                    <i class="fa-solid fa-truck-ramp-box"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">Has your order arrived?</h4>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">Inspect the item thoroughly. Confirm delivery here or give your 4-digit OTP to the courier.</p>
+                </div>
+            </div>
+            <button id="confirm-delivery-btn" onclick="confirmBuyerDelivery()" class="w-full sm:w-auto px-5 py-2.5 bg-chanuka-mpesa hover:bg-green-700 text-white text-sm font-bold rounded-xl shadow-md transition-all whitespace-nowrap">
+                <i class="fa-solid fa-check-circle mr-1.5"></i> Confirm Delivery & Release Payment
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 py-6 mt-12 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 dark:text-gray-400 space-y-2">
+            <p><strong>Chanuka-market-store</strong> • Rongai, Gataka & Nairobi Metropolis Escrow Protection Platform</p>
+        </div>
+    </footer>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL DIALOGS                              -->
+    <!-- ========================================== -->
+
+    <!-- 1. Delivery OTP Modal -->
+    <div id="modal-otp" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-sm w-full border border-gray-200 dark:border-slate-700 shadow-2xl text-center space-y-4">
+            <div class="w-16 h-16 bg-amber-100 dark:bg-amber-950/60 text-amber-500 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
+                <i class="fa-solid fa-shield-keyhole"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-black text-gray-900 dark:text-white">Delivery Verification OTP</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Show this code to the seller/courier only after inspecting your item.</p>
+            </div>
+
+            <!-- OTP Code Display -->
+            <div class="bg-gray-100 dark:bg-slate-700 p-4 rounded-2xl border-2 border-dashed border-amber-500">
+                <span id="otp-display-code" class="text-4xl font-mono font-black tracking-widest text-amber-600 dark:text-amber-400">---</span>
+            </div>
+
+            <p class="text-[11px] text-gray-400"><i class="fa-solid fa-lock text-chanuka-mpesa mr-1"></i> Giving this PIN authorizes instant payment release to the seller.</p>
+
+            <button onclick="closeOtpModal()" class="w-full py-2.5 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 rounded-xl text-sm font-bold hover:bg-gray-300">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. Raise Dispute Modal -->
+    <div id="modal-dispute" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-md w-full border border-gray-200 dark:border-slate-700 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-red-600 dark:text-red-400 flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Freeze Escrow & Report Issue
+                </h3>
+                <button onclick="closeDisputeModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-gray-600 dark:text-gray-300">This will halt payment release to the seller and request Admin review.</p>
+
+            <div class="space-y-3">
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300">Reason for Dispute</label>
+                <select id="dispute-reason" class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl p-2.5 text-xs text-gray-900 dark:text-white">
+                    <option>Item Damaged or Defective</option>
+                    <option>Missing Accessories or Parts</option>
+                    <option>Wrong Product Delivered</option>
+                    <option>Seller Did Not Show Up</option>
+                </select>
+
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300">Additional Details</label>
+                <textarea id="dispute-details" rows="3" placeholder="Describe what went wrong..." class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl p-2.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+            </div>
+
+            <div class="flex items-center gap-2 pt-2">
+                <button onclick="submitDisputeForm()" class="flex-grow py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold shadow transition-all">
+                    Submit & Freeze Funds
+                </button>
+                <button onclick="closeDisputeModal()" class="px-4 py-2.5 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-xl text-xs font-semibold">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Global Product Chat State
+        let productData = {
+            product: "Product",
+            price: "0",
+            seller: "Seller",
+            image: "https://placehold.co/150x150/1e293b/ffffff?text=Product",
+            orderId: "#CHK-" + Math.floor(1000 + Math.random() * 9000),
+            otp: Math.floor(1000 + Math.random() * 9000).toString(),
+            status: "Dispatched"
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initUrlParams();
+            initTheme();
+        });
+
+        // Parse URL Query Parameters dynamically
+        function initUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            
+            if (params.has('product')) productData.product = params.get('product');
+            if (params.has('price')) productData.price = params.get('price');
+                if (params.has('seller'))
+        }
