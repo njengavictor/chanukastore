@@ -6,6 +6,22 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Allow your Vercel frontend URL (No trailing slashes!)
+app.use(cors({
+  origin: ['https://chanukamarket-three.vercel.app', 'http://localhost:5173'],
+  credentials: true
+}));
+
+app.use(express.json());
+
+// Simple health check route so hitting https://backendchanuka.onrender.com doesn't show "Cannot GET /"
+app.get('/', (req, res) => {
+  res.send('Backend API is running!');
+});
 
 // SECURITY 1: Hide headers
 app.use(helmet());
