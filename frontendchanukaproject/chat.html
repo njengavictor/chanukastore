@@ -55,11 +55,10 @@
     </main>
 
     <script>
-        // Supabase Connection
-        const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-        const SUPABASE_KEY = "YOUR_ANON_KEY";
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+      // Replace with your actual Supabase Project URL and Anon Key
+const SUPABASE_URL = "https://your-project-id.supabase.co";
+const SUPABASE_KEY = "your-supabase-anon-key";
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         // Parse URL Parameters
         const params = new URLSearchParams(window.location.search);
         const productName = params.get('product') || 'Selected Goods';
