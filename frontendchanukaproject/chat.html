@@ -133,16 +133,23 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             box.scrollTop = box.scrollHeight;
         }
 
-        // Send Message Handler
-        document.getElementById('chat-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text || !chatId) return;
+       // Send Message Handler
+document.getElementById('chat-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || !chatId) return;
 
-            input.value = '';
-            await supabase.from('messages').insert([{ chat_id: chatId, sender: 'buyer', text }]);
-        });
+    input.value = '';
+    
+    // Check if current user is admin or buyer (you can adjust this based on your auth profile)
+    const senderRole = new URLSearchParams(window.location.search).get('role') === 'admin' ? 'admin' : 'buyer';
+
+    await supabase.from('messages').insert([{ chat_id: chatId, sender: senderRole, text }]);
+    
+    // Update last message in chat summary
+    await supabase.from('chats').update({ last_message: text }).eq('id', chatId);
+});
 
         initChat();
     </script>
