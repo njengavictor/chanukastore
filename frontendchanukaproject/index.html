@@ -14,6 +14,7 @@
 
   
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -28,18 +29,52 @@
             </a>
         </div>
         <header style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10">
-  <b>Marketplace</b>
-  <div> <div class="auth-wrap">
-    <a href="login.html" class="btn-login">
-      <i class="fa-solid fa-right-to-bracket"></i> Log In
-    </a>
-    <a href="register.html" class="btn-signup">
-      <i class="fa-solid fa-user-plus"></i> Sign Up
-       
-    </a>
-  </div>
  
-  </div>
+<a href="#products">Marketplace</a>
+<div class="auth-wrap">
+  <a href="login.html" class="btn-login">Log In</a>
+  <a href="register.html" class="btn-signup">Sign Up</a>
+</div>
+</div>
+
+  <style>
+  .auth-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn-login {
+    padding: 8px 18px;
+    border: 1.5px solid #111;
+    border-radius: 25px;
+    color: #fdf8f8;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+    background: #6366f1;
+  }
+  .btn-login:hover {
+    background: #111;
+    color: #fff;
+  }
+  .btn-signup {
+    padding: 8px 20px;
+    background: #EAB308;
+    border: 1.5px solid #EAB308;
+    border-radius: 25px;
+    color: #111;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .btn-signup:hover {
+    background: #111;
+    color: #EAB308;
+    border-color: #111;
+  }
+</style>
 </header>
 
 
@@ -207,7 +242,7 @@
            
  Vitron V619-12 3.1CH Sub Woofer System Sorround Sound Multimedia Speaker System with Super Bass and Quality Stereo
  Brand: Vitron 
-            </p>
+        </p>
 
         </div>
 
@@ -244,9 +279,7 @@
             <button class="favorite-button">
                    ❤️
             </button>
-
-          
-
+            
         </div>
         <div class="product-information">
             <p class="product-category">
@@ -256,7 +289,9 @@
             <p class="product-description">
            
   home office set creates a productive and stylish home office. Order yours today and start working from home in comfort and style. 
+           
             </p>
+
 
         </div>
 
@@ -290,10 +325,10 @@
             <button class="favorite-button">
                    ❤️
             </button>
-
-          
+            
 
         </div>
+        
         <div class="product-information">
             <p class="product-category">
                Liquor & Dinks
@@ -304,6 +339,8 @@
   Jameson Irish whiskey is a triple-distilled blended Irish whiskey, as versatile as it is smooth. Whiskey like Jameson isn't just born smooth and balanced. 
   First, we take the best of pot still and fine grain whiskeys. Then we triple distil them.
             </p>
+            
+
 
         </div>
 
@@ -311,6 +348,7 @@
             <strong>KSh 3,199
   
     </strong>
+    
 
       <button
       class="add-to-cart"
@@ -341,7 +379,7 @@
   <div class="footer-container">
     <div class="footer-col">
       <h3 style="color:#FFD700;">Chanuka-market-store</h3>
-      <p>Affordable products for students, families and businesses in Rongai & Gataka. M-Pesa & Cash on Delivery.</p>
+      <p>Affordable products for students, families and businesses in Rongai,Gataka & selected areas. M-Pesa & Cash on Delivery.</p>
       <div class="socials">FB | its_Victo_r| WhatsApp | TikTok</div>
     </div>
 
