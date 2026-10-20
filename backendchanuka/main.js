@@ -245,7 +245,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         checkoutBtn.textContent = "Sending...";
         checkoutBtn.disabled = true;
         showToast("Sending STK push to " + normalized + "...");
-        const res = await fetch('chanukamarket-three.vercel.app', {
+        const res = await fetch('https://chanukamarket.onrender.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: normalized, amount: Math.round(totalPrice) || 1 })
