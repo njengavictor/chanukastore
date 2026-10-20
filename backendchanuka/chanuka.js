@@ -69,7 +69,7 @@ app.post("/stkpush", async (req,res)=>{
       PartyA: phone,
       PartyB: shortCode,
       PhoneNumber: phone,
-      CallBackURL: "https://mydomain.com/callback", // Must be https://
+      CallBackURL: "https://chanukamarket-three.vercel.app/callback", // Must be https://
       AccountReference: "Chanuka",
       TransactionDesc: "Chanuka purchase"
     };
