@@ -4,11 +4,7 @@ const axios = require("axios");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-
 const app = express();
-const cors = require('cors');
-
-
 // Allow your Vercel frontend URL (No trailing slashes!)
 app.use(cors({
   origin: ['https://chanukamarket-three.vercel.app', 'http://localhost:5173'],
