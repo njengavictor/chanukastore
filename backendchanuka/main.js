@@ -1,8 +1,26 @@
-// =====================================================
-// Chanuka Market Store - main.js - FINAL FIXED
-// =====================================================
+import { supabase } from './supabase.js';
+
+window.startChat = async function(productId, productName, sellerId, sellerName) {
+  const buyerId = localStorage.getItem('userId') || 'buyer_' + Date.now();
+  const buyerName = localStorage.getItem('userName') || 'Guest Buyer';
+  localStorage.setItem('userId', buyerId);
+
+  const { data, error } = await supabase.from('conversations').insert({
+    product_id: productId,
+    product_name: productName,
+    buyer_id: buyerId,
+    buyer_name: buyerName,
+    seller_id: sellerId,
+    seller_name: sellerName,
+    last_message: 'Started conversation'
+  }).select().single();
+
+  if(error){ alert(error.message); return; }
+  window.location.href = `chat.html?id=${data.id}`;
+}
+
 function parsePrice(text) {
-    return Number(String(text).replace(/[^0-9.]/g, "")) || 0;
+    return Number(String(text).replace(/[^0-9.]/g, "")) || 0);
 }
 function formatPrice(amount) {
     return "KSh " + amount.toLocaleString("en-KE");
@@ -230,7 +248,7 @@ cartPanel.querySelector("[data-cart-clear]").addEventListener("click", function 
     cart = []; saveData("chanukaCart", cart); renderCart();
 });
 
-// --- FIXED CHECKOUT - FINAL VERSION ---
+// --- FIXED CHECKOUT - CORRECT BACKEND URL ---
 cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async () => {
     if (cart.length === 0) { showToast("Your cart is empty"); return; }
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -245,10 +263,12 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         checkoutBtn.textContent = "Sending...";
         checkoutBtn.disabled = true;
         showToast("Sending STK push to " + normalized + "...");
-        const res = await fetch('https://chanukamarket.onrender.com', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: normalized, amount: Math.round(totalPrice) || 1 })
+        const BACKEND_URL = "https://backendchanuka.onrender.com";
+
+        const res = await fetch(`${BACKEND_URL}/stkpush`, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ phone: normalized, amount: totalPrice })
         });
         const data = await res.json();
         console.log("Server response:", data);
@@ -260,7 +280,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         }
     } catch (err) {
         console.error(err);
-        showToast("Cannot connect to backend. Is node server.js running on port 3000?");
+       showToast("Cannot connect to Render backend. Error: " + err.message);
     } finally {
         checkoutBtn.textContent = originalText;
         checkoutBtn.disabled = false;
