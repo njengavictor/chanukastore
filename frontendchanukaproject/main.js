@@ -245,7 +245,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         checkoutBtn.textContent = "Sending...";
         checkoutBtn.disabled = true;
         showToast("Sending STK push to " + normalized + "...");
-    const BACKEND_URL = "https://backendchanuka.onrender.com";
+    const BACKEND_URL = "https://chanukamarket.onrender.com";
 
 const res = await fetch(`${BACKEND_URL}/api/stkpush`, {
   method: "POST",
