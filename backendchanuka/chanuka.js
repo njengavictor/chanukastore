@@ -71,7 +71,7 @@ app.post("/stkpush", async (req,res)=>{
       PartyA: phone,
       PartyB: shortCode,
       PhoneNumber: phone,
-      CallBackURL: "https://backendchanuka.onrender.com/callback", // <-- FIXED MUST BE BACKEND
+      CallBackURL: "https://chanukamarket.onrender.com/callback", // <-- FIXED MUST BE BACKEND
       AccountReference: "ChanukaMarket",
       TransactionDesc: "Chanuka purchase"
     };
