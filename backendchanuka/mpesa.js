@@ -58,7 +58,7 @@ app.post('/api/stkpush', getMpesaToken, async (req, res) => {
         PartyA: phone,
         PartyB: shortCode,
         PhoneNumber: phone,
-        CallBackURL: "https://backendchanuka.onrender.com/callback",
+        CallBackURL: "https://chanukamarket.onrender.com/callback",
         AccountReference: "ChanukaMarket",
         TransactionDesc: "E-Commerce Payment"
       },
