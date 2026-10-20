@@ -23,7 +23,7 @@ app.use(helmet());
 
 // SECURITY 2: Only allow your website to call API
 app.use(cors({
-  origin: ["http://localhost:5500", "https://your-chanuka-domain.com"], // add your real domain
+  origin: ["http://localhost:5500", "https://chanukamarket-three.vercel.app"], // add your real domain
   methods: ["POST"]
 }));
 
