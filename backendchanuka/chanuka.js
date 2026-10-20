@@ -6,9 +6,8 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
-const express = require('express');
 const cors = require('cors');
-const app = express();
+
 
 // Allow your Vercel frontend URL (No trailing slashes!)
 app.use(cors({
