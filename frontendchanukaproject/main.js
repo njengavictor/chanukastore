@@ -243,7 +243,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
     if (!loggedUser) {
         showToast("Please create an account first");
         localStorage.setItem("redirectAfterLogin", "cart");
-        window.location.href = "signup.html";
+        window.location.href = "register.html";
         return;
     }
 
