@@ -1,3 +1,4 @@
+Here is your full file fixed. Copy everything, replace your whole file, save:
 window.startChat = async function(productId, productName, sellerId, sellerName) {
   const buyerId = localStorage.getItem('userId') || 'buyer_' + Date.now();
   const buyerName = localStorage.getItem('userName') || 'Guest Buyer';
@@ -237,36 +238,24 @@ cartPanel.querySelector("[data-cart-clear]").addEventListener("click", function 
 
 cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async () => {
     if (cart.length === 0) { showToast("Your cart is empty"); return; }
-  const handleCheckout = () => {
-  const user = localStorage.getItem("chanuka_user"); // or however you store login
-  // or check your auth: const token = localStorage.getItem("token");
 
-  if (!user) {
-    // Save where they wanted to go
-    localStorage.setItem("redirectAfterLogin", "/cart");
-    alert("Please create an account first to checkout");
-    window.location.href = "/signup"; // or "/login"
-    return;
-  }
+    const loggedUser = localStorage.getItem("chanuka_user") || localStorage.getItem("chanukaUser") || localStorage.getItem("userId");
+    if (!loggedUser) {
+        showToast("Please create an account first");
+        localStorage.setItem("redirectAfterLogin", "cart");
+        window.location.href = "signup.html";
+        return;
+    }
 
-      // 2. PICKUP STATION
-  const stations = ["cooperative on campus", "Gataka - Destiny", " G-place Gataka", "Eldoret -Zion mall", "Delivery within gataka (Ksh 150)"];
-  let station = prompt("Choose pickup station:\n" + stations.map((s,i) => ${i+1}. ${s}).join("\n") + "\n\nEnter number (1-4):");
-  if (!station) return;
-  const index = parseInt(station) - 1;
-  if (index < 0 || index >= stations.length) { showToast("Invalid station"); return; }
-  const selectedStation = stations[index];
+    const stations = ["cooperative on campus", "Gataka - Destiny", "G-place Gataka", "Eldoret - Zion mall", "Delivery within gataka (Ksh 150)"];
+    let choice = prompt("Choose pickup station:\n" + stations.map((s,i) => `${i+1}. ${s}`).join("\n") + "\n\nEnter number (1-5):");
+    if (!choice) return;
+    const idx = parseInt(choice) - 1;
+    if (isNaN(idx) || idx < 0 || idx >= stations.length) { showToast("Invalid station"); return; }
+    const selectedStation = stations[idx];
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  let phone = prompt("Enter M-Pesa number to pay: " + formatPrice(totalPrice) + " for pickup at " + selectedStation + "\n(e.g. 0712345678)");
-  if (!phone) return;
-  const normalized = normalizePhoneFrontend(phone);
-  if (!normalized) { showToast("Invalid phone. Use 07... or 2547..."); return; }
-
-  // ... your existing M-Pesa STK code here
-}
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    let phone = prompt("Enter M-Pesa number to pay: " + formatPrice(totalPrice) + "\n(e.g. 0712345678 or 2547...)");
+    let phone = prompt("Enter M-Pesa number to pay: " + formatPrice(totalPrice) + " | Pickup: " + selectedStation + "\n(e.g. 0712345678)");
     if (!phone) return;
     const normalized = normalizePhoneFrontend(phone);
     if (!normalized) { showToast("Invalid phone. Use 07... or 2547..."); return; }
@@ -282,7 +271,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         const res = await fetch(`${BACKEND_URL}/stkpush`, {
           method: "POST",
           headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({ phone: normalized, amount: totalPrice })
+          body: JSON.stringify({ phone: normalized, amount: totalPrice, station: selectedStation })
         });
         const data = await res.json();
         console.log("Server response:", data);
@@ -290,7 +279,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
             showToast("STK Sent! Check your phone " + normalized + " and enter PIN");
             cart = []; saveData("chanukaCart", cart); renderCart(); closeCart();
         } else {
-            showToast("Failed: " + (data.errorMessage || data.error || data.ResultDesc || JSON.stringify(data).slice(0,100)));
+            showToast("Failed: " + (data.errorMessage || data.error || data.ResultDesc || "Try again"));
         }
     } catch (err) {
         console.error(err);
@@ -303,3 +292,10 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
 
 renderCart();
 }
+Paste, save, then hard refresh `Ctrl+Shift+R`. Now it will:
+
+- Redirect to `signup.html` if not logged in
+- Ask for your 5 stations
+- Then send STK
+
+If your signup file is named differently, tell me the name and I'll update `window.location.href`.
