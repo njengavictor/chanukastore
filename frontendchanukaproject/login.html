@@ -106,6 +106,8 @@
 
         message.style.color = 'green';
         message.textContent = 'Logged in! Redirecting...';
+        localStorage.setItem('chanuka_user', JSON.stringify(data.user));
+localStorage.setItem('chanuka_user_email', email);
         
         // Redirect based on role
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
