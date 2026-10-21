@@ -6,13 +6,14 @@
 html{
   scroll-behavior: smooth; 
   scroll-padding-top: 88px;
+  font-size: 16px; /* Base for rem sizing */
 }
 body{
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #F5F6F8;
   color: #111;
   overflow-x: hidden;
-  font-size: 14px;
+  font-size: 0.875rem; /* 14px */
 }
 a { text-decoration: none; color: inherit; }
 button{ font-family: inherit; cursor: pointer; }
@@ -26,11 +27,11 @@ button{ font-family: inherit; cursor: pointer; }
   top: 0;
   z-index: 50;
   border-bottom: 1px solid #e8e51a;
-  padding: 12px 16px;
+  padding: clamp(8px, 1.5vw, 12px) clamp(12px, 3vw, 20px);
   background-color:#111827;
   color: white;
 }
-.logo{ font-weight: 800; color:#3c44da; font-size: 20px; }
+.logo{ font-weight: 800; color:#3c44da; font-size: clamp(1.1rem, 2vw, 1.25rem); }
 .logo span { color: #dfdc18; font-size: larger; }
 .nav{ display: flex; gap: 1rem; margin-left: auto; align-items: center; }
 .nav a:hover{ color: #e8e51a; }
@@ -46,7 +47,7 @@ button{ font-family: inherit; cursor: pointer; }
   align-items: center;
   gap: 0.4rem;
 }
-#cartcount{ background: #fff; color: #2d3297; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+#cartcount{ background: #fff; color: #2d3297; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; }
 .menu-button{ display: none; }
 
 /* HERO - REDUCED HEIGHT */
@@ -56,32 +57,32 @@ button{ font-family: inherit; cursor: pointer; }
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding: 24px 16px;
+  padding: clamp(16px, 4vw, 32px) clamp(12px, 3vw, 20px);
   gap: 8px;
   background: linear-gradient(rgba(12, 34, 65, 0.65), rgba(0,0,0,0.4)), url(https://plus.unsplash.com/premium_photo-1681487741797-a8f7f6d29019?q=80&w=1170&auto=format&fit=crop);
   background-position: center;
   background-size: cover;
-  height: 32vh;
-  min-height: 240px;
+  min-height: 220px;
   max-height: 320px;
+  height: clamp(240px, 32vh, 320px);
   color: #F8F9FA;
 }
 .hero-content h2 {
   color: #FFEB3B;
-  font-size: 26px;
+  font-size: clamp(1.35rem, 3.5vw, 1.625rem);
   font-weight: 800;
   line-height: 1.2;
   text-shadow: 0 2px 8px rgba(0,0,0,.4);
 }
 .hero-content h3{
-  font-size: 16px;
+  font-size: clamp(0.95rem, 2vw, 1rem);
   line-height: 1.3;
   font-weight: 600;
   opacity: 0.95;
 }
-.hero-content span{ color: #a5b4fc; font-size: 16px; }
+.hero-content span{ color: #a5b4fc; font-size: clamp(0.95rem, 2vw, 1rem); }
 .hero-content p{
-  font-size: 13px;
+  font-size: clamp(0.75rem, 1.5vw, 0.8125rem);
   line-height: 1.4;
   max-width: 500px;
   opacity: 0.9;
@@ -97,7 +98,7 @@ button{ font-family: inherit; cursor: pointer; }
 .makebtn, .sellbtn{
   padding: 10px 18px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: clamp(0.75rem, 1.5vw, 0.8125rem);
   font-weight: 700;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -111,7 +112,7 @@ button{ font-family: inherit; cursor: pointer; }
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 16px;
+  padding: clamp(12px, 3vw, 20px);
   background: white;
 }
 .search-box{
@@ -124,7 +125,7 @@ button{ font-family: inherit; cursor: pointer; }
   flex: 1;
   padding: 12px 14px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   background-color:white;
   border: 1px solid #d1d5db;
 }
@@ -135,7 +136,7 @@ button{ font-family: inherit; cursor: pointer; }
   background-color:#484fcd;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 /* HEADINGS */
@@ -143,8 +144,8 @@ button{ font-family: inherit; cursor: pointer; }
   text-align: center;
   margin: 16px 0 8px;
 }
-.section-heading p{ color: #484fcd; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-.section-heading h3{ font-size: 18px; font-weight: 800; }
+.section-heading p{ color: #484fcd; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.section-heading h3{ font-size: clamp(1rem, 2.5vw, 1.125rem); font-weight: 800; }
 
 /* CATEGORIES - SMALLER */
 .categories{ padding: 10px; display: flex; flex-direction: column; align-items: center; }
@@ -159,7 +160,7 @@ button{ font-family: inherit; cursor: pointer; }
   background-color: #EAB308;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: clamp(0.75rem, 1.5vw, 0.8125rem);
   padding: 8px 14px;
   border: none;
 }
@@ -170,7 +171,7 @@ button{ font-family: inherit; cursor: pointer; }
 .products-grid{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
+  gap: clamp(8px, 2vw, 16px);
   padding: 10px;
 }
 .product-card{
@@ -190,25 +191,26 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .favorite-button{
   position: absolute; top: 8px; right: 8px; width: 28px; height: 28px;
-  border: none; background: white; border-radius: 50%; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border: none; background: white; border-radius: 50%; font-size: 0.875rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 .product-information{ padding: 10px; flex: 1; display: flex; flex-direction: column; }
-.product-category{ color: #6366f1; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.product-category{ color: #6366f1; font-size: 0.625rem; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
 .product-information h3{
-  font-size: 13px; font-weight: 600; line-height: 1.3; margin-bottom: 4px;
+  font-size: 0.8125rem; font-weight: 600; line-height: 1.3; margin-bottom: 4px;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   min-height: 32px;
 }
 .product-description{
-  font-size: 11px; color: #6b7280; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  font-size: 0.6875rem; color: #6b7280; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .product-button{
   display: flex; align-items: center; justify-content: space-between; padding: 10px; margin-top: auto;
 }
-.product-button strong{ font-weight: 800; color: #059669; font-size: 14px; }
+.product-button strong{ font-weight: 800; color: #059669; font-size: 0.875rem; }
 .add-to-cart{
-  border: none; background-color: #2e37d1; color: white; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 12px;
+  border: none; background-color: #2e37d1; color: white; padding: 6px 10px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;
 }
+
 /* FOOTER - RESTORED ORIGINAL */
 .footer{
   background:#111827;
@@ -223,8 +225,8 @@ button{ font-family: inherit; cursor: pointer; }
   grid-template-columns: repeat(4, 1fr);
   gap:25px;
 }
-.footer-col h4{ color:#fff; margin-bottom:10px; font-size: 15px; }
-.footer-col a{ display:block; color:#aaa; text-decoration:none; margin:5px 0; font-size: 13px; }
+.footer-col h4{ color:#fff; margin-bottom:10px; font-size: 0.9375rem; }
+.footer-col a{ display:block; color:#aaa; text-decoration:none; margin:5px 0; font-size: 0.8125rem; }
 .footer-col a:hover{ color:#FFD700; }
 .footer-bottom{
   border-top:1px solid #333;
@@ -232,7 +234,7 @@ button{ font-family: inherit; cursor: pointer; }
   padding-top:15px;
   text-align:center;
   color:#888;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .sell{
   padding-top: 80px;
@@ -244,6 +246,7 @@ button{ font-family: inherit; cursor: pointer; }
 @media(max-width:500px){
   .footer-container{ grid-template-columns: 1fr; }
 }
+
 /* MOBILE FIXES */
 @media (max-width: 900px) {
   .nav{
@@ -253,14 +256,13 @@ button{ font-family: inherit; cursor: pointer; }
   .nav.show{ display: flex; }
   .menu-button{ display: flex; background: transparent; color: white; font-size: 24px; border: none; }
   .hero-content{ height: 28vh; min-height: 220px; }
-  .hero-content h2{ font-size: 22px; }
-  .hero-content h3{ font-size: 14px; }
 }
 @media (max-width: 480px){
   .products-grid{ grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .product-card{ height: 295px; }
   .products-image{ height: 120px; }
 }
+
 /* FIX LOGIN/SIGNUP BUTTONS */
 .nav {
   gap: 12px;
@@ -268,7 +270,7 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .nav a {
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
 }
 .nav a[href*="log-in"], .nav a[href*="sign-in"] {
@@ -286,87 +288,4 @@ button{ font-family: inherit; cursor: pointer; }
 @media(max-width: 900px){
   .nav { gap: 8px; padding: 12px; }
   .nav a { width: 100%; text-align: center; padding: 10px; }
-}
-/* --- FIX PHONE PRESENTABLE - PASTE AT END --- */
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
-body { overflow-x: hidden; margin:0; }
-
-/* HEADER FIX */
-header, .navbar, .top-bar {
-  display: flex;
-  flex-wrap: wrap !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 8px !important;
-  padding: 10px 12px !important;
-  width: 100% !important;
-  max-width: 100vw !important;
-}
-.logo, .brand {
-  font-size: clamp(18px, 5vw, 24px) !important;
-  line-height: 1.1 !important;
-  flex: 1 !important;
-  min-width: 120px !important;
-  word-break: break-word !important;
-}
-
-/* Buttons same size */
-button, .btn, a.btn {
-  font-size: clamp(13px, 3.5vw, 15px) !important;
-  padding: 10px 14px !important;
-  white-space: nowrap !important;
-  height: auto !important;
-  min-height: 42px !important;
-}
-
-/* HERO TEXT FIX */
-h1, .welcome-title {
-  font-size: clamp(20px, 6vw, 32px) !important;
-  line-height: 1.2 !important;
-  text-wrap: balance !important;
-}
-.hero p, .welcome-subtitle {
-  font-size: clamp(13px, 3.8vw, 16px) !important;
-}
-
-/* SEARCH BAR FIX */
-.search-bar, .search-container {
-  display: flex !important;
-  gap: 8px !important;
-  padding: 12px !important;
-  width: 100% !important;
-}
-.search-bar input, .search-container input {
-  flex: 1 !important;
-  min-width: 0 !important;
-  font-size: 16px !important; /* prevents zoom on iPhone */
-}
-
-/* CATEGORIES FIX - this is your main issue */
-.categories, .category-buttons, .shop-categories {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  padding: 10px !important;
-}
-.categories button, .category-buttons button {
-  font-size: 14px !important;
-  padding: 8px 16px !important;
-  flex: 0 1 auto !important;
-  min-width: fit-content !important;
-}
-
-/* PRODUCTS GRID */
-.products-grid, .featured-products {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
-  gap: 12px !important;
-  padding: 12px !important;
-}
-
-@media (max-width: 380px) {
-  .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  header { padding: 8px !important; }
 }
