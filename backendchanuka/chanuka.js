@@ -6,35 +6,30 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const BASE_URL = "https://sandbox.safaricom.co.ke";
 const shortCode = process.env.MPESA_SHORTCODE || "174379";
 const passkey = process.env.MPESA_PASSKEY;
 
-// --- SECURITY ---
 app.use(helmet());
 app.use(express.json({ limit: "10kb" }));
-
-// ONE cors only
 app.use(cors({
   origin: ['https://chanukamarket-three.vercel.app', 'http://localhost:5500', 'http://localhost:5173'],
   credentials: true
 }));
 
-// Rate limit
 const limiter = rateLimit({
-  windowMs: 5 * 60 * 1000,
-  max: 10,
-  message: { error: "Too many requests, try after 5 mins" }
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  validate: { xForwardedForHeader: false },
 });
-app.use("/stkpush", limiter);
+app.use(limiter);
 
-// Health
 app.get('/', (req, res) => {
   res.send('Backend API is running! Callback URL is /callback');
 });
 
-// --- MPESA HELPERS ---
 function getTimestamp() {
   const date = new Date();
   const pad = (n) => String(n).padStart(2,'0');
@@ -44,6 +39,7 @@ function getTimestamp() {
 async function getToken() {
   const key = process.env.MPESA_CONSUMER_KEY;
   const secret = process.env.MPESA_CONSUMER_SECRET;
+  if(!key || !secret) throw new Error("Missing MPESA_CONSUMER_KEY/SECRET in Render Env");
   const auth = Buffer.from(`${key}:${secret}`).toString("base64");
   const res = await axios.get(`${BASE_URL}/oauth/v1/generate?grant_type=client_credentials`, {
     headers: { Authorization: `Basic ${auth}` }
@@ -51,27 +47,30 @@ async function getToken() {
   return res.data.access_token;
 }
 
-// --- STK PUSH ---
 app.post("/stkpush", async (req,res)=>{
   try{
+    if(!passkey) return res.status(500).json({ error: "MPESA_PASSKEY missing in Render" });
+    
     let phone = String(req.body.phone || "").replace(/\D/g,"");
     if(phone.length < 10) return res.status(400).json({ error: "Invalid phone" });
     phone = phone.startsWith("0") ? "254"+phone.slice(1) : phone;
+    phone = phone.startsWith("7") ? "254"+phone : phone;
 
     const token = await getToken();
     const timestamp = getTimestamp();
     const password = Buffer.from(shortCode+passkey+timestamp).toString("base64");
+    const amount = Math.round(Number(req.body.amount) || 1);
 
     const payload = {
       BusinessShortCode: shortCode,
       Password: password,
       Timestamp: timestamp,
       TransactionType: "CustomerPayBillOnline",
-      Amount: req.body.amount || 1,
+      Amount: amount,
       PartyA: phone,
       PartyB: shortCode,
       PhoneNumber: phone,
-      CallBackURL: "https://chanukamarket.onrender.com/callback", // <-- FIXED MUST BE BACKEND
+      CallBackURL: "https://chanukamarket.onrender.com/callback",
       AccountReference: "ChanukaMarket",
       TransactionDesc: "Chanuka purchase"
     };
@@ -81,24 +80,21 @@ app.post("/stkpush", async (req,res)=>{
       timeout: 15000
     });
     
-    res.json({ success: true, message: "STK Sent", data: response.data });
+    // Return exactly what Safaricom returns so frontend sees ResponseCode
+    res.json(response.data);
 
   }catch(e){
     console.log("STK ERROR:", e.response?.data || e.message);
-    res.status(500).json({ error: "Payment failed", details: e.response?.data });
+    res.status(500).json({ error: "Payment failed", details: e.response?.data || e.message });
   }
 });
 
-// --- CALLBACK - THIS WAS MISSING ---
 app.post("/callback", (req, res) => {
   console.log("=== M-PESA CALLBACK ===", JSON.stringify(req.body, null, 2));
-  // Here you will later save to Supabase
   res.json({ ResultCode: 0, ResultDesc: "Accepted" });
 });
-
 app.get('/callback', (req,res) => res.send('Callback working'));
 
-// --- SELLERS (keep but move before listen) ---
 let sellers = [];
 app.post("/request-to-sell", (req,res)=>{
   const { name, phone, businessName } = req.body;
