@@ -1,4 +1,3 @@
-Here is your full file fixed. Copy everything, replace your whole file, save:
 window.startChat = async function(productId, productName, sellerId, sellerName) {
   const buyerId = localStorage.getItem('userId') || 'buyer_' + Date.now();
   const buyerName = localStorage.getItem('userName') || 'Guest Buyer';
@@ -292,10 +291,3 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
 
 renderCart();
 }
-Paste, save, then hard refresh `Ctrl+Shift+R`. Now it will:
-
-- Redirect to `signup.html` if not logged in
-- Ask for your 5 stations
-- Then send STK
-
-If your signup file is named differently, tell me the name and I'll update `window.location.href`.
