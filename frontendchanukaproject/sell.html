@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sell on Chanuka Market</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   html { scroll-behavior: smooth; }
   body { font-family: Arial; margin:0; background:#f5f7fb; }
   .sell-wrapper { max-width:550px; margin:30px auto; padding:20px; }
-  .sell-card { background:white; padding:25px; border-radius:16px; box-shadow:0 5px 20px rgba(0,0,0,0.1); }
+  .sell-card { background:white; padding:25px; border-radius:16px; box-shadow:0 5px 20px rgba(0,0,0,0.1); margin-bottom:20px; }
   .sell-card h2 { text-align:center; margin-bottom:5px; }
   .sell-card p { text-align:center; color:#666; font-size:14px; }
   .sell-card input, .sell-card textarea, .sell-card select {
@@ -22,7 +23,6 @@
   .whatsapp-direct {
     display:block; text-align:center; margin-top:15px; padding:14px; background:#25D366; color:white; text-decoration:none; border-radius:10px; font-weight:bold;
   }
-  /* Phone balance */
   @media(max-width:600px){ .sell-wrapper{ margin:10px; padding:10px; } }
 </style>
 </head>
@@ -30,6 +30,15 @@
 
 <div class="sell-wrapper">
   <a href="index.html" style="text-decoration:none; color:#0a58ff;">← Back to Market</a>
+
+  <!-- NEW: SELLER INBOX -->
+  <div class="sell-card" style="border:2px solid #0a58ff;">
+    <h3 style="margin:0 0 10px 0;">💬 Buyer Messages Inbox</h3>
+    <p style="text-align:left;margin:0 0 10px 0;">When buyer clicks "Chat with Seller" you see it here live</p>
+    <div id="inboxList" style="max-height:300px;overflow-y:auto;">Loading messages...</div>
+    <button onclick="loadInbox()" style="background:#eef2ff;color:#0a58ff;margin-top:10px;padding:8px;">🔄 Refresh</button>
+  </div>
+
   <div class="sell-card">
     <h2>Start Selling on Chanuka</h2>
     <p>Sell your products to people near you - BEI YAKO BEI POA!</p>
@@ -49,7 +58,6 @@
         <option>Books & Stationery</option>
       </select>
       <textarea id="desc" rows="3" placeholder="Describe your product..."></textarea>
-      
       <button type="submit" id="submitBtn">Send Request to Admin</button>
     </form>
 
@@ -60,18 +68,43 @@
 </div>
 
 <script>
-const ADMIN_WHATSAPP = "254114044517"; // CHANGE TO YOUR NUMBER HERE
+const ADMIN_WHATSAPP = "254114044517";
+const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsdHB5c2psY2ppZmNraWxub21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjE3MTgzNSwiZXhwIjoyMTA3NzQ3ODM1fQ.GaRZS3drc_pU_k-GUwH30nftt0HIDZsuYdYW30OYahQ";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Direct WhatsApp button
 document.getElementById("whatsappDirect").href = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent("Hi Chanuka Admin, I want to sell my products on Chanuka Market")}`;
 
+// --- NEW INBOX LOGIC ---
+async function loadInbox(){
+  const list = document.getElementById('inboxList');
+  try {
+    const { data, error } = await supabaseClient.from('chats').select('*').order('created_at', {ascending:false}).limit(20);
+    if(error) throw error;
+    if(!data || data.length===0){ list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">No buyer messages yet.<br>Share your product link - when buyer clicks Chat with Seller, it appears here.</p>'; return; }
+    list.innerHTML = data.map(c => `
+      <div onclick="location.href='chat.html?product=${encodeURIComponent(c.product_name)}&price=${c.price}&seller=${encodeURIComponent(c.seller_name)}&role=seller'" 
+      style="padding:12px;border:1px solid #eee;border-radius:10px;margin-bottom:8px;cursor:pointer;background:${c.last_message?'#f0f7ff':'#fff'}">
+        <div style="display:flex;justify-content:space-between"><b>${c.product_name}</b><small>${new Date(c.created_at).toLocaleTimeString()}</small></div>
+        <div style="font-size:13px;color:#333;margin-top:4px;">💬 ${c.last_message || 'Chat started'}</div>
+        <div style="font-size:11px;color:#0a58ff;margin-top:4px;">Click to reply →</div>
+      </div>
+    `).join('');
+  } catch(e){
+    list.innerHTML = 'Error: '+e.message+'<br>Create chats table first';
+  }
+}
+loadInbox();
+// Live update when buyer sends new message
+supabaseClient.channel('chats-realtime').on('postgres_changes',{event:'*',schema:'public',table:'chats'},()=>loadInbox()).subscribe();
+supabaseClient.channel('messages-realtime').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},()=>loadInbox()).subscribe();
+
+// --- OLD SELL FORM LOGIC ---
 const form = document.getElementById("sellForm");
 const statusMsg = document.getElementById("statusMsg");
-
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const btn = document.getElementById("submitBtn");
-  
   const data = {
     name: document.getElementById("name").value.trim(),
     phone: document.getElementById("phone").value.trim(),
@@ -80,38 +113,12 @@ form.addEventListener("submit", async (e) => {
     category: document.getElementById("category").value,
     desc: document.getElementById("desc").value.trim()
   };
-
-  // Security: Validate phone
-  if(!/^0[17][0-9]{8}$/.test(data.phone)){
-    alert("Enter valid Safaricom phone 07... or 01...");
-    return;
-  }
-
-  btn.textContent = "Sending...";
-  btn.disabled = true;
-
-  // 1. Try save to your backend (optional)
-  try {
-    await fetch("https://backendchanuka.onrender.com", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-  } catch(err){ console.log("Backend offline - will use WhatsApp only"); }
-
-  // 2. ALWAYS redirect to YOUR WhatsApp with seller details - THIS IS THE COMMUNICATION
-  const waMessage = `*NEW SELLER REQUEST - CHANUKA MARKET*%0A%0AName: ${data.name}%0APhone: ${data.phone}%0AProduct: ${data.product}%0APrice: KSH ${data.price}%0ACategory: ${data.category}%0ADetails: ${data.desc}%0A%0APlease approve me to sell.`;
-
-  statusMsg.style.display = "block";
-  statusMsg.textContent = "✅ Opening your WhatsApp to Admin...";
-  
-  setTimeout(()=>{
-    window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${waMessage}`, "_blank");
-    form.reset();
-    btn.textContent = "Send Request to Admin";
-    btn.disabled = false;
-    statusMsg.textContent = "✅ Request sent! Check WhatsApp.";
-  }, 800);
+  if(!/^0[17][0-9]{8}$/.test(data.phone)){ alert("Enter valid Safaricom phone 07... or 01..."); return; }
+  btn.textContent = "Sending..."; btn.disabled = true;
+  try { await fetch("https://backendchanuka.onrender.com", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); } catch(err){}
+  const waMessage = `*NEW SELLER REQUEST - CHANUKA MARKET*%0A%0AName: ${data.name}%0APhone: ${data.phone}%0AProduct: ${data.product}%0APrice: KSH ${data.price}%0ACategory: ${data.category}%0ADetails: ${data.desc}`;
+  statusMsg.style.display = "block"; statusMsg.textContent = "✅ Opening your WhatsApp to Admin...";
+  setTimeout(()=>{ window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${waMessage}`, "_blank"); form.reset(); btn.textContent = "Send Request to Admin"; btn.disabled = false; statusMsg.textContent = "✅ Request sent! Check WhatsApp."; }, 800);
 });
 </script>
 
