@@ -1,26 +1,13 @@
-import { supabase } from './supabase.js';
-
 window.startChat = async function(productId, productName, sellerId, sellerName) {
   const buyerId = localStorage.getItem('userId') || 'buyer_' + Date.now();
   const buyerName = localStorage.getItem('userName') || 'Guest Buyer';
   localStorage.setItem('userId', buyerId);
-
-  const { data, error } = await supabase.from('conversations').insert({
-    product_id: productId,
-    product_name: productName,
-    buyer_id: buyerId,
-    buyer_name: buyerName,
-    seller_id: sellerId,
-    seller_name: sellerName,
-    last_message: 'Started conversation'
-  }).select().single();
-
-  if(error){ alert(error.message); return; }
-  window.location.href = `chat.html?id=${data.id}`;
+  alert("Chat for " + productName + " - Seller: " + sellerName);
+  window.location.href = `chat.html?product=${productId}`;
 }
 
 function parsePrice(text) {
-    return Number(String(text).replace(/[^0-9.]/g, "")) || 0);
+    return Number(String(text).replace(/[^0-9.]/g, "")) || 0;
 }
 function formatPrice(amount) {
     return "KSh " + amount.toLocaleString("en-KE");
@@ -248,7 +235,6 @@ cartPanel.querySelector("[data-cart-clear]").addEventListener("click", function 
     cart = []; saveData("chanukaCart", cart); renderCart();
 });
 
-// --- FIXED CHECKOUT - CORRECT BACKEND URL ---
 cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async () => {
     if (cart.length === 0) { showToast("Your cart is empty"); return; }
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -263,7 +249,7 @@ cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async 
         checkoutBtn.textContent = "Sending...";
         checkoutBtn.disabled = true;
         showToast("Sending STK push to " + normalized + "...");
-        const BACKEND_URL = "https://backendchanuka.onrender.com";
+        const BACKEND_URL = "https://chanukamarket.onrender.com";
 
         const res = await fetch(`${BACKEND_URL}/stkpush`, {
           method: "POST",
