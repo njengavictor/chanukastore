@@ -349,14 +349,6 @@ button, .btn-login, .btn-signup {
   padding: 6px 12px !important;
   font-size: 13px !important;
 }
-/* BRIDGE THE GAP - BRING BUTTONS CLOSER TO LOGO */
-.header, nav, .navbar {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important; /* not space-between */
-  gap: 10px !important;
-  padding: 8px 12px !important;
-}
 
 /* Logo stays left but doesn't push */
 .logo {
