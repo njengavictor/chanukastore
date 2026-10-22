@@ -1,55 +1,82 @@
-<!-- ========== INTRODUCTION - WHAT IS CHANUKA ========== -->
-<section class="bg-white p-6 md:p-10 rounded-2xl border border-slate-200 shadow-sm space-y-6 relative overflow-hidden">
-  <!-- CC: Yellow accent line -->
-  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-yellow to-brand-blue"></div>
-  
-  <div class="flex flex-col lg:flex-row gap-8">
-    <div class="lg:w-[65%] space-y-4">
-      <span class="inline-block bg-slate-900 text-brand-yellow text-[11px] font-bold px-3 py-1 rounded-full tracking-wider">ABOUT CHANUKA MARKET</span>
-      
-      <h1 class="text-[26px] md:text-[36px] font-bold leading-[1.15] text-slate-900">
-        Connecting <span class="text-brand-blue">Student Hustlers</span>, Local Vendors & Everyday Shoppers
-      </h1>
-      
-      <p class="text-slate-600 text-[14px] leading-relaxed">
-        <strong>Chanuka Market Store</strong> was built with one simple purpose: <strong>BEI YAKO, BEI POA.</strong> 
-        We saw students in Rongai, Gataka & Tuala struggling to sell their products online because of high delivery fees, 
-        lack of trust, and platforms that take 20-30% commission. So we built a local marketplace that actually works for us.
-      </p>
-      
-      <p class="text-slate-600 text-[14px] leading-relaxed">
-        We connect <strong>student entrepreneurs, mama mboga, local shops, and small vendors</strong> directly to a 
-        variety of buyers looking for affordable goods - from electronics, fashion, furniture, groceries, to liquor & drinks. 
-        No middlemen, no expensive couriers. Just drop your product at our verified pickup stations and we handle the trust.
-      </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ========== META ========== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>About Us | Chanuka Market Store</title>
+  <meta name="description" content="Chanuka connects student entrepreneurs and local vendors to buyers in Rongai, Gataka & Tuala. Escrow protected, 5% commission, local pickup.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { 'brand-blue': '#0a58ff', 'brand-yellow': '#FFD60A', 'brand-dark': '#0f172a' }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body{font-family:'Poppins',sans-serif} html,body{overflow-x:hidden; -webkit-text-size-adjust:100%}</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-        <div class="p-3 bg-slate-50 rounded-xl border"><div class="text-sm font-bold">🎓 For Students</div><div class="text-[12px] text-slate-500 mt-1">Turn your side hustle into a real business. List in 2 mins.</div></div>
-        <div class="p-3 bg-slate-50 rounded-xl border"><div class="text-sm font-bold">🏪 For Vendors</div><div class="text-[12px] text-slate-500 mt-1">Keep 95% of every sale. We only take 5%.</div></div>
-        <div class="p-3 bg-slate-50 rounded-xl border"><div class="text-sm font-bold">🛒 For Buyers</div><div class="text-[12px] text-slate-500 mt-1">Variety of goods, local prices, escrow safety.</div></div>
-      </div>
-    </div>
+<!-- ========== NAVBAR ========== -->
+<header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 h-[64px] flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2 font-bold text-lg"><span class="w-8 h-8 bg-brand-blue text-white rounded-lg flex items-center justify-center">C</span> Chanuka<span class="text-brand-blue">Market</span></a>
+    <nav class="hidden md:flex items-center gap-3">
+      <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Home</a>
+      <a href="index.html#products" class="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Products</a>
+      <a href="about.html" class="px-3 py-1.5 rounded-lg text-sm font-bold text-slate-900 bg-brand-yellow">About Us</a>
+    </nav>
+    <button id="menuBtn" class="md:hidden w-10 h-10 rounded-full bg-slate-900 text-white">☰</button>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t px-4 py-3 space-y-2">
+    <a href="index.html" class="block py-2 px-3 rounded-lg hover:bg-slate-100">Home</a>
+    <a href="index.html#products" class="block py-2 px-3 rounded-lg hover:bg-slate-100">Products</a>
+    <a href="sell.html" class="block py-2 px-3 rounded-lg bg-brand-yellow font-bold">Sell Products</a>
+  </div>
+</header>
 
-    <div class="lg:w-[35%] space-y-4">
-      <div class="bg-brand-dark text-white p-6 rounded-xl space-y-3">
-        <h3 class="font-bold text-[16px] text-brand-yellow">Our Mission</h3>
-        <p class="text-[13px] text-slate-300 leading-relaxed">To empower Rongai's local economy by making online selling safe, affordable and accessible to every student and vendor.</p>
-        <div class="pt-3 border-t border-slate-700 space-y-2 text-[13px]">
-          <div class="flex justify-between"><span class="text-slate-400">Location</span><span class="font-semibold">Rongai • Gataka • Tuala</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Started</span><span class="font-semibold">2024</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Motto</span><span class="font-semibold text-brand-yellow">Bei Yako, Bei Poa</span></div>
+<main class="max-w-7xl mx-auto px-4 py-8 space-y-10">
+
+  <!-- ========== 01. INTRODUCTION - WHAT IS CHANUKA ========== -->
+  <section class="bg-white p-6 md:p-10 rounded-2xl border border-slate-200 shadow-sm space-y-6 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-yellow to-brand-blue"></div>
+    <div class="flex flex-col lg:flex-row gap-8">
+      <div class="lg:w-[65%] space-y-4">
+        <span class="inline-block bg-slate-900 text-brand-yellow text-[11px] font-bold px-3 py-1 rounded-full tracking-wider">ABOUT CHANUKA MARKET • BEI YAKO, BEI POA</span>
+        <h1 class="text-[26px] md:text-[38px] font-bold leading-[1.15] text-slate-900">Connecting <span class="text-brand-blue">Student Entrepreneurs</span>, Local Vendors & Everyday Shoppers</h1>
+        <p class="text-slate-600 text-[14px] leading-relaxed"><strong>Chanuka Market Store</strong> was built with one purpose: make local commerce safe and affordable. We saw students in Rongai, Gataka & Tuala struggling to sell online because of high courier fees, scams, and platforms taking 20-30% commission. So we built a marketplace that works for us.</p>
+        <p class="text-slate-600 text-[14px] leading-relaxed">We connect <strong>student hustlers, mama mboga, electronics shops, fashion vendors, and small businesses</strong> to buyers looking for a variety of goods at local prices - electronics, fashion, furniture, groceries, household, liquor & drinks. No middlemen. Just verified pickup stations and escrow protection.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          <div class="p-3 bg-slate-50 rounded-xl border"><div class="text-sm font-bold">🎓 Students</div><div class="text-[12px] text-slate-500 mt-1">Turn side hustle to business. List in 2 mins, zero fees.</div></div>
+          <div class="p-3 bg-slate-50 rounded-xl border"><div class="text-sm font-bold">🏪 Vendors</div><div class="text-[12px] text-slate-500 mt-1">Keep 95% of every sale. Only 5% flat fee.</div></div>
+          <div class="p-3 bg-slate-50 rounded-xl border"><div class="text-sm font-bold">🛒 Buyers</div><div class="text-[12px] text-slate-500 mt-1">Variety of goods, local prices, escrow safety.</div></div>
         </div>
       </div>
-      
-      <div class="bg-brand-yellow p-5 rounded-xl">
-        <h4 class="font-bold text-slate-900 text-sm">Why Chanuka?</h4>
-        <ul class="mt-2 space-y-1 text-[12px] text-slate-800">
-          <li>✓ Zero listing fees</li>
-          <li>✓ Local pickup, no high courier fees</li>
-          <li>✓ Escrow protects your money</li>
-          <li>✓ Built by locals, for locals</li>
-        </ul>
+      <div class="lg:w-[35%] space-y-4">
+        <div class="bg-brand-dark text-white p-6 rounded-xl space-y-3">
+          <h3 class="font-bold text-[16px] text-brand-yellow">Our Mission</h3>
+          <p class="text-[13px] text-slate-300 leading-relaxed">To empower Rongai's local economy by making online selling safe, affordable and accessible to every student and vendor.</p>
+          <div class="pt-3 border-t border-slate-700 space-y-2 text-[13px]">
+            <div class="flex justify-between"><span class="text-slate-400">Coverage</span><span class="font-semibold">Rongai • Gataka • Tuala</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Est.</span><span class="font-semibold">2024</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Motto</span><span class="font-semibold text-brand-yellow">Bei Yako, Bei Poa</span></div>
+          </div>
+        </div>
+        <div class="bg-brand-yellow p-5 rounded-xl">
+          <h4 class="font-bold text-slate-900 text-sm">Why Choose Us?</h4>
+          <ul class="mt-2 space-y-1 text-[12px] text-slate-800">
+            <li>✓ Zero listing fees</li><li>✓ Local pickup, no high courier fees</li><li>✓ Escrow protects your money</li><li>✓ Built by locals, for locals</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ========== 02. PLATFORM STATS & CORE FEATURES ========== -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center">
+      <div class="w-12 h-12 bg-blue-100 text-brand-blue rounded-full flex
