@@ -321,3 +321,31 @@ button{ font-family: inherit; cursor: pointer; }
   text-align: center;
   font-weight: 700;
 }
+/* FIX MENU OVERFLOW ON MOBILE */
+@media (max-width: 768px) {
+  .header, nav {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+  /* Make buttons smaller */
+  .login-btn, .signup-btn, .cart-btn, button:has-text("Log In") {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+    height: 32px !important;
+    min-width: auto !important;
+  }
+  /* Shrink store name */
+  .logo, .store-name {
+    font-size: 16px !important;
+    max-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* General smaller buttons for all screens */
+button, .btn-login, .btn-signup {
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+}
