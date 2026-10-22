@@ -3,14 +3,9 @@
    & COMMISSION / PICKUP STATION NOTIFICATIONS
    ========================================================= */
 
-// Initialize Supabase Client for Order & Seller Notifications
+// Initialize Supabase Client Configuration
 const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
 const SUPABASE_KEY = "Your_Supabase_Key_Here"; // Replace with your active Supabase key
-let supabaseClient = null;
-
-if (typeof supabase !== 'undefined') {
-  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-}
 
 /* 1. CHAT WITH SELLER HANDLER */
 window.startChat = async function(productId, productName, sellerId, sellerName, price = "0", image = "") {
@@ -378,7 +373,7 @@ function init() {
 
       const BACKEND_URL = "https://chanukamarket.onrender.com";
 
-      // STK Push Request
+      // STK Push Request to Render Backend
       const res = await fetch(`${BACKEND_URL}/stkpush`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
@@ -397,15 +392,20 @@ function init() {
       if (data.ResponseCode == '0' || data.ResponseCode == 0) {
         showToast("STK Sent! Check your phone " + normalized + " and enter PIN");
 
-        // Notify Sellers in Supabase about their purchased items and pickup destination
-        if (supabaseClient) {
+        // Safely notify Sellers in Supabase without breaking execution
+        if (typeof supabase !== 'undefined' && SUPABASE_KEY !== "Your_Supabase_Key_Here") {
+          const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
           for (const item of cart) {
             const sellerName = item.seller || "Merchant Store";
-            await supabaseClient.from('notifications').insert([{
-              seller_name: sellerName,
-              message: `🎉 Order Paid! "${item.name}" (Qty: ${item.quantity}). Deliver to station: ${selectedStation}. Contact Buyer: ${normalized}`,
-              is_read: false
-            }]).catch(err => console.error("Notification insert error:", err));
+            try {
+              await client.from('notifications').insert([{
+                seller_name: sellerName,
+                message: `🎉 Order Paid! "${item.name}" (Qty: ${item.quantity}). Deliver to station: ${selectedStation}. Contact Buyer: ${normalized}`,
+                is_read: false
+              }]);
+            } catch (notifErr) {
+              console.warn("Notification error:", notifErr);
+            }
           }
         }
 
@@ -418,7 +418,7 @@ function init() {
       }
     } catch (err) {
       console.error(err);
-      showToast("Cannot connect to Render backend. Error: " + err.message);
+      showToast("Backend connection note: " + err.message);
     } finally {
       checkoutBtn.textContent = originalText;
       checkoutBtn.disabled = false;
