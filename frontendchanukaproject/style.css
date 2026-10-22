@@ -18,7 +18,7 @@ body{
 a { text-decoration: none; color: inherit; }
 button{ font-family: inherit; cursor: pointer; }
 
-/* HEADER - FIXED MOBILE ALIGNMENT */
+/* HEADER - CLEAN MOBILE LAYOUT */
 .header {
   display: flex;
   align-items: center;
@@ -27,21 +27,24 @@ button{ font-family: inherit; cursor: pointer; }
   top: 0;
   z-index: 50;
   border-bottom: 1px solid #e8e51a;
-  padding: 10px 14px;
+  padding: 10px 16px;
   background-color:#111827;
   color: white;
-  flex-wrap: wrap;
-  gap: 8px;
 }
-.logo{ font-weight: 800; color:#3c44da; font-size: clamp(1rem, 2vw, 1.25rem); }
+.logo{ font-weight: 800; color:#3c44da; font-size: clamp(1.1rem, 2vw, 1.25rem); }
 .logo span { color: #dfdc18; font-size: larger; }
 
-/* NAV / ACTIONS CONTAINER */
-.header-actions{ display: flex; gap: 0.5rem; align-items: center; margin-left: auto; }
+.header-actions{ 
+  display: flex; 
+  gap: 0.5rem; 
+  align-items: center; 
+}
 
+/* NAV STYLING FOR DESKTOP */
 .nav{ 
   display: flex; 
-  gap: 0.75rem; 
+  gap: 1rem; 
+  margin-left: auto; 
   align-items: center; 
 }
 .nav a:hover{ color: #e8e51a; }
@@ -50,15 +53,15 @@ button{ font-family: inherit; cursor: pointer; }
   border: none;
   background-color: #d5d22b;
   color:#111827;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.8rem;
+  gap: 0.4rem;
+  font-size: 0.85rem;
 }
-#cartcount{ background: #fff; color: #2d3297; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; }
+#cartcount{ background: #fff; color: #2d3297; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; }
 .menu-button{ display: none; }
 
 /* HERO - REDUCED HEIGHT */
@@ -259,11 +262,8 @@ button{ font-family: inherit; cursor: pointer; }
   .footer-container{ grid-template-columns: 1fr; }
 }
 
-/* MOBILE NAV & BUTTON FIXES */
+/* MOBILE RESPONSIVE HEADER & MENU */
 @media (max-width: 900px) {
-  .header {
-    justify-content: space-between;
-  }
   .nav{
     position: absolute; 
     top: 100%; 
@@ -275,6 +275,7 @@ button{ font-family: inherit; cursor: pointer; }
     padding: 16px;
     border-bottom: 1px solid #333;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    gap: 12px;
   }
   .nav.show{ display: flex; }
   .menu-button{ display: flex; background: transparent; color: white; font-size: 22px; border: none; padding: 4px; }
@@ -287,24 +288,26 @@ button{ font-family: inherit; cursor: pointer; }
   .products-image{ height: 115px; }
 }
 
-/* LOGIN/SIGNUP NAV BUTTON STYLING */
+/* LOGIN / SIGNUP BUTTON STYLING */
 .nav a {
   white-space: nowrap;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 .nav a[href*="log-in"], .nav a[href*="sign-in"] {
   border: 1px solid rgba(255,255,255,0.7);
-  padding: 5px 10px;
+  padding: 6px 14px;
   border-radius: 20px;
+  text-align: center;
 }
 .nav a[href*="sign-up"], .nav a[href*="register"] {
   background: #EAB308;
   color: #111827 !important;
-  padding: 5px 10px;
+  padding: 6px 14px;
   border-radius: 20px;
+  text-align: center;
 }
 
 @media(max-width: 900px){
-  .nav a { width: 100%; text-align: center; padding: 8px; }
+  .nav a { width: 100%; padding: 10px; }
 }
