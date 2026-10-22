@@ -47,11 +47,13 @@
             </form>
         </div>
     </main>
-
-<script>
+    <script>
 // Supabase Configuration
 const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
-const SUPABASE_KEY = "Your_Supabase_Key_Here"; // Keep your active key here
+
+// REPLACE THIS WITH YOUR VALID KEY FROM SUPABASE DASHBOARD -> PROJECT SETTINGS -> API
+const SUPABASE_KEY = "YOUR_ACTUAL_SUPABASE_ANON_KEY_HERE"; 
+
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Extract URL parameters passed from product click
@@ -123,7 +125,6 @@ async function initChat() {
                 table: 'messages', 
                 filter: `chat_id=eq.${chatId}` 
             }, payload => {
-                // Render message if it came from the other party
                 if (payload.new.sender !== senderRole) {
                     renderMessage(payload.new);
                 }
@@ -174,21 +175,13 @@ document.getElementById('chat-form').addEventListener('submit', async (e) => {
         return;
     }
 
-    // Update the last message preview in the chats table (which your Admin Dashboard can monitor)
+    // Update the last message preview in the chats table
     await client.from('chats').update({ last_message: text }).eq('id', chatId);
-
-    // Optional Notification trigger for seller/buyer notification tables
-    if (senderRole === 'buyer') {
-        await client.from('notifications').insert([{
-            seller_name: seller,
-            message: `New message from buyer regarding ${productName}: "${text}"`,
-            is_read: false
-        }]).catch(() => {}); // Fails silently if notifications table isn't created yet
-    }
 });
 
 // Run initialization on load
 initChat();
-</script>
-</body>
-</html>
+                </script>
+
+
+        
