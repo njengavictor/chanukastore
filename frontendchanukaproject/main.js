@@ -5,7 +5,7 @@
 
 // Initialize Supabase Client Configuration
 const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
-const SUPABASE_KEY = "Your_Supabase_Key_Here"; // Replace with your active Supabase key
+const SUPABASE_KEY = "sb_publishable_kpkKcjiQck7a3hNzqxJtmw_dFJOAV-8"; // Replace with your active Supabase key
 
 /* 1. CHAT WITH SELLER HANDLER */
 window.startChat = async function(productId, productName, sellerId, sellerName, price = "0", image = "") {
