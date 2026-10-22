@@ -350,23 +350,3 @@ button, .btn-login, .btn-signup {
   font-size: 13px !important;
 }
 
-/* Logo stays left but doesn't push */
-.logo {
-  margin-right: 10px !important;
-  flex-shrink: 0 !important;
-}
-
-/* Button group - move closer to logo */
-.header > div:last-child, 
-nav > div:last-child,
-div:has(> .login-btn) {
-  display: flex !important;
-  gap: 6px !important;
-  margin-left: 8px !important; /* small gap only */
-  align-items: center !important;
-}
-
-/* Make buttons even tighter */
-.login-btn, .signup-btn, .cart-btn {
-  margin: 0 !important;
-}
