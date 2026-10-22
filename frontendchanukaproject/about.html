@@ -1,288 +1,206 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Chanuka Market</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b0f17;
-            color: #f1f5f9;
-        }
-        .glass-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .gradient-text {
-            background: #FFFFFF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .glow-button {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-blue-500 selection:text-white">
+  <nav class="flex items-center gap-3">
+    <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition-all">
+      Home
+    </a>
+    <a href="index.html#products" class="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition-all">
+      Products
+    </a>
+    <a href="about.html" class="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-900 bg-brand-yellow hover:bg-yellow-400 transition-all font-semibold">
+      About Us
+    </a>
+  </nav>
+</div>
 
-    <!-- Navbar -->
-    <header class="bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition">
-                    C
-                </div>
-                <span class="text-xl font-extrabold tracking-tight text-white">Chanuka<span class="text-amber-500">-market</span></span>
-            </a>
 
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-                <a href="index.html" class="hover:text-white transition">Home</a>
-                <a href="index.html#products" class="hover:text-white transition">Products</a>
-                <a href="about.html" class="text-blue-400 font-semibold border-b-2 border-blue-500 pb-0.5">About Us</a>
-                <a href="chat.html" class="hover:text-white transition">Messages</a>
-            </nav>
+<!-- PLATFORM STATS & CORE FEATURES -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center">
+    <div class="w-12 h-12 bg-blue-100 text-brand-blue rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+      🔒
+    </div>
+    <h3 class="text-lg font-bold text-slate-900 mb-2">Escrow Protected</h3>
+    <p class="text-slate-600 text-sm">
+      Payments are securely held in the Chanuka Escrow Vault and are only released to the seller once the buyer receives and verifies their product.
+    </p>
+  </div>
 
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl glow-button transition">
-                    Shop Store
-                </a>
-            </div>
-        </div>
-    </header>
+  <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center">
+    <div class="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+      ⚡
+    </div>
+    <h3 class="text-lg font-bold text-slate-900 mb-2">5% Fair Platform Commission</h3>
+    <p class="text-slate-600 text-sm">
+      We maintain a simple and transparent structure: sellers keep 95% of every sale, with a nominal 5% flat fee powering platform operations.
+    </p>
+  </div>
 
-    <!-- Hero Section -->
-    <section class="relative py-16 md:py-24 px-4 overflow-hidden border-b border-slate-800/60">
-        <div class="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-slate-900/50 to-transparent pointer-events-none"></div>
-        <div class="max-w-4xl mx-auto text-center relative z-10 space-y-6">
-            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                <i class="fa-solid fa-shield-halved text-blue-400"></i> Smart Campus Commerce
-            </span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight">
-                Empowering Campus Stores with <span class="gradient-text">Escrow Vault</span> Security
-            </h1>
-            <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                Chanuka Market is built specifically for verified students and local vendors to trade safely, seamlessly, and instantly with guaranteed payment escrow.
-            </p>
-        </div>
-    </section>
+  <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center">
+    <div class="w-12 h-12 bg-slate-100 text-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+      📍
+    </div>
+    <h3 class="text-lg font-bold text-slate-900 mb-2">Local Pickup Stations</h3>
+    <p class="text-slate-600 text-sm">
+      Avoid high courier fees. Conveniently drop off or collect your items at verified neighborhood pickup hubs across Rongai and Gataka.
+    </p>
+  </div>
+</section>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-16 space-y-16 flex-1">
+<!-- ESCROW MECHANICS & RETURN POLICY GRID -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  
+  <!-- ESCROW VAULT EXPLANATION -->
+  <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-4">
+    <div class="flex items-center gap-3">
+      <span class="p-2 bg-brand-blue text-white rounded-lg font-bold text-sm">01</span>
+      <h2 class="text-xl font-bold text-slate-900">How Escrow Safeguards You</h2>
+    </div>
+    <p class="text-slate-600 text-sm leading-relaxed">
+      Shopping locally shouldn't involve financial risk. Chanuka Market acts as a neutral third-party holding facility for funds during every transaction.
+    </p>
+    <ul class="space-y-3 text-sm text-slate-700">
+      <li class="flex items-start gap-2">
+        <span class="text-brand-blue font-bold">✓</span>
+        <span><strong>Buyer Deposits:</strong> Payment is sent securely via M-Pesa to our system vault upon checkout.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-brand-blue font-bold">✓</span>
+        <span><strong>Verification Window:</strong> The buyer inspects the package at pick-up or upon door delivery.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-brand-blue font-bold">✓</span>
+        <span><strong>Automated Payout:</strong> Once approved by the buyer, funds are released directly to the seller's M-Pesa account.</span>
+      </li>
+    </ul>
+  </div>
 
-        <!-- Section 1: How Escrow Works -->
-        <div class="grid lg:grid-cols-2 gap-10 items-center">
-            <div class="space-y-6">
-                <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400">
-                    <i class="fa-solid fa-lock"></i> Escrow Transaction Guarantee
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">How Chanuka Stores Process Payments</h2>
-                <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
-                    When you order an item using M-Pesa STK Push, your funds are **never disbursed to the seller immediately**. They enter the **Chanuka Escrow Vault** where they are securely protected.
-                </p>
-                <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
-                    Money is only transferred to the merchant after you receive, inspect, and confirm satisfaction with your item at your chosen pickup station.
-                </p>
-            </div>
+  <!-- SELLER RETURN POLICY -->
+  <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-4">
+    <div class="flex items-center gap-3">
+      <span class="p-2 bg-brand-yellow text-slate-900 rounded-lg font-bold text-sm">02</span>
+      <h2 class="text-xl font-bold text-slate-900">Seller Return & Refund Policy</h2>
+    </div>
+    <p class="text-slate-600 text-sm leading-relaxed">
+      We maintain clear standards to protect both merchant reputations and buyer confidence:
+    </p>
+    <ul class="space-y-3 text-sm text-slate-700">
+      <li class="flex items-start gap-2">
+        <span class="text-slate-900 font-bold">•</span>
+        <span><strong>24-Hour Inspection:</strong> Buyers have 24 hours post-delivery to report inaccurate items or hidden defects.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-slate-900 font-bold">•</span>
+        <span><strong>Faulty Goods:</strong> Items that do not match the listing description are eligible for a 100% full refund from escrow.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-slate-900 font-bold">•</span>
+        <span><strong>Return Dispatch:</strong> Returned goods must be deposited at an official station in original condition.</span>
+      </li>
+    </ul>
+  </div>
 
-            <!-- Workflow Steps -->
-            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 border border-slate-800">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-bolt text-amber-400"></i> Seamless Order Flow
-                </h3>
-                <div class="space-y-4">
-                    <div class="flex items-start gap-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                        <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 font-bold flex items-center justify-center shrink-0">1</div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">M-Pesa STK Push Checkout</h4>
-                            <p class="text-xs text-slate-400">Select your preferred pickup station and authorize payment on your mobile phone.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 font-bold flex items-center justify-center shrink-0">2</div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">Seller Order Dispatch</h4>
-                            <p class="text-xs text-slate-400">The seller receives an automated alert and delivers the order to your designated location.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center shrink-0">3</div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">Inspection & Payout</h4>
-                            <p class="text-xs text-slate-400">After inspecting your item, you confirm in chat and the escrow vault releases funds.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+</section>
 
-        <!-- Section 2: Seller Earnings & Policy Details -->
-        <div class="grid md:grid-cols-3 gap-6">
-            <!-- Card 1 -->
-            <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg font-bold">
-                    <i class="fa-solid fa-percent"></i>
-                </div>
-                <h3 class="text-lg font-bold text-white">5% Transparent Fee</h3>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Chanuka Market retains a automatic 5% platform commission to support server maintenance, escrow handling, and direct support services.
-                </p>
-            </div>
+<!-- OFFICIAL PICKUP STATIONS SECTION -->
+<section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold text-slate-900">Official Pickup Stations</h2>
+    <p class="text-slate-600 text-sm">Drop off or collect your orders safely at these verified locations.</p>
+  </div>
 
-            <!-- Card 2 -->
-            <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg font-bold">
-                    <i class="fa-solid fa-wallet"></i>
-                </div>
-                <h3 class="text-lg font-bold text-white">95% Net Seller Payouts</h3>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Merchants retain 95% of their total sale price, disbursed straight to their registered M-Pesa line immediately upon buyer confirmation.
-                </p>
-            </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm">Rongai Central Station</h3>
+      <p class="text-xs text-slate-500 mt-1">Main Stage Plaza, Shop #12</p>
+      <span class="inline-block mt-2 text-xs font-semibold text-brand-blue bg-blue-50 px-2 py-0.5 rounded">Active Hub</span>
+    </div>
 
-            <!-- Card 3 -->
-            <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
-                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-lg font-bold">
-                    <i class="fa-solid fa-box-open"></i>
-                </div>
-                <h3 class="text-lg font-bold text-white">Seller Return Policies</h3>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Returns and exchange policies are determined according to individual seller guidelines. Buyers inspect goods at stations prior to release.
-                </p>
-            </div>
-        </div>
+    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm">Gataka Junction Hub</h3>
+      <p class="text-xs text-slate-500 mt-1">Gataka Commercial Center, Ground Floor</p>
+      <span class="inline-block mt-2 text-xs font-semibold text-brand-blue bg-blue-50 px-2 py-0.5 rounded">Active Hub</span>
+    </div>
 
-        <!-- Section 3: Pickup Locations & Feedback Form -->
-        <div class="grid lg:grid-cols-2 gap-10">
-            
-            <!-- Station List -->
-            <div class="glass-card p-8 rounded-3xl border border-slate-800 space-y-6">
-                <div>
-                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-location-dot text-indigo-400"></i> Designated Pickup Destinations
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-1">Convenient station drop-offs optimized for students and local buyers.</p>
-                </div>
+    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm">Tuala Express Point</h3>
+      <p class="text-xs text-slate-500 mt-1">Tuala Shopping Center, Opp. Supermarket</p>
+      <span class="inline-block mt-2 text-xs font-semibold text-brand-blue bg-blue-50 px-2 py-0.5 rounded">Active Hub</span>
+    </div>
+  </div>
+</section>
 
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-sm font-medium text-slate-200">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-building-columns text-blue-400"></i> Cooperative on campus</span>
-                        <span class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-2.5 py-1 rounded-full">Station</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-sm font-medium text-slate-200">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-map-pin text-indigo-400"></i> Gataka - Destiny</span>
-                        <span class="text-xs text-indigo-400 font-semibold bg-indigo-500/10 px-2.5 py-1 rounded-full">Station</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-sm font-medium text-slate-200">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-store text-emerald-400"></i> G-place Gataka</span>
-                        <span class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-full">Station</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-sm font-medium text-slate-200">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-bag-shopping text-amber-400"></i> Eldoret - Zion mall</span>
-                        <span class="text-xs text-amber-400 font-semibold bg-amber-500/10 px-2.5 py-1 rounded-full">Station</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-sm font-medium text-slate-200">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-truck-fast text-rose-400"></i> Doorstep Delivery within Gataka</span>
-                        <span class="text-xs text-slate-300 font-bold bg-slate-800 px-2.5 py-1 rounded-full">KSh 150</span>
-                    </div>
-                </div>
-            </div>
+<!-- FEEDBACK FORM MODULE -->
+<section class="bg-slate-900 text-white p-8 rounded-xl shadow-md space-y-6">
+  <div class="max-w-2xl">
+    <h2 class="text-2xl font-bold text-white">Send Us Feedback or Questions</h2>
+    <p class="text-slate-300 text-sm mt-1">
+      Have ideas to improve Chanuka Market or need support? Drop us a message below.
+    </p>
+  </div>
 
-            <!-- Feedback & Suggestions Form -->
-            <div class="glass-card p-8 rounded-3xl border border-slate-800 space-y-6">
-                <div>
-                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-comment-dots text-blue-400"></i> Feedback & Suggestions
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-1">Help us tailor Chanuka Market to your needs.</p>
-                </div>
+  <form class="max-w-2xl space-y-4" onsubmit="event.preventDefault(); alert('Thank you for your feedback!');">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">Your Name</label>
+        <input type="text" required placeholder="John Doe" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-brand-blue">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">Phone Number / Email</label>
+        <input type="text" required placeholder="0712345678" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-brand-blue">
+      </div>
+    </div>
 
-                <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Name (Optional)</label>
-                        <input type="text" id="feedbackName" placeholder="e.g. Victor" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Category</label>
-                        <select id="feedbackType" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
-                            <option value="Suggestion">💡 Feature Suggestion</option>
-                            <option value="Review">⭐ Platform Experience</option>
-                            <option value="Issue">⚠️ Report an Issue</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your Feedback</label>
-                        <textarea id="feedbackMessage" required rows="3" placeholder="Write your thoughts..." class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition resize-none"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition text-sm glow-button">
-                        Submit Feedback
-                    </button>
-                </form>
+    <div>
+      <label class="block text-xs font-medium text-slate-300 mb-1">Message</label>
+      <textarea rows="4" required placeholder="Write your inquiry or feedback here..." class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-brand-blue"></textarea>
+    </div>
 
-                <div id="feedbackAlert" class="hidden text-xs bg-emerald-500/10 text-emerald-400 p-3 rounded-xl border border-emerald-500/20 font-medium text-center">
-                    ✨ Thank you! Your response has been saved.
-                </div>
-            </div>
+    <button type="submit" class="bg-brand-yellow hover:bg-yellow-400 text-slate-900 font-bold px-6 py-2.5 rounded-lg text-sm transition-all">
+      Submit Message
+    </button>
+  </form>
+</section>
 
-        </div>
 
-        <!-- Section 4: Connect With Us -->
-        <div class="glass-card p-8 sm:p-10 rounded-3xl border border-slate-800 text-center space-y-6">
-            <div class="max-w-md mx-auto space-y-2">
-                <h3 class="text-2xl font-black text-white">Connect & Get Support</h3>
-                <p class="text-xs sm:text-sm text-slate-400">Reach out directly via our official social channels for assistance or inquiries.</p>
-            </div>
+  <div>
+    <h3 class="text-brand-yellow font-bold text-lg mb-3">Chanuka-market-store</h3>
+    <p class="text-xs text-slate-400 leading-relaxed">
+      Affordable products for students, families, and businesses in Rongai, Gataka, and surrounding areas.
+    </p>
+  </div>
 
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://wa.me/254107474332" target="_blank" class="flex items-center gap-3 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-semibold px-6 py-3 rounded-2xl transition text-sm">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>WhatsApp: 0107474332</span>
-                </a>
-                <a href="https://instagram.com/its_victo_r" target="_blank" class="flex items-center gap-3 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-amber-500/20 hover:opacity-90 text-pink-300 border border-pink-500/30 font-semibold px-6 py-3 rounded-2xl transition text-sm">
-                    <i class="fa-brands fa-instagram text-lg"></i>
-                    <span>Instagram: @its_victo_r</span>
-                </a>
-            </div>
-        </div>
+  <div>
+    <h4 class="text-white font-semibold text-sm mb-3">Quick Links</h4>
+    <ul class="space-y-2 text-xs text-slate-400">
+      <li><a href="index.html" class="hover:text-white">Home</a></li>
+      <li><a href="index.html#products" class="hover:text-white">Shop Products</a></li>
+      <li><a href="about.html" class="hover:text-white">About Us</a></li>
+      <li><a href="sell.html" class="hover:text-white">Sell Products</a></li>
+    </ul>
+  </div>
 
-    </main>
+  <div>
+    <h4 class="text-white font-semibold text-sm mb-3">Categories</h4>
+    <ul class="space-y-2 text-xs text-slate-400">
+      <li>Electronics</li>
+      <li>Fashion</li>
+      <li>Furniture</li>
+      <li>Groceries & Household</li>
+      <li>Liquor & Drinks</li>
+    </ul>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800/80 py-8 text-xs text-slate-500">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>&copy; 2026 Chanuka Market Stores. All rights reserved.</p>
-            <div class="flex gap-6">
-                <a href="index.html" class="hover:text-slate-300 transition">Home</a>
-                <a href="about.html" class="hover:text-slate-300 transition">About Us</a>
-                <a href="https://wa.me/254107474332" target="_blank" class="hover:text-slate-300 transition">Support</a>
-            </div>
-        </div>
-    </footer>
+  <div>
+    <h4 class="text-white font-semibold text-sm mb-3">Contact & Support</h4>
+    <ul class="space-y-2 text-xs text-slate-400">
+      <li>📍 Rongai, Nairobi, Kenya</li>
+      <li>📞 Phone / WhatsApp: <a href="https://wa.me/254107474332" class="text-brand-yellow hover:underline">0107474332</a></li>
+      <li>📸 Instagram: <a href="https://instagram.com/its_victo_r" class="text-brand-yellow hover:underline">its_victo_r</a></li>
+      <li>✉️ Email: njengavictor92@gmail.com</li>
+    </ul>
+  </div>
 
-    <!-- Feedback Logic Script -->
-    <script>
-        function handleFeedbackSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('feedbackName').value || 'Anonymous';
-            const type = document.getElementById('feedbackType').value;
-            const message = document.getElementById('feedbackMessage').value;
+</div>
 
-            const existing = JSON.parse(localStorage.getItem('chanuka_feedback') || '[]');
-            existing.push({ name, type, message, timestamp: new Date().toISOString() });
-            localStorage.setItem('chanuka_feedback', JSON.stringify(existing));
-
-            document.getElementById('feedbackForm').reset();
-            const alert = document.getElementById('feedbackAlert');
-            alert.classList.remove('hidden');
-            setTimeout(() => alert.classList.add('hidden'), 4000);
-        }
-    </script>
-</body>
-</html>
+<div class="max-w-7xl mx-auto pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+  <p>© 2026 Chanuka Market Store. All Rights Reserved | Secured with Chanuka Escrow Vault</p>
+</div>
