@@ -1,83 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - Chanuka</title>
-<style>
-body{font-family:Arial;background:#eef1f5;margin:0}
-.box{max-width:420px;margin:80px auto;background:#fff;padding:30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:center}
-.box input{width:100%;padding:14px;margin:15px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box}
-.box button{width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
-#panel{display:none}
-.header{background:#000;color:#fff;padding:15px;display:flex;justify-content:space-between}
-.card{background:#fff;margin:10px;padding:15px;border-radius:10px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chanuka Market - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen p-4 sm:p-6">
+    <header class="max-w-6xl mx-auto bg-slate-900 text-white p-4 rounded-2xl shadow flex justify-between items-center mb-6">
+        <h1 class="font-bold text-lg">Chanuka Admin <span class="text-amber-400">Dashboard</span></h1>
+        <a href="index.html" class="bg-indigo-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition">View Store</a>
+    </header>
 
-<div id="loginDiv" class="box">
-<h2>Chanuka Admin Only</h2>
-<p>Enter admin key to continue</p>
-<input type="password" id="key" placeholder="Chanuka2026Admin">
-<button onclick="doLogin()">Login</button>
-<p style="font-size:12px;color:#999;margin-top:15px">Default key: Chanuka2026Admin</p>
-<a href="index.html">← Back to shop</a>
-</div>
+    <main class="max-w-6xl mx-auto space-y-6">
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-md font-bold text-gray-800 mb-4"><i class="fa-solid fa-comments mr-2 text-indigo-600"></i> Active Marketplace Conversations</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="border-b bg-gray-50 text-gray-600">
+                            <th class="p-3">Product</th>
+                            <th class="p-3">Seller</th>
+                            <th class="p-3">Price</th>
+                            <th class="p-3">Last Message</th>
+                            <th class="p-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-chat-list">
+                        <tr><td colspan="5" class="p-4 text-center text-gray-400">Loading chats...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div id="panel">
-<div class="header"><b>Chanuka Dashboard</b><button onclick="doLogout()" style="background:#333;color:#fff;border:none;padding:8px;border-radius:6px">Logout</button></div>
-<div style="padding:15px">
-<div style="display:flex;gap:10px">
-<div class="card" style="flex:1"><b id="total">0</b><br>Total</div>
-<div class="card" style="flex:1"><b id="pending">0</b><br>Pending</div>
-<div class="card" style="flex:1"><b id="approved">0</b><br>Approved</div>
-</div>
-<div class="card"><h3>Seller Requests</h3><div id="list">Loading...</div></div>
-</div>
-</div>
+        <!-- Transcript Modal Viewer -->
+        <div id="transcript-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden flex flex-col h-[500px]">
+                <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+                    <h3 id="modal-title" class="font-bold text-sm">Chat Transcript</h3>
+                    <button onclick="closeModal()" class="text-white text-xl font-bold">&times;</button>
+                </div>
+                <div id="modal-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50 text-sm">
+                    <!-- Messages loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
 
 <script>
-function doLogin(){
-  var k = document.getElementById("key").value;
-  if(k === "Chanuka2026Admin"){
-    localStorage.setItem("admin_ok","yes");
-    showPanel();
-  } else {
-    alert("Wrong key! Type: Chanuka2026Admin");
-  }
+const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
+const SUPABASE_KEY = "Your_Supabase_Key_Here"; // Use your active key
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function loadAdminChats() {
+    const { data: chats, error } = await client.from('chats').select('*').order('created_at', { ascending: false });
+    const tbody = document.getElementById('admin-chat-list');
+    
+    if (error || !chats || chats.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">No active conversations found.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = '';
+    chats.forEach(chat => {
+        tbody.innerHTML += `
+            <tr class="border-b hover:bg-gray-50 transition">
+                <td class="p-3 font-semibold text-gray-800">${chat.product_name}</td>
+                <td class="p-3 text-indigo-600 font-medium">${chat.seller_name}</td>
+                <td class="p-3 text-green-600 font-bold">KSh ${Number(chat.price).toLocaleString()}</td>
+                <td class="p-3 text-gray-500 truncate max-w-xs">${chat.last_message || 'Started'}</td>
+                <td class="p-3">
+                    <button onclick="viewTranscript('${chat.id}', '${chat.product_name}', '${chat.seller_name}')" class="bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-slate-800">
+                        Inspect
+                    </button>
+                </td>
+            </tr>`;
+    });
 }
-function showPanel(){
-  document.getElementById("loginDiv").style.display="none";
-  document.getElementById("panel").style.display="block";
-  load();
+
+async function viewTranscript(chatId, productName, sellerName) {
+    document.getElementById('modal-title').innerText = `${productName} (${sellerName})`;
+    const modalMsgs = document.getElementById('modal-messages');
+    modalMsgs.innerHTML = '<div class="text-center text-gray-400">Loading transcript...</div>';
+    document.getElementById('transcript-modal').classList.remove('hidden');
+
+    const { data: messages } = await client.from('messages').select('*').eq('chat_id', chatId).order('created_at', { ascending: true });
+    
+    modalMsgs.innerHTML = '';
+    if (!messages || messages.length === 0) {
+        modalMsgs.innerHTML = '<div class="text-center text-gray-400">No messages sent in this chat yet.</div>';
+        return;
+    }
+
+    messages.forEach(msg => {
+        const isBuyer = msg.sender === 'buyer';
+        modalMsgs.innerHTML += `
+            <div class="flex ${isBuyer ? 'justify-end' : 'justify-start'}">
+                <div class="max-w-[75%] p-3 rounded-xl ${isBuyer ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800'}">
+                    <p class="text-xs font-bold opacity-70 mb-0.5 uppercase">${msg.sender}</p>
+                    <p>${msg.text}</p>
+                </div>
+            </div>`;
+    });
 }
-function doLogout(){
-  localStorage.removeItem("admin_ok");
-  location.reload();
+
+function closeModal() {
+    document.getElementById('transcript-modal').classList.add('hidden');
 }
-function load(){
-  var sellers = JSON.parse(localStorage.getItem("chanuka_sellers") || "[]");
-  document.getElementById("total").innerText = sellers.length;
-  document.getElementById("pending").innerText = sellers.filter(s=>s.status=="pending").length;
-  document.getElementById("approved").innerText = sellers.filter(s=>s.status=="approved").length;
-  var list = document.getElementById("list");
-  if(sellers.length==0){ list.innerHTML="No sellers yet. Go to sell.html and submit a test."; return; }
-  list.innerHTML = sellers.map((s,i)=>`<div style="border-bottom:1px solid #eee;padding:10px 0"><b>${s.name}</b> - ${s.product} - KSH ${s.price}<br><small>${s.phone} | ${s.status}</small><br><button onclick="approve(${i})" style="margin-top:5px;padding:6px 10px;background:#25D366;color:#fff;border:none;border-radius:6px">Approve</button> <button onclick="del(${i})" style="padding:6px 10px;background:red;color:#fff;border:none;border-radius:6px">Delete</button> <a href="https://wa.me/254${s.phone.slice(-9)}" target="_blank" style="padding:6px 10px;background:#0a58ff;color:#fff;text-decoration:none;border-radius:6px">WhatsApp</a></div>`).join("");
-}
-function approve(i){
-  var sellers = JSON.parse(localStorage.getItem("chanuka_sellers") || "[]");
-  sellers[i].status="approved";
-  localStorage.setItem("chanuka_sellers", JSON.stringify(sellers));
-  load();
-}
-function del(i){
-  var sellers = JSON.parse(localStorage.getItem("chanuka_sellers") || "[]");
-  sellers.splice(i,1);
-  localStorage.setItem("chanuka_sellers", JSON.stringify(sellers));
-  load();
-}
-if(localStorage.getItem("admin_ok")==="yes"){ showPanel(); }
+
+loadAdminChats();
 </script>
 </body>
 </html>
