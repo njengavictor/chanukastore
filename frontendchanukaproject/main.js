@@ -176,28 +176,54 @@ function init() {
 
   /* Product Card Attachments: Chat Buttons & Favorites */
   productCards.forEach(function(card) {
+      /* Product Card Attachments: Chat Buttons & Favorites */
+  productCards.forEach(function(card) {
     const chatBtn = card.querySelector(".chat-with-seller-btn, [data-action='chat']");
+    
+    // Define product data ONCE for both card click and chat button
+    const pId = card.dataset.id || "prod_" + Date.now();
+    const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
+    const pSellerId = card.dataset.sellerId || "merchant_default";
+    const pSellerName = card.dataset.seller || card.querySelector(".product-seller")?.textContent.trim() || "Merchant Store";
+    const pSellerPhone = card.dataset.sellerPhone || "0712345678";
+    const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
+    const pImg = card.querySelector("img")?.src || "";
+    const pDesc = card.dataset.description || "";
+    const pCategory = card.dataset.category || "General";
+    const pStation = card.dataset.pickup || "Rongai Central";
+
+    // Make whole card clickable - ONLY ADDITION
+    card.style.cursor = 'pointer';
+    card.onclick = function() {
+      if (typeof openProductModal === 'function') {
+        openProductModal({
+          id: pId,
+          name: pName,
+          price: pPrice,
+          image: pImg,
+          images: [pImg],
+          description: pDesc,
+          category: pCategory,
+          pickup_station: pStation
+        });
+      }
+    };
+
     if (chatBtn) {
-    e.stopPropagation();  chatBtn.addEventListener("click", function(e) {
+      chatBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
         e.preventDefault();
-        const pId = card.dataset.id || "prod_" + Date.now();
-        const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
-        const pSellerId = card.dataset.sellerId || "merchant_default";
-        const pSellerName = card.dataset.seller || card.querySelector(".product-seller")?.textContent.trim() || "Merchant Store";
-        const pSellerPhone = card.dataset.sellerPhone || "0712345678";
-        const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
-        const pImg = card.querySelector("img")?.src || "";
-         card.style.cursor = 'pointer';
-card.onclick = function() {
-  openProductModal({
-    id: pId,
-    name: pName,
-    price: pPrice,
-    image: pImg,
-    images: [pImg],
-    description: card.dataset.description || "",
-    category: card.dataset.category || "General",
-    pickup_station: card.dataset.pickup || "Rongai Central"
+        window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
+      });
+    }
+
+    // Also prevent favorite button from opening modal
+    const favBtn = card.querySelector(".favorite-button");
+    if (favBtn) {
+      favBtn.addEventListener("click", function(e){
+        e.stopPropagation();
+      });
+    }
   });
 };
 
