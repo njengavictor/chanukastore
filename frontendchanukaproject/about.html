@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>About Us | Chanuka Market Store</title>
-  <meta name="description" content="Chanuka connects student entrepreneurs and local vendors to buyers in Rongai, Gataka & Eldoret. Created by Victor Njenga (Makaveli). M-Pesa Verified & Escrow Protected.">
+  <title>About Us & Legal Policies | Chanuka Market Store</title>
+  <meta name="description" content="Chanuka Market Store connects student entrepreneurs and local vendors to buyers in Rongai, Gataka & Eldoret. Created by Victor Njenga (Makaveli). Privacy Policy, Terms, and Cookie Guidelines.">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -183,7 +183,7 @@
       .grid-2 { grid-template-columns: 1.4fr 1fr; }
     }
 
-    /* Attributes & Light Blue Features */
+    /* Attributes & Features */
     .attribution-box {
       background-color: var(--brand-blue-light);
       border-left: 5px solid var(--brand-blue);
@@ -242,7 +242,7 @@
       gap: 10px;
     }
 
-    /* ========== SVG SOCIAL CARDS ========== */
+    /* ========== SOCIAL CARDS ========== */
     .social-card {
       display: flex;
       align-items: center;
@@ -270,7 +270,6 @@
     }
     .social-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
 
-    /* Social Brand Colors */
     .icon-instagram { background-color: #fce7f3; color: #be185d; }
     .icon-whatsapp { background-color: var(--mpesa-light); color: var(--mpesa-green); }
     .icon-phone { background-color: var(--brand-blue-light); color: var(--brand-blue); }
@@ -305,6 +304,53 @@
     }
     .btn-submit:hover { background-color: #1e40af; }
 
+    /* ========== COOKIE CONSENT BANNER ========== */
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--brand-dark);
+      color: #ffffff;
+      padding: 16px 20px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 3px solid var(--brand-yellow-accent);
+    }
+    @media (min-width: 640px) {
+      .cookie-banner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .cookie-banner p { color: #cbd5e1; margin: 0; font-size: 0.875rem; font-weight: 500; }
+    .cookie-banner a { color: #fbbf24; text-decoration: underline; font-weight: 700; }
+    .cookie-btn-group { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-cookie-accept {
+      background-color: var(--brand-yellow-accent);
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .btn-cookie-decline {
+      background-color: #334155;
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
     /* ========== FOOTER ========== */
     .footer {
       background-color: var(--brand-dark);
@@ -323,6 +369,10 @@
       font-size: 0.875rem;
       font-weight: 500;
     }
+    .footer-legal-links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+    .footer-legal-links a { color: #94a3b8; text-decoration: none; font-weight: 600; font-size: 0.825rem; }
+    .footer-legal-links a:hover { color: #ffffff; text-decoration: underline; }
+
     @media (min-width: 640px) {
       .footer-container { flex-direction: row; align-items: center; }
       .menu-btn { display: none; }
@@ -345,7 +395,7 @@
       <nav class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="index.html#products" class="nav-link">Products</a>
-        <a href="about.html" class="nav-link active">About Us</a>
+        <a href="about.html" class="nav-link active">About Us & Legal</a>
       </nav>
       <button id="menuBtn" class="menu-btn" aria-label="Toggle menu">☰</button>
     </div>
@@ -398,186 +448,57 @@
       </div>
     </section>
 
-    <!-- 2. CORE MARKETPLACE POLICIES (TABBED) -->
-    <section class="card">
-      <h2>Platform Guidelines & Verification</h2>
-      <p style="margin-bottom: 20px; font-weight: 600;">Review how we handle escrow transactions, delivery pickups, and buyer/seller protections.</p>
+    <!-- 2. CORE POLICIES & LEGAL TERMS (TABBED) -->
+    <section class="card" id="legal-policies">
+      <h2>Legal Policies & Operational Terms</h2>
+      <p style="margin-bottom: 20px; font-weight: 600;">Transparency and compliance guidelines governing buying, selling, data protection, and cookie usage.</p>
 
       <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab(event, 'escrow-policy')">Shield Escrow & M-Pesa</button>
-        <button class="tab-btn" onclick="switchTab(event, 'pickup-policy')">Delivery & Pickup Points</button>
-        <button class="tab-btn" onclick="switchTab(event, 'returns-policy')">Returns & Dispute Policy</button>
+        <button class="tab-btn active" onclick="switchTab(event, 'privacy-policy')">🔒 Privacy Policy</button>
+        <button class="tab-btn" onclick="switchTab(event, 'terms-policy')">📜 Terms of Service</button>
+        <button class="tab-btn" onclick="switchTab(event, 'cookie-policy')">🍪 Cookie Policy</button>
       </div>
 
-      <!-- Tab 1: Escrow & M-Pesa -->
-      <div id="escrow-policy" class="tab-content active">
+      <!-- Tab 1: Privacy Policy -->
+      <div id="privacy-policy" class="tab-content active">
+        <p>Your privacy is important to us. This Privacy Policy details how Chanuka Market Store collects and protects your data:</p>
         <ul class="policy-list">
-          <li><span style="color: var(--mpesa-green); font-weight: 800;">✓</span> <strong>M-Pesa Express Payment:</strong> Fast and direct STK Push payments linked directly to verified seller accounts.</li>
-          <li><span style="color: var(--brand-blue); font-weight: 800;">🛡️</span> <strong>Vault Security:</strong> Buyer funds are held safely in the Chanuka Escrow Vault until delivery is confirmed.</li>
-          <li><span style="color: var(--brand-gold); font-weight: 800;">💰</span> <strong>5% Platform Fee:</strong> Sellers retain 95% net payout on all successful sales.</li>
+          <li><strong>Information We Collect:</strong> We collect details necessary for processing orders and buyer-seller chat routing, including your name, phone number, and chosen delivery pickup point.</li>
+          <li><strong>M-Pesa Checkout Data:</strong> Payment details are securely submitted directly via M-Pesa STK Push. Chanuka Market Store does not store your private M-Pesa PIN.</li>
+          <li><strong>Data Confidentiality:</strong> Your contact information is strictly shared with the assigned product seller to facilitate pickup and order fulfillment. We do not sell user data.</li>
         </ul>
       </div>
 
-      <!-- Tab 2: Delivery Points -->
-      <div id="pickup-policy" class="tab-content">
+      <!-- Tab 2: Terms of Service -->
+      <div id="terms-policy" class="tab-content">
+        <p>By browsing or creating a shop on Chanuka Market Store, you agree to the following Terms of Service:</p>
         <ul class="policy-list">
-          <li><span style="color: var(--brand-blue); font-weight: 800;">📍</span> <strong>Cooperative on Campus:</strong> Centralized drop-off and pickup point for university students.</li>
-          <li><span style="color: var(--brand-blue); font-weight: 800;">📍</span> <strong>Gataka Stations:</strong> Pickup available at Gataka - Destiny and G-place Gataka.</li>
-          <li><span style="color: var(--brand-blue); font-weight: 800;">📍</span> <strong>Eldoret Station:</strong> Zion Mall pickup hub.</li>
-          <li><span style="color: var(--brand-blue); font-weight: 800;">📍</span> <strong>Gataka Delivery:</strong> Ksh 150 local delivery option within Gataka.</li>
+          <li><strong>Escrow Vault Protection:</strong> Buyer payments are held securely in escrow until order delivery and verification at the designated pickup point.</li>
+          <li><strong>5% Platform Fee:</strong> Sellers receive 95% net payout on all successfully fulfilled items. Platform fees are non-refundable once an order is complete.</li>
+          <li><strong>Prohibited Items:</strong> Sellers are strictly forbidden from listing illegal goods, hazardous materials, or fraudulent products. Offending accounts are suspended immediately.</li>
         </ul>
       </div>
 
-      <!-- Tab 3: Dispute & Refund Policy -->
-      <div id="returns-policy" class="tab-content">
+      <!-- Tab 3: Cookie Policy -->
+      <div id="cookie-policy" class="tab-content">
+        <p>Chanuka Market Store uses cookies and local storage to enhance your browsing experience:</p>
         <ul class="policy-list">
-          <li><span style="color: var(--brand-gold); font-weight: 800;">⚠️</span> <strong>Station Inspection:</strong> Buyers inspect items at the pickup station prior to releasing escrow funds.</li>
-          <li><span style="color: var(--brand-gold); font-weight: 800;">⚠️</span> <strong>Dispute Window:</strong> Damaged or incorrect items can be flagged instantly to hold payout.</li>
-          <li><span style="color: var(--mpesa-green); font-weight: 800;">✓</span> <strong>Full Refund Guarantee:</strong> Unfulfilled orders receive a 100% refund back to the buyer's M-Pesa number.</li>
+          <li><strong>Essential Cookies:</strong> Required to keep you logged into your Seller Dashboard and save items in your active shopping cart.</li>
+          <li><strong>Preference Cookies:</strong> Remembers your preferred pickup station (e.g., Cooperative on Campus, Gataka - Destiny) for faster checkout.</li>
+          <li><strong>Managing Consent:</strong> You can manage or disable cookie preferences anytime through your browser settings or our Cookie Banner below.</li>
         </ul>
       </div>
     </section>
 
     <!-- 3. SOCIAL HANDLES & FEEDBACK FORM -->
     <section class="grid-2">
-      <!-- Social Media Links with SVG Vector Logos -->
+      <!-- Social Media Links -->
       <div class="card">
         <h2>Connect With Us</h2>
         <p style="font-weight: 600;">Reach out directly for seller onboarding, support, or community inquiries.</p>
 
         <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
           
-          <!-- Instagram -->
           <a href="https://instagram.com/its_victo_r" target="_blank" class="social-card">
             <div class="social-icon-box icon-instagram">
-              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </div>
-            <div>
-              <h3>Instagram</h3>
-              <div style="font-size: 0.85rem; font-weight: 700; color: #be185d;">@its_victo_r</div>
-            </div>
-          </a>
-
-          <!-- WhatsApp -->
-          <a href="https://wa.me/254107474332" target="_blank" class="social-card">
-            <div class="social-icon-box icon-whatsapp">
-              <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-            </div>
-            <div>
-              <h3>WhatsApp</h3>
-              <div style="font-size: 0.85rem; font-weight: 700; color: var(--mpesa-green);">0107474332 / +254 114 044 517</div>
-            </div>
-          </a>
-
-          <!-- Phone Call -->
-          <a href="tel:0107474332" class="social-card">
-            <div class="social-icon-box icon-phone">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            </div>
-            <div>
-              <h3>Call Direct</h3>
-              <div style="font-size: 0.85rem; font-weight: 700; color: var(--brand-blue);">0107474332</div>
-            </div>
-          </a>
-
-          <!-- TikTok -->
-          <a href="#" class="social-card">
-            <div class="social-icon-box icon-tiktok">
-              <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.98-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.36 1.48-1.42 2.49-.13 1.34.62 2.67 1.83 3.23 1.04.5 2.33.43 3.27-.19.89-.57 1.48-1.57 1.54-2.63.07-2.73.03-5.46.04-8.19.01-4.21.01-8.42.01-12.63z"/></svg>
-            </div>
-            <div>
-              <h3>TikTok</h3>
-              <div style="font-size: 0.85rem; font-weight: 700; color: #0f172a;">@chanuka_market</div>
-            </div>
-          </a>
-
-          <!-- Facebook -->
-          <a href="#" class="social-card">
-            <div class="social-icon-box icon-facebook">
-              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </div>
-            <div>
-              <h3>Facebook</h3>
-              <div style="font-size: 0.85rem; font-weight: 700; color: #1e40af;">Chanuka Market Store</div>
-            </div>
-          </a>
-
-        </div>
-      </div>
-
-      <!-- Admin Feedback Form -->
-      <div class="card">
-        <h2>Send Direct Feedback</h2>
-        <p style="font-weight: 600;">Have suggestions or need assistance? Drop a line to the admin team.</p>
-
-        <form id="feedbackForm" style="margin-top: 16px;">
-          <div class="form-group">
-            <label for="fbName">Full Name</label>
-            <input type="text" id="fbName" class="form-control" placeholder="Your name" required>
-          </div>
-          <div class="form-group">
-            <label for="fbPhone">Phone Number</label>
-            <input type="tel" id="fbPhone" class="form-control" placeholder="07... or 01..." required>
-          </div>
-          <div class="form-group">
-            <label for="fbMessage">Message or Suggestion</label>
-            <textarea id="fbMessage" rows="3" class="form-control" placeholder="How can we improve Chanuka Market?" required></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Submit Message</button>
-        </form>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ========== FOOTER ========== -->
-  <footer class="footer">
-    <div class="footer-container">
-      <div>
-        <div style="font-weight: 800; color: #ffffff; font-size: 1.05rem;">Chanuka Market Store</div>
-        <div style="color: #cbd5e1; margin-top: 2px; font-weight: 600;">Created & Developed by <strong>Victor Njenga (Makaveli)</strong></div>
-      </div>
-      <div style="color: #cbd5e1; font-weight: 600;">
-        © 2026 Chanuka Market Store. All rights reserved.
-      </div>
-    </div>
-  </footer>
-
-  <!-- ========== JAVASCRIPT ========== -->
-  <script>
-    // Mobile Navigation Toggle
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('show');
-      });
-    }
-
-    // Policy Tab Switcher
-    function switchTab(event, tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-      event.currentTarget.classList.add('active');
-      const target = document.getElementById(tabId);
-      if (target) target.classList.add('active');
-    }
-
-    // Feedback Form Handler
-    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = document.getElementById('fbName').value;
-      const phone = document.getElementById('fbPhone').value;
-      const msg = document.getElementById('fbMessage').value;
-
-      const adminWhatsApp = "254107474332";
-      const text = `*FEEDBACK FROM ABOUT PAGE*%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AMessage: ${encodeURIComponent(msg)}`;
-      
-      alert('Thank you ' + name + '! Redirecting your feedback to Admin on WhatsApp.');
-      window.open(`https://wa.me/${adminWhatsApp}?text=${text}`, '_blank');
-      this.reset();
-    });
-  </script>
-</body>
-</html>
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2
