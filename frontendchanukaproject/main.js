@@ -178,7 +178,7 @@ function init() {
   productCards.forEach(function(card) {
     const chatBtn = card.querySelector(".chat-with-seller-btn, [data-action='chat']");
     if (chatBtn) {
-      chatBtn.addEventListener("click", function(e) {
+    e.stopPropagation();  chatBtn.addEventListener("click", function(e) {
         e.preventDefault();
         const pId = card.dataset.id || "prod_" + Date.now();
         const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
@@ -188,7 +188,18 @@ function init() {
         const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
         const pImg = card.querySelector("img")?.src || "";
          card.style.cursor = 'pointer';
-card.onclick = () => openProductModal(product);
+card.onclick = function() {
+  openProductModal({
+    id: pId,
+    name: pName,
+    price: pPrice,
+    image: pImg,
+    images: [pImg],
+    description: card.dataset.description || "",
+    category: card.dataset.category || "General",
+    pickup_station: card.dataset.pickup || "Rongai Central"
+  });
+};
 
         window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
       });
