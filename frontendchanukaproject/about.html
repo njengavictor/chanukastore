@@ -1,253 +1,235 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sell on Chanuka Market</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-  body { font-family: Arial; margin:0; background:#f5f7fb; }
-  .sell-wrapper { max-width:550px; margin:30px auto; padding:20px; }
-  .sell-card { background:white; padding:25px; border-radius:16px; box-shadow:0 5px 20px rgba(0,0,0,0.1); margin-bottom:20px; }
-  .sell-card input, .sell-card textarea, .sell-card select { width:100%; padding:14px; margin:10px 0; border:1px solid #ddd; border-radius:10px; font-size:16px; box-sizing:border-box; }
-  .sell-card button { width:100%; padding:15px; background:#0a58ff; color:white; border:none; border-radius:10px; font-weight:bold; font-size:16px; cursor:pointer; }
-  .hidden { display:none; }
-  .tab-btn { flex:1; padding:10px; border:none; background:#eef2ff; color:#0a58ff; font-weight:bold; border-radius:8px; cursor:pointer; }
-  .tab-btn.active { background:#0a58ff; color:white; }
-</style>
-</head>
-<body>
+<!-- 1. HERO & CREATOR ATTRIBUTION SECTION -->
+<section class="bg-white p-6 md:p-10 rounded-xl border border-slate-200 shadow-sm space-y-6">
+  <div class="flex flex-col lg:flex-row gap-8 items-start">
+    <div class="lg:w-[65%] space-y-4">
+      <div class="inline-flex items-center gap-2 bg-[#1e293b] text-white text-[12px] font-medium px-3 py-1.5 rounded-md">
+        <span>💡 Developed by</span>
+        <span class="text-brand-yellow font-bold">Victor Njenga (Makaveli)</span>
+      </div>
+      
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
+        Empowering Student Entrepreneurs & Local Merchants Across Kenya
+      </h1>
+      
+      <p class="text-slate-600 text-sm leading-relaxed">
+        <strong>Chanuka Market Store</strong> was built to solve a simple problem: making online buying and selling safe, affordable, and hyper-local. Created by <strong>Victor Njenga (Makaveli)</strong>, the platform bridges the gap between student hustlers, local shop owners, and daily buyers without the burden of heavy courier fees or high commissions.
+      </p>
 
-<div class="sell-wrapper">
-  <a href="index.html" style="text-decoration:none; color:#0a58ff;">← Back to Market</a>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        Whether you are selling electronics, campus fashion, books, groceries, household items, or liquor, Chanuka Market provides a trusted marketplace backed by escrow payment security and verified local pickup stations.
+      </p>
 
-  <!-- SELLER LOGIN - makes inbox private -->
-  <div id="loginCard" class="sell-card" style="border:2px solid #0a58ff;">
-    <h3 style="text-align:center;">🔒 My Seller Dashboard</h3>
-    <p style="text-align:center;font-size:13px;color:#666;">Enter your shop name/phone to see ONLY your buyer chats & orders</p>
-    <input type="text" id="shopNameInput" placeholder="Your Shop Name e.g. Jameson Distributors">
-    <input type="tel" id="shopPhoneInput" placeholder="Your M-Pesa Phone 07...">
-    <button onclick="loginSeller()">Login to My Dashboard</button>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+          <div class="text-xs font-bold text-slate-900">🎓 Student Hustlers</div>
+          <div class="text-[11px] text-slate-600 mt-1">List items freely, reach campus peers, and grow your income.</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+          <div class="text-xs font-bold text-slate-900">🏪 Local Vendors</div>
+          <div class="text-[11px] text-slate-600 mt-1">Keep 95% net payout. Just a flat 5% platform maintenance fee.</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-xs font-bold text-slate-900">🛒 Safe Buyers</div>
+          <div class="text-[11px] text-slate-600 mt-1">Funds are protected in Escrow until delivery is verified.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:w-[35%] w-full space-y-4">
+      <div class="bg-[#1e293b] text-white p-6 rounded-xl space-y-3">
+        <h3 class="font-bold text-sm text-brand-yellow uppercase tracking-wider">Market Overview</h3>
+        <div class="space-y-2 text-xs border-t border-slate-700 pt-3">
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">Founder & Lead Dev</span>
+            <span class="font-medium text-white">Victor Njenga (Makaveli)</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">Vendor Commission</span>
+            <span class="font-medium text-brand-yellow">5% Flat Rate</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">Seller Net Payout</span>
+            <span class="font-medium text-white">95%</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">Primary Hubs</span>
+            <span class="font-medium text-white">Rongai • Gataka • Eldoret</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span class="text-slate-400">Payment Engine</span>
+            <span class="font-medium text-white">M-Pesa STK & Escrow</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. SOCIAL MEDIA & DIRECT CONTACT CARDS -->
+<section class="space-y-4">
+  <div class="border-l-4 border-brand-blue pl-3">
+    <h2 class="text-lg font-bold text-slate-900">Connect With Admin & Community</h2>
+    <p class="text-xs text-slate-600">Follow our handles, ask questions, or chat directly with the platform developer.</p>
   </div>
 
-  <!-- PRIVATE INBOX & ORDER ALERTS - only for logged seller -->
-  <div id="inboxCard" class="sell-card hidden" style="border:2px solid #0a58ff;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-      <h3>📊 Seller Dashboard</h3>
-      <button onclick="logoutSeller()" style="width:auto;padding:6px 12px;background:#eee;color:#333;font-size:12px;">Logout</button>
-    </div>
-    <p style="font-size:12px;color:#666;margin-bottom:15px;">Shop: <b id="myShopDisplay"></b> - private dashboard</p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Instagram -->
+    <a href="https://instagram.com/its_victo_r" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-blue transition-all flex items-center gap-3">
+      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">📷</div>
+      <div>
+        <div class="text-xs font-bold text-slate-900">Instagram</div>
+        <div class="text-xs text-brand-blue font-medium">@its_victo_r</div>
+      </div>
+    </a>
 
-    <!-- ADMIN BROADCAST ALERTS BANNER -->
-    <div id="adminAlertBanner" style="display:none;background:#fef3c7;border:1px solid #f59e0b;padding:12px;border-radius:10px;margin-bottom:15px;font-size:13px;color:#92400e;">
-      <b>📢 Admin Notice:</b> <span id="adminAlertText"></span>
-    </div>
+    <!-- WhatsApp Support -->
+    <a href="https://wa.me/254114044517" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-blue transition-all flex items-center gap-3">
+      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">💬</div>
+      <div>
+        <div class="text-xs font-bold text-slate-900">WhatsApp Support</div>
+        <div class="text-xs text-brand-blue font-medium">+254 114 044 517</div>
+      </div>
+    </a>
 
-    <!-- NAVIGATION TABS -->
-    <div style="display:flex;gap:8px;margin-bottom:15px;">
-      <button id="tabOrdersBtn" class="tab-btn active" onclick="switchTab('orders')">📦 Order Alerts</button>
-      <button id="tabChatsBtn" class="tab-btn" onclick="switchTab('chats')">💬 Buyer Messages</button>
-    </div>
+    <!-- Direct Call -->
+    <a href="tel:0107474332" class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-blue transition-all flex items-center gap-3">
+      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">📞</div>
+      <div>
+        <div class="text-xs font-bold text-slate-900">Phone Support</div>
+        <div class="text-xs text-brand-blue font-medium">0107474332</div>
+      </div>
+    </a>
 
-    <!-- ORDER NOTIFICATIONS TAB -->
-    <div id="ordersTab">
-      <div id="ordersList">Loading order alerts...</div>
+    <!-- TikTok / Social Community -->
+    <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-3">
+      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">🎵</div>
+      <div>
+        <div class="text-xs font-bold text-slate-900">TikTok Community</div>
+        <div class="text-xs text-slate-500 font-medium">@chanukamarket</div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <!-- BUYER CHATS TAB -->
-    <div id="chatsTab" class="hidden">
-      <div id="inboxList">Loading chats...</div>
-    </div>
-
-    <button onclick="refreshDashboard()" style="background:#eef2ff;color:#0a58ff;margin-top:15px;padding:10px;font-size:13px;">🔄 Refresh Dashboard</button>
+<!-- 3. PICKUP STATIONS & PLATFORM MECHANICS -->
+<section class="bg-white p-6 rounded-xl border border-slate-200 space-y-4">
+  <div class="border-l-4 border-brand-yellow pl-3">
+    <h2 class="text-lg font-bold text-slate-900">Verified Pickup Stations</h2>
+    <p class="text-xs text-slate-600">Eliminating expensive long-distance delivery costs with designated pickup hubs.</p>
   </div>
 
-  <!-- PUBLIC SELL FORM -->
-  <div class="sell-card">
-    <h2 style="text-align:center;">Start Selling on Chanuka</h2>
-    <p style="text-align:center;color:#666;font-size:14px;">Sell your products - BEI YAKO BEI POA!</p>
-    <form id="sellForm">
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="tel" id="phone" placeholder="Your M-Pesa Phone 07..." required>
-      <input type="text" id="product" placeholder="Product Name" required>
-      <input type="number" id="price" placeholder="Price in KSH" required>
-      <select id="category" required>
-        <option value="">Select Category</option>
-        <option>Electronics</option>
-        <option>Fashion</option>
-        <option>Beauty products</option>
-        <option>Food Stuff</option>
-        <option>Furniture</option>
-        <option>Books & Stationery</option>
-        <option>Liquor & Drinks</option>
-      </select>
-      <textarea id="desc" rows="3" placeholder="Describe product..."></textarea>
-      <button type="submit" id="submitBtn">Send Request to Admin</button>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 text-xs">
+    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div class="font-bold text-slate-900">📍 Station 1</div>
+      <div class="text-slate-600 mt-1">Cooperative on campus</div>
+    </div>
+    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div class="font-bold text-slate-900">📍 Station 2</div>
+      <div class="text-slate-600 mt-1">Gataka - Destiny</div>
+    </div>
+    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div class="font-bold text-slate-900">📍 Station 3</div>
+      <div class="text-slate-600 mt-1">G-place Gataka</div>
+    </div>
+    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div class="font-bold text-slate-900">📍 Station 4</div>
+      <div class="text-slate-600 mt-1">Eldoret - Zion mall</div>
+    </div>
+    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div class="font-bold text-slate-900">🚚 Doorstep</div>
+      <div class="text-slate-600 mt-1">Gataka Area (Ksh 150)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. STANDARD MARKETPLACE POLICIES -->
+<section class="bg-white p-6 rounded-xl border border-slate-200 space-y-6">
+  <div class="border-l-4 border-brand-blue pl-3">
+    <h2 class="text-lg font-bold text-slate-900">Marketplace Policies & Guidelines</h2>
+    <p class="text-xs text-slate-600">Standard operational guidelines ensuring safety for buyers and sellers.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+    <!-- Policy 1 -->
+    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+        <span>🛡️</span> Escrow & Buyer Protection Policy
+      </h3>
+      <p class="text-slate-600 leading-relaxed">
+        All customer payments via M-Pesa STK push are held in the secure Chanuka Escrow Vault. Funds are only released to the seller (95% net payout) once the buyer inspects and confirms satisfaction upon delivery or pickup.
+      </p>
+    </div>
+
+    <!-- Policy 2 -->
+    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+        <span>📦</span> Pickup & Station Drop-off SLA
+      </h3>
+      <p class="text-slate-600 leading-relaxed">
+        Upon order placement, sellers receive instant notifications specifying the exact pickup station chosen by the buyer. Sellers are expected to drop off the item within 24 to 48 hours for buyer collection.
+      </p>
+    </div>
+
+    <!-- Policy 3 -->
+    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+        <span>🚫</span> Prohibited Items & Vendor Conduct
+      </h3>
+      <p class="text-slate-600 leading-relaxed">
+        Sellers must list genuine products with accurate pricing. Counterfeit goods, illegal contraband, weapons, or misleading descriptions will result in immediate account termination and escrow forfeitures.
+      </p>
+    </div>
+
+    <!-- Policy 4 -->
+    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
+      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+        <span>🔄</span> Refunds & Dispute Resolution
+      </h3>
+      <p class="text-slate-600 leading-relaxed">
+        If an item is damaged, misdescribed, or unfulfilled, buyers can request order cancellation before escrow release. Admin support will mediate disputes and process full refunds when applicable.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ADMIN CONTACT & FEEDBACK FORM -->
+<section class="bg-white p-6 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div class="space-y-4">
+    <h2 class="text-lg font-bold text-slate-900">Send Direct Feedback to Admin</h2>
+    <p class="text-xs text-slate-600 leading-relaxed">
+      Have a suggestion, seller registration issue, or general question? Send a message directly to Victor Njenga (Makaveli) and our support staff.
+    </p>
+
+    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2 text-xs">
+      <div class="font-bold text-slate-900">Direct Contact Channels</div>
+      <p class="text-slate-600">📱 Phone: <b>0107474332</b></p>
+      <p class="text-slate-600">💬 WhatsApp: <b>+254 114 044 517</b></p>
+      <p class="text-slate-600">📸 Instagram: <b>@its_victo_r</b></p>
+    </div>
+  </div>
+
+  <div class="bg-slate-50 p-5 rounded-lg border border-slate-200 space-y-3">
+    <form onsubmit="event.preventDefault(); alert('Thank you Victor/User! Your feedback has been sent to admin.');" class="space-y-3 text-xs">
+      <div>
+        <label class="block font-medium text-slate-700 mb-1">Your Name</label>
+        <input type="text" placeholder="Enter your full name" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-brand-blue">
+      </div>
+      <div>
+        <label class="block font-medium text-slate-700 mb-1">Your Phone / M-Pesa</label>
+        <input type="tel" placeholder="07... or 01..." required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-brand-blue">
+      </div>
+      <div>
+        <label class="block font-medium text-slate-700 mb-1">Message or Issue Description</label>
+        <textarea rows="3" placeholder="Write your feedback here..." required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-brand-blue"></textarea>
+      </div>
+      <button type="submit" class="w-full py-2.5 bg-brand-blue text-white font-bold rounded-lg hover:bg-blue-700 transition-colors">Submit Message</button>
     </form>
-    <a id="whatsappDirect" style="display:block;text-align:center;margin-top:15px;padding:14px;background:#25D366;color:white;text-decoration:none;border-radius:10px;font-weight:bold;" href="#" target="_blank">💬 Chat Admin on WhatsApp</a>
+  </div>
+</section>
+
+
+  <div class="text-slate-400 text-center md:text-right">
+    <p>© 2026 Chanuka Market Store. All Rights Reserved.</p>
+    <p class="mt-1">Instagram: <a href="https://instagram.com/its_victo_r" class="text-white hover:underline">@its_victo_r</a> | Phone: <span class="text-white">0107474332</span></p>
   </div>
 </div>
-
-<script>
-const ADMIN_WHATSAPP = "254114044517";
-const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsdHB5c2psY2ppZmNraWxub21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjE3MTgzNSwiZXhwIjoyMTA3NzQ3ODM1fQ.GaRZS3drc_pU_k-GUwH30nftt0HIDZsuYdYW30OYahQ";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-document.getElementById("whatsappDirect").href = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent("Hi Chanuka Admin, I want to sell")}`;
-
-// LOGIN & LOGOUT LOGIC
-function loginSeller(){
-  const shop = document.getElementById('shopNameInput').value.trim();
-  const phone = document.getElementById('shopPhoneInput').value.trim();
-  if(!shop){ alert('Enter your shop name'); return; }
-  localStorage.setItem('myShopName', shop);
-  localStorage.setItem('myShopPhone', phone);
-  showInbox();
-}
-
-function logoutSeller(){ 
-  localStorage.removeItem('myShopName'); 
-  localStorage.removeItem('myShopPhone'); 
-  location.reload(); 
-}
-
-function showInbox(){
-  const shop = localStorage.getItem('myShopName');
-  if(!shop) return;
-  document.getElementById('loginCard').classList.add('hidden');
-  document.getElementById('inboxCard').classList.remove('hidden');
-  document.getElementById('myShopDisplay').textContent = shop;
-  refreshDashboard();
-}
-
-function switchTab(tabName) {
-  if (tabName === 'orders') {
-    document.getElementById('ordersTab').classList.remove('hidden');
-    document.getElementById('chatsTab').classList.add('hidden');
-    document.getElementById('tabOrdersBtn').classList.add('active');
-    document.getElementById('tabChatsBtn').classList.remove('active');
-  } else {
-    document.getElementById('ordersTab').classList.add('hidden');
-    document.getElementById('chatsTab').classList.remove('hidden');
-    document.getElementById('tabOrdersBtn').classList.remove('active');
-    document.getElementById('tabChatsBtn').classList.add('active');
-  }
-}
-
-function refreshDashboard() {
-  loadOrderNotifications();
-  loadInbox();
-  loadAdminAlerts();
-}
-
-// 1. FETCH REAL-TIME ORDER ALERTS & PICKUP DESTINATIONS
-async function loadOrderNotifications() {
-  const myShop = localStorage.getItem('myShopName');
-  const myPhone = localStorage.getItem('myShopPhone');
-  if (!myShop) return;
-
-  const list = document.getElementById('ordersList');
-  list.innerHTML = 'Loading order notifications...';
-
-  // Fetch notifications specifically addressed to this shop
-  const { data, error } = await supabaseClient
-    .from('notifications')
-    .select('*')
-    .ilike('seller_name', `%${myShop}%`)
-    .order('created_at', { ascending: false });
-
-  if (error) { 
-    list.innerHTML = `<p style="color:red;font-size:12px;">Error: ${error.message}</p>`; 
-    return; 
-  }
-
-  if (!data || !data.length) { 
-    list.innerHTML = `<p style="color:#999;text-align:center;padding:15px;font-size:13px;">No order notifications for <b>${myShop}</b> yet.<br>New customer purchases & delivery pickup points will appear here.</p>`; 
-    return; 
-  }
-
-  list.innerHTML = data.map(item => `
-    <div style="padding:14px; background:#f0fdf4; border:1px solid #bbf7d0; border-left:4px solid #16a34a; border-radius:10px; margin-bottom:10px;">
-      <div style="font-size:13px; font-weight:bold; color:#15803d; margin-bottom:4px;">
-        📢 Order Notification
-      </div>
-      <div style="font-size:13px; color:#1e293b; line-height:1.4;">
-        ${item.message}
-      </div>
-      <div style="font-size:11px; color:#64748b; margin-top:6px; display:flex; justify-content:space-between;">
-        <span>Status: <b style="color:#0a58ff;">Funds in Escrow Vault</b></span>
-        <span>${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-// 2. FETCH PRIVATE BUYER CHATS
-async function loadInbox(){
-  const myShop = localStorage.getItem('myShopName');
-  if(!myShop) return;
-  const list = document.getElementById('inboxList');
-  list.innerHTML = 'Loading chats...';
-  
-  const { data, error } = await supabaseClient
-    .from('chats')
-    .select('*')
-    .ilike('seller_name', `%${myShop}%`)
-    .order('created_at', {ascending:false});
-
-  if(error){ list.innerHTML = error.message; return; }
-  if(!data || !data.length){ 
-    list.innerHTML = `<p style="color:#999;text-align:center;padding:15px;font-size:13px;">No buyer chats for <b>${myShop}</b> yet.</p>`; 
-    return; 
-  }
-
-  list.innerHTML = data.map(c => `
-    <div onclick="location.href='chat.html?product=${encodeURIComponent(c.product_name)}&price=${c.price}&seller=${encodeURIComponent(c.seller_name)}&role=seller'" 
-    style="padding:12px;border:1px solid #eee;border-radius:10px;margin-bottom:8px;cursor:pointer;background:#f0f7ff">
-      <b>${c.product_name}</b> <small style="float:right">${new Date(c.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</small>
-      <div style="font-size:13px;margin-top:4px;">💬 ${c.last_message || 'New chat'}</div>
-      <div style="font-size:11px;color:#0a58ff;margin-top:4px;">Click to reply → private</div>
-    </div>`).join('');
-}
-
-// 3. FETCH ADMIN ANNOUNCEMENTS / ALERTS
-async function loadAdminAlerts() {
-  const { data } = await supabaseClient
-    .from('notifications')
-    .select('*')
-    .eq('seller_name', 'ALL_SELLERS')
-    .order('created_at', { ascending: false })
-    .limit(1);
-
-  if (data && data.length > 0) {
-    document.getElementById('adminAlertText').textContent = data[0].message;
-    document.getElementById('adminAlertBanner').style.display = 'block';
-  }
-}
-
-// Auto-login if already saved
-if(localStorage.getItem('myShopName')) showInbox();
-
-// Real-time subscriptions for Order Notifications & Chats
-supabaseClient.channel('seller-realtime')
-  .on('postgres_changes', {event:'*', schema:'public', table:'notifications'}, () => { if(localStorage.getItem('myShopName')) refreshDashboard(); })
-  .on('postgres_changes', {event:'*', schema:'public', table:'chats'}, () => { if(localStorage.getItem('myShopName')) loadInbox(); })
-  .subscribe();
-
-// SELL FORM SUBMISSION
-document.getElementById("sellForm").addEventListener("submit", async (e)=>{
-  e.preventDefault();
-  const data = { 
-    name: document.getElementById("name").value, 
-    phone: document.getElementById("phone").value, 
-    product: document.getElementById("product").value, 
-    price: document.getElementById("price").value, 
-    category: document.getElementById("category").value, 
-    desc: document.getElementById("desc").value 
-  };
-  const waMessage = `*NEW SELLER REQUEST*%0AName: ${data.name}%0APhone: ${data.phone}%0AProduct: ${data.product}%0APrice: KSH ${data.price}%0ACategory: ${data.category}%0ADetails: ${data.desc}`;
-  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${waMessage}`, "_blank");
-});
-</script>
-</body>
-</html>
