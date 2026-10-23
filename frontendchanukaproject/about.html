@@ -1,235 +1,459 @@
-<!-- 1. HERO & CREATOR ATTRIBUTION SECTION -->
-<section class="bg-white p-6 md:p-10 rounded-xl border border-slate-200 shadow-sm space-y-6">
-  <div class="flex flex-col lg:flex-row gap-8 items-start">
-    <div class="lg:w-[65%] space-y-4">
-      <div class="inline-flex items-center gap-2 bg-[#1e293b] text-white text-[12px] font-medium px-3 py-1.5 rounded-md">
-        <span>💡 Developed by</span>
-        <span class="text-brand-yellow font-bold">Victor Njenga (Makaveli)</span>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>About Us | Chanuka Market Store</title>
+  <meta name="description" content="Chanuka connects student entrepreneurs and local vendors to buyers in Rongai, Gataka & Eldoret. Created by Victor Njenga (Makaveli).">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== SOLID COLOR PALETTE (MUTED & PROFESSIONAL) ========== */
+    :root {
+      --bg-slate: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-color: #cbd5e1;
       
-      <h1 class="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
-        Empowering Student Entrepreneurs & Local Merchants Across Kenya
-      </h1>
+      --brand-dark: #1e293b;
+      --brand-blue: #2563eb;
+      --brand-blue-hover: #1d4ed8;
+      --brand-amber: #d97706;
+      --brand-amber-light: #fef3c7;
       
-      <p class="text-slate-600 text-sm leading-relaxed">
-        <strong>Chanuka Market Store</strong> was built to solve a simple problem: making online buying and selling safe, affordable, and hyper-local. Created by <strong>Victor Njenga (Makaveli)</strong>, the platform bridges the gap between student hustlers, local shop owners, and daily buyers without the burden of heavy courier fees or high commissions.
-      </p>
+      --success-green: #16a34a;
+      --radius: 12px;
+    }
 
-      <p class="text-slate-600 text-sm leading-relaxed">
-        Whether you are selling electronics, campus fashion, books, groceries, household items, or liquor, Chanuka Market provides a trusted marketplace backed by escrow payment security and verified local pickup stations.
-      </p>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-slate);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-text-size-adjust: 100%;
+    }
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-          <div class="text-xs font-bold text-slate-900">🎓 Student Hustlers</div>
-          <div class="text-[11px] text-slate-600 mt-1">List items freely, reach campus peers, and grow your income.</div>
+    /* ========== NAVBAR ========== */
+    .header {
+      background-color: var(--brand-dark);
+      border-bottom: 1px solid #334155;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .logo-badge {
+      width: 32px;
+      height: 32px;
+      background-color: var(--brand-blue);
+      color: #ffffff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-link {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-link:hover {
+      background-color: #334155;
+      color: #ffffff;
+    }
+    .nav-link.active {
+      background-color: var(--brand-amber);
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .menu-btn {
+      display: none;
+      background: #334155;
+      color: #ffffff;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .mobile-menu {
+      display: none;
+      background-color: var(--brand-dark);
+      border-bottom: 1px solid #334155;
+      padding: 12px 20px;
+    }
+    .mobile-menu.show { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 10px 0;
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #334155;
+    }
+
+    /* ========== MAIN CONTAINER & CARDS ========== */
+    .main-layout {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: var(--brand-amber-light);
+      color: var(--brand-amber);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
+    h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; color: var(--text-main); }
+    h3 { font-size: 1rem; font-weight: 600; color: var(--text-main); }
+    p { color: var(--text-muted); font-size: 0.925rem; margin-bottom: 12px; }
+
+    /* Grid Layouts */
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    
+    @media (min-width: 768px) {
+      .grid-2 { grid-template-columns: 1.4fr 1fr; }
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Attributes & Stats */
+    .attribution-box {
+      background-color: #f1f5f9;
+      border-left: 4px solid var(--brand-blue);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+    .feature-box {
+      background-color: var(--bg-slate);
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    /* ========== POLICY TABS ========== */
+    .tab-buttons {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      color: var(--brand-blue);
+      border-bottom-color: var(--brand-blue);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .policy-list { list-style: none; margin-top: 8px; }
+    .policy-list li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding: 6px 0;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* ========== SOCIAL CARDS & CONTACT FORM ========== */
+    .social-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background-color: var(--bg-slate);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: border-color 0.2s;
+    }
+    .social-card:hover { border-color: var(--brand-blue); }
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: var(--brand-dark);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    /* Form Control */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.825rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background-color: #ffffff;
+    }
+    .form-control:focus { outline: 2px solid var(--brand-blue); border-color: transparent; }
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--brand-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .btn-submit:hover { background-color: var(--brand-blue-hover); }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background-color: var(--brand-dark);
+      color: #94a3b8;
+      padding: 32px 20px;
+      margin-top: 40px;
+      border-top: 1px solid #334155;
+    }
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      justify-content: space-between;
+      font-size: 0.825rem;
+    }
+    @media (min-width: 640px) {
+      .footer-container { flex-direction: row; align-items: center; }
+      .menu-btn { display: none; }
+    }
+    @media (max-width: 639px) {
+      .nav-links { display: none; }
+      .menu-btn { display: flex; align-items: center; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-badge">C</span>
+        Chanuka<span style="color: var(--brand-amber);">Market</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#products" class="nav-link">Products</a>
+        <a href="about.html" class="nav-link active">About Us</a>
+      </nav>
+      <button id="menuBtn" class="menu-btn" aria-label="Toggle menu">☰</button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="index.html#products">Products</a>
+      <a href="seller.html" style="color: var(--brand-amber); font-weight: 600;">Sell Products</a>
+    </div>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-layout">
+
+    <!-- 1. OVERVIEW & CREATOR SECTION -->
+    <section class="card">
+      <span class="badge">Bei Yako, Bei Poa</span>
+      <h1>Empowering Student Hustlers & Local Business Vendors</h1>
+      
+      <div class="grid-2" style="margin-top: 16px;">
+        <div>
+          <p><strong>Chanuka Market Store</strong> is a local e-commerce platform designed to remove barriers for student entrepreneurs, small business vendors, and everyday shoppers across Rongai, Gataka, and Eldoret.</p>
+          <p>We saw that small business owners and student vendors often struggled with high courier delivery fees, middleman cuts, and distrust in online transactions. Chanuka provides a low-commission marketplace backed by escrow vault security and verified local pickup points.</p>
+          
+          <div class="attribution-box">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--brand-blue); text-transform: uppercase;">Platform Developer & Founder</div>
+            <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">Victor Njenga (Makaveli)</div>
+            <div style="font-size: 0.825rem; color: var(--text-muted);">Built to provide safe, affordable, and accessible local commerce for everyone.</div>
+          </div>
         </div>
-        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-          <div class="text-xs font-bold text-slate-900">🏪 Local Vendors</div>
-          <div class="text-[11px] text-slate-600 mt-1">Keep 95% net payout. Just a flat 5% platform maintenance fee.</div>
-        </div>
-        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-          <div class="text-xs font-bold text-slate-900">🛒 Safe Buyers</div>
-          <div class="text-[11px] text-slate-600 mt-1">Funds are protected in Escrow until delivery is verified.</div>
-        </div>
-      </div>
-    </div>
 
-    <div class="lg:w-[35%] w-full space-y-4">
-      <div class="bg-[#1e293b] text-white p-6 rounded-xl space-y-3">
-        <h3 class="font-bold text-sm text-brand-yellow uppercase tracking-wider">Market Overview</h3>
-        <div class="space-y-2 text-xs border-t border-slate-700 pt-3">
-          <div class="flex justify-between py-1 border-b border-slate-800">
-            <span class="text-slate-400">Founder & Lead Dev</span>
-            <span class="font-medium text-white">Victor Njenga (Makaveli)</span>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="feature-box">
+            <h3>🎓 Student Hustlers</h3>
+            <p style="margin: 4px 0 0 0; font-size: 0.825rem;">Turn your side hustle into a real brand. Zero listing fees, instant setup.</p>
           </div>
-          <div class="flex justify-between py-1 border-b border-slate-800">
-            <span class="text-slate-400">Vendor Commission</span>
-            <span class="font-medium text-brand-yellow">5% Flat Rate</span>
+          <div class="feature-box">
+            <h3>🏪 Verified Vendors</h3>
+            <p style="margin: 4px 0 0 0; font-size: 0.825rem;">Keep 95% of every sale. We charge a flat, transparent 5% platform fee.</p>
           </div>
-          <div class="flex justify-between py-1 border-b border-slate-800">
-            <span class="text-slate-400">Seller Net Payout</span>
-            <span class="font-medium text-white">95%</span>
-          </div>
-          <div class="flex justify-between py-1 border-b border-slate-800">
-            <span class="text-slate-400">Primary Hubs</span>
-            <span class="font-medium text-white">Rongai • Gataka • Eldoret</span>
-          </div>
-          <div class="flex justify-between py-1">
-            <span class="text-slate-400">Payment Engine</span>
-            <span class="font-medium text-white">M-Pesa STK & Escrow</span>
+          <div class="feature-box">
+            <h3>🛡️ Escrow Protection</h3>
+            <p style="margin: 4px 0 0 0; font-size: 0.825rem;">Payments are safely held in escrow until the item is delivered and inspected.</p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- 2. SOCIAL MEDIA & DIRECT CONTACT CARDS -->
-<section class="space-y-4">
-  <div class="border-l-4 border-brand-blue pl-3">
-    <h2 class="text-lg font-bold text-slate-900">Connect With Admin & Community</h2>
-    <p class="text-xs text-slate-600">Follow our handles, ask questions, or chat directly with the platform developer.</p>
-  </div>
+    <!-- 2. CORE MARKETPLACE POLICIES (TABBED) -->
+    <section class="card">
+      <h2>Platform Policies & Guidelines</h2>
+      <p style="margin-bottom: 20px;">Review how we handle escrow transactions, delivery pickups, and buyer/seller protections.</p>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <!-- Instagram -->
-    <a href="https://instagram.com/its_victo_r" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-blue transition-all flex items-center gap-3">
-      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">📷</div>
-      <div>
-        <div class="text-xs font-bold text-slate-900">Instagram</div>
-        <div class="text-xs text-brand-blue font-medium">@its_victo_r</div>
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="switchTab(event, 'escrow-policy')">Shield Escrow & Payouts</button>
+        <button class="tab-btn" onclick="switchTab(event, 'pickup-policy')">Delivery & Pickup Points</button>
+        <button class="tab-btn" onclick="switchTab(event, 'returns-policy')">Returns & Dispute Policy</button>
       </div>
-    </a>
 
-    <!-- WhatsApp Support -->
-    <a href="https://wa.me/254114044517" target="_blank" class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-blue transition-all flex items-center gap-3">
-      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">💬</div>
-      <div>
-        <div class="text-xs font-bold text-slate-900">WhatsApp Support</div>
-        <div class="text-xs text-brand-blue font-medium">+254 114 044 517</div>
+      <!-- Tab 1: Escrow -->
+      <div id="escrow-policy" class="tab-content active">
+        <ul class="policy-list">
+          <li><span>✓</span> <strong>Vault Security:</strong> When a buyer pays via M-Pesa, funds enter the Chanuka Escrow Vault first.</li>
+          <li><span>✓</span> <strong>5% Platform Fee:</strong> Sellers receive 95% net payout automatically upon order confirmation.</li>
+          <li><span>✓</span> <strong>No Monthly Charges:</strong> Listing products is completely free for all verified sellers.</li>
+        </ul>
       </div>
-    </a>
 
-    <!-- Direct Call -->
-    <a href="tel:0107474332" class="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-blue transition-all flex items-center gap-3">
-      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">📞</div>
-      <div>
-        <div class="text-xs font-bold text-slate-900">Phone Support</div>
-        <div class="text-xs text-brand-blue font-medium">0107474332</div>
+      <!-- Tab 2: Delivery -->
+      <div id="pickup-policy" class="tab-content">
+        <ul class="policy-list">
+          <li><span>📍</span> <strong>Cooperative on Campus:</strong> Centralized drop-off and pickup point for students.</li>
+          <li><span>📍</span> <strong>Gataka Stations:</strong> Pickup available at Gataka - Destiny and G-place Gataka.</li>
+          <li><span>📍</span> <strong>Eldoret Station:</strong> Eldoret - Zion Mall pickup center.</li>
+          <li><span>📍</span> <strong>Gataka Door Delivery:</strong> Flat Ksh 150 delivery fee option within Gataka.</li>
+        </ul>
       </div>
-    </a>
 
-    <!-- TikTok / Social Community -->
-    <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-      <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-lg">🎵</div>
-      <div>
-        <div class="text-xs font-bold text-slate-900">TikTok Community</div>
-        <div class="text-xs text-slate-500 font-medium">@chanukamarket</div>
+      <!-- Tab 3: Returns -->
+      <div id="returns-policy" class="tab-content">
+        <ul class="policy-list">
+          <li><span>⚠️</span> <strong>Inspection at Pickup:</strong> Buyers must inspect items at the pickup station before confirming receipt.</li>
+          <li><span>⚠️</span> <strong>Dispute Window:</strong> If an item is defective or incorrect, buyers can flag it before escrow release.</li>
+          <li><span>⚠️</span> <strong>Refund Guarantee:</strong> Valid unfulfilled or incorrect orders are 100% refunded to the buyer's M-Pesa.</li>
+        </ul>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- 3. PICKUP STATIONS & PLATFORM MECHANICS -->
-<section class="bg-white p-6 rounded-xl border border-slate-200 space-y-4">
-  <div class="border-l-4 border-brand-yellow pl-3">
-    <h2 class="text-lg font-bold text-slate-900">Verified Pickup Stations</h2>
-    <p class="text-xs text-slate-600">Eliminating expensive long-distance delivery costs with designated pickup hubs.</p>
-  </div>
+    <!-- 3. SOCIAL HANDLES & FEEDBACK FORM -->
+    <section class="grid-2">
+      <!-- Social Media Links -->
+      <div class="card">
+        <h2>Connect With Us</h2>
+        <p>Reach out directly for seller onboarding, support, or community inquiries.</p>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 text-xs">
-    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="font-bold text-slate-900">📍 Station 1</div>
-      <div class="text-slate-600 mt-1">Cooperative on campus</div>
-    </div>
-    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="font-bold text-slate-900">📍 Station 2</div>
-      <div class="text-slate-600 mt-1">Gataka - Destiny</div>
-    </div>
-    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="font-bold text-slate-900">📍 Station 3</div>
-      <div class="text-slate-600 mt-1">G-place Gataka</div>
-    </div>
-    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="font-bold text-slate-900">📍 Station 4</div>
-      <div class="text-slate-600 mt-1">Eldoret - Zion mall</div>
-    </div>
-    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="font-bold text-slate-900">🚚 Doorstep</div>
-      <div class="text-slate-600 mt-1">Gataka Area (Ksh 150)</div>
-    </div>
-  </div>
-</section>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <a href="https://instagram.com/its_victo_r" target="_blank" class="social-card">
+            <div class="social-icon">📷</div>
+            <div>
+              <h3>Instagram</h3>
+              <div style="font-size: 0.8rem; color: var(--brand-blue);">@its_victo_r</div>
+            </div>
+          </a>
 
-<!-- 4. STANDARD MARKETPLACE POLICIES -->
-<section class="bg-white p-6 rounded-xl border border-slate-200 space-y-6">
-  <div class="border-l-4 border-brand-blue pl-3">
-    <h2 class="text-lg font-bold text-slate-900">Marketplace Policies & Guidelines</h2>
-    <p class="text-xs text-slate-600">Standard operational guidelines ensuring safety for buyers and sellers.</p>
-  </div>
+          <a href="https://wa.me/254107474332" target="_blank" class="social-card">
+            <div class="social-icon" style="background-color: var(--success-green);">💬</div>
+            <div>
+              <h3>WhatsApp Support</h3>
+              <div style="font-size: 0.8rem; color: var(--success-green);">0107474332 / +254 114 044 517</div>
+            </div>
+          </a>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-    <!-- Policy 1 -->
-    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
-      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-        <span>🛡️</span> Escrow & Buyer Protection Policy
-      </h3>
-      <p class="text-slate-600 leading-relaxed">
-        All customer payments via M-Pesa STK push are held in the secure Chanuka Escrow Vault. Funds are only released to the seller (95% net payout) once the buyer inspects and confirms satisfaction upon delivery or pickup.
-      </p>
-    </div>
-
-    <!-- Policy 2 -->
-    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
-      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-        <span>📦</span> Pickup & Station Drop-off SLA
-      </h3>
-      <p class="text-slate-600 leading-relaxed">
-        Upon order placement, sellers receive instant notifications specifying the exact pickup station chosen by the buyer. Sellers are expected to drop off the item within 24 to 48 hours for buyer collection.
-      </p>
-    </div>
-
-    <!-- Policy 3 -->
-    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
-      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-        <span>🚫</span> Prohibited Items & Vendor Conduct
-      </h3>
-      <p class="text-slate-600 leading-relaxed">
-        Sellers must list genuine products with accurate pricing. Counterfeit goods, illegal contraband, weapons, or misleading descriptions will result in immediate account termination and escrow forfeitures.
-      </p>
-    </div>
-
-    <!-- Policy 4 -->
-    <div class="space-y-2 border p-4 rounded-lg bg-slate-50 border-slate-200">
-      <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-        <span>🔄</span> Refunds & Dispute Resolution
-      </h3>
-      <p class="text-slate-600 leading-relaxed">
-        If an item is damaged, misdescribed, or unfulfilled, buyers can request order cancellation before escrow release. Admin support will mediate disputes and process full refunds when applicable.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- 5. ADMIN CONTACT & FEEDBACK FORM -->
-<section class="bg-white p-6 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-8">
-  <div class="space-y-4">
-    <h2 class="text-lg font-bold text-slate-900">Send Direct Feedback to Admin</h2>
-    <p class="text-xs text-slate-600 leading-relaxed">
-      Have a suggestion, seller registration issue, or general question? Send a message directly to Victor Njenga (Makaveli) and our support staff.
-    </p>
-
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2 text-xs">
-      <div class="font-bold text-slate-900">Direct Contact Channels</div>
-      <p class="text-slate-600">📱 Phone: <b>0107474332</b></p>
-      <p class="text-slate-600">💬 WhatsApp: <b>+254 114 044 517</b></p>
-      <p class="text-slate-600">📸 Instagram: <b>@its_victo_r</b></p>
-    </div>
-  </div>
-
-  <div class="bg-slate-50 p-5 rounded-lg border border-slate-200 space-y-3">
-    <form onsubmit="event.preventDefault(); alert('Thank you Victor/User! Your feedback has been sent to admin.');" class="space-y-3 text-xs">
-      <div>
-        <label class="block font-medium text-slate-700 mb-1">Your Name</label>
-        <input type="text" placeholder="Enter your full name" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-brand-blue">
+          <a href="tel:0107474332" class="social-card">
+            <div class="social-icon" style="background-color: var(--brand-blue);">📞</div>
+            <div>
+              <h3>Phone Call</h3>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">0107474332</div>
+            </div>
+          </a>
+        </div>
       </div>
-      <div>
-        <label class="block font-medium text-slate-700 mb-1">Your Phone / M-Pesa</label>
-        <input type="tel" placeholder="07... or 01..." required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-brand-blue">
-      </div>
-      <div>
-        <label class="block font-medium text-slate-700 mb-1">Message or Issue Description</label>
-        <textarea rows="3" placeholder="Write your feedback here..." required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-brand-blue"></textarea>
-      </div>
-      <button type="submit" class="w-full py-2.5 bg-brand-blue text-white font-bold rounded-lg hover:bg-blue-700 transition-colors">Submit Message</button>
-    </form>
-  </div>
-</section>
 
+      <!-- Admin Feedback Form -->
+      <div class="card">
+        <h2>Send Direct Feedback</h2>
+        <p>Have suggestions or need assistance? Drop a line to the admin team.</p>
 
-  <div class="text-slate-400 text-center md:text-right">
-    <p>© 2026 Chanuka Market Store. All Rights Reserved.</p>
-    <p class="mt-1">Instagram: <a href="https://instagram.com/its_victo_r" class="text-white hover:underline">@its_victo_r</a> | Phone: <span class="text-white">0107474332</span></p>
-  </div>
-</div>
+        <form id="feedbackForm" style="margin-top: 16px;">
+          <div class="form-group">
+            <label for="fbName">Full Name</label>
+            <input type="text" id="fbName" class="form-control" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="fbPhone">Phone Number</label>
+            <input type="tel" id="fbPhone" class="form-control" placeholder="07... or 01..." required>
+          </div>
+          <div class="form-group">
+            <label for="fbMessage">Message or Suggestion</label>
+            <textarea id="fbMessage" rows="3" class="form-control" placeholder="How can we improve Chanuka Market?" required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Submit Message</button>
+        </form>
+      </div>
+    </section>
