@@ -12,6 +12,8 @@
   .sell-card input, .sell-card textarea, .sell-card select { width:100%; padding:14px; margin:10px 0; border:1px solid #ddd; border-radius:10px; font-size:16px; box-sizing:border-box; }
   .sell-card button { width:100%; padding:15px; background:#0a58ff; color:white; border:none; border-radius:10px; font-weight:bold; font-size:16px; cursor:pointer; }
   .hidden { display:none; }
+  .tab-btn { flex:1; padding:10px; border:none; background:#eef2ff; color:#0a58ff; font-weight:bold; border-radius:8px; cursor:pointer; }
+  .tab-btn.active { background:#0a58ff; color:white; }
 </style>
 </head>
 <body>
@@ -22,21 +24,42 @@
   <!-- SELLER LOGIN - makes inbox private -->
   <div id="loginCard" class="sell-card" style="border:2px solid #0a58ff;">
     <h3 style="text-align:center;">🔒 My Seller Dashboard</h3>
-    <p style="text-align:center;font-size:13px;color:#666;">Enter your shop name/phone to see ONLY your buyer chats</p>
+    <p style="text-align:center;font-size:13px;color:#666;">Enter your shop name/phone to see ONLY your buyer chats & orders</p>
     <input type="text" id="shopNameInput" placeholder="Your Shop Name e.g. Jameson Distributors">
     <input type="tel" id="shopPhoneInput" placeholder="Your M-Pesa Phone 07...">
-    <button onclick="loginSeller()">Login to My Inbox</button>
+    <button onclick="loginSeller()">Login to My Dashboard</button>
   </div>
 
-  <!-- PRIVATE INBOX - only for logged seller -->
+  <!-- PRIVATE INBOX & ORDER ALERTS - only for logged seller -->
   <div id="inboxCard" class="sell-card hidden" style="border:2px solid #0a58ff;">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <h3>💬 My Buyer Messages</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h3>📊 Seller Dashboard</h3>
       <button onclick="logoutSeller()" style="width:auto;padding:6px 12px;background:#eee;color:#333;font-size:12px;">Logout</button>
     </div>
-    <p style="font-size:12px;color:#666;">Shop: <b id="myShopDisplay"></b> - only you see these</p>
-    <div id="inboxList">Loading...</div>
-    <button onclick="loadInbox()" style="background:#eef2ff;color:#0a58ff;margin-top:10px;padding:8px;font-size:13px;">🔄 Refresh</button>
+    <p style="font-size:12px;color:#666;margin-bottom:15px;">Shop: <b id="myShopDisplay"></b> - private dashboard</p>
+
+    <!-- ADMIN BROADCAST ALERTS BANNER -->
+    <div id="adminAlertBanner" style="display:none;background:#fef3c7;border:1px solid #f59e0b;padding:12px;border-radius:10px;margin-bottom:15px;font-size:13px;color:#92400e;">
+      <b>📢 Admin Notice:</b> <span id="adminAlertText"></span>
+    </div>
+
+    <!-- NAVIGATION TABS -->
+    <div style="display:flex;gap:8px;margin-bottom:15px;">
+      <button id="tabOrdersBtn" class="tab-btn active" onclick="switchTab('orders')">📦 Order Alerts</button>
+      <button id="tabChatsBtn" class="tab-btn" onclick="switchTab('chats')">💬 Buyer Messages</button>
+    </div>
+
+    <!-- ORDER NOTIFICATIONS TAB -->
+    <div id="ordersTab">
+      <div id="ordersList">Loading order alerts...</div>
+    </div>
+
+    <!-- BUYER CHATS TAB -->
+    <div id="chatsTab" class="hidden">
+      <div id="inboxList">Loading chats...</div>
+    </div>
+
+    <button onclick="refreshDashboard()" style="background:#eef2ff;color:#0a58ff;margin-top:15px;padding:10px;font-size:13px;">🔄 Refresh Dashboard</button>
   </div>
 
   <!-- PUBLIC SELL FORM -->
@@ -48,7 +71,16 @@
       <input type="tel" id="phone" placeholder="Your M-Pesa Phone 07..." required>
       <input type="text" id="product" placeholder="Product Name" required>
       <input type="number" id="price" placeholder="Price in KSH" required>
-      <select id="category" required><option value="">Select Category</option><option>Electronics</option><option>Fashion</option><option>Beauty products</option><option>Food Stuff</option><option>Furniture</option><option>Books & Stationery</option></select>
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option>Electronics</option>
+        <option>Fashion</option>
+        <option>Beauty products</option>
+        <option>Food Stuff</option>
+        <option>Furniture</option>
+        <option>Books & Stationery</option>
+        <option>Liquor & Drinks</option>
+      </select>
       <textarea id="desc" rows="3" placeholder="Describe product..."></textarea>
       <button type="submit" id="submitBtn">Send Request to Admin</button>
     </form>
@@ -63,7 +95,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 document.getElementById("whatsappDirect").href = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent("Hi Chanuka Admin, I want to sell")}`;
 
-// PRIVATE LOGIN LOGIC
+// LOGIN & LOGOUT LOGIC
 function loginSeller(){
   const shop = document.getElementById('shopNameInput').value.trim();
   const phone = document.getElementById('shopPhoneInput').value.trim();
@@ -72,41 +104,147 @@ function loginSeller(){
   localStorage.setItem('myShopPhone', phone);
   showInbox();
 }
-function logoutSeller(){ localStorage.removeItem('myShopName'); location.reload(); }
+
+function logoutSeller(){ 
+  localStorage.removeItem('myShopName'); 
+  localStorage.removeItem('myShopPhone'); 
+  location.reload(); 
+}
+
 function showInbox(){
   const shop = localStorage.getItem('myShopName');
   if(!shop) return;
   document.getElementById('loginCard').classList.add('hidden');
   document.getElementById('inboxCard').classList.remove('hidden');
   document.getElementById('myShopDisplay').textContent = shop;
-  loadInbox();
+  refreshDashboard();
 }
+
+function switchTab(tabName) {
+  if (tabName === 'orders') {
+    document.getElementById('ordersTab').classList.remove('hidden');
+    document.getElementById('chatsTab').classList.add('hidden');
+    document.getElementById('tabOrdersBtn').classList.add('active');
+    document.getElementById('tabChatsBtn').classList.remove('active');
+  } else {
+    document.getElementById('ordersTab').classList.add('hidden');
+    document.getElementById('chatsTab').classList.remove('hidden');
+    document.getElementById('tabOrdersBtn').classList.remove('active');
+    document.getElementById('tabChatsBtn').classList.add('active');
+  }
+}
+
+function refreshDashboard() {
+  loadOrderNotifications();
+  loadInbox();
+  loadAdminAlerts();
+}
+
+// 1. FETCH REAL-TIME ORDER ALERTS & PICKUP DESTINATIONS
+async function loadOrderNotifications() {
+  const myShop = localStorage.getItem('myShopName');
+  const myPhone = localStorage.getItem('myShopPhone');
+  if (!myShop) return;
+
+  const list = document.getElementById('ordersList');
+  list.innerHTML = 'Loading order notifications...';
+
+  // Fetch notifications specifically addressed to this shop
+  const { data, error } = await supabaseClient
+    .from('notifications')
+    .select('*')
+    .ilike('seller_name', `%${myShop}%`)
+    .order('created_at', { ascending: false });
+
+  if (error) { 
+    list.innerHTML = `<p style="color:red;font-size:12px;">Error: ${error.message}</p>`; 
+    return; 
+  }
+
+  if (!data || !data.length) { 
+    list.innerHTML = `<p style="color:#999;text-align:center;padding:15px;font-size:13px;">No order notifications for <b>${myShop}</b> yet.<br>New customer purchases & delivery pickup points will appear here.</p>`; 
+    return; 
+  }
+
+  list.innerHTML = data.map(item => `
+    <div style="padding:14px; background:#f0fdf4; border:1px solid #bbf7d0; border-left:4px solid #16a34a; border-radius:10px; margin-bottom:10px;">
+      <div style="font-size:13px; font-weight:bold; color:#15803d; margin-bottom:4px;">
+        📢 Order Notification
+      </div>
+      <div style="font-size:13px; color:#1e293b; line-height:1.4;">
+        ${item.message}
+      </div>
+      <div style="font-size:11px; color:#64748b; margin-top:6px; display:flex; justify-content:space-between;">
+        <span>Status: <b style="color:#0a58ff;">Funds in Escrow Vault</b></span>
+        <span>${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 2. FETCH PRIVATE BUYER CHATS
 async function loadInbox(){
   const myShop = localStorage.getItem('myShopName');
   if(!myShop) return;
   const list = document.getElementById('inboxList');
-  list.innerHTML = 'Loading...';
-  // PRIVATE FILTER: only chats where seller_name contains my shop name
-  const { data, error } = await supabaseClient.from('chats').select('*').ilike('seller_name', `%${myShop}%`).order('created_at', {ascending:false});
+  list.innerHTML = 'Loading chats...';
+  
+  const { data, error } = await supabaseClient
+    .from('chats')
+    .select('*')
+    .ilike('seller_name', `%${myShop}%`)
+    .order('created_at', {ascending:false});
+
   if(error){ list.innerHTML = error.message; return; }
-  if(!data.length){ list.innerHTML = `<p style="color:#999;text-align:center;padding:20px;">No messages for <b>${myShop}</b> yet.<br>When buyer clicks Chat with Seller on your product, it will appear here private.</p>`; return; }
+  if(!data || !data.length){ 
+    list.innerHTML = `<p style="color:#999;text-align:center;padding:15px;font-size:13px;">No buyer chats for <b>${myShop}</b> yet.</p>`; 
+    return; 
+  }
+
   list.innerHTML = data.map(c => `
     <div onclick="location.href='chat.html?product=${encodeURIComponent(c.product_name)}&price=${c.price}&seller=${encodeURIComponent(c.seller_name)}&role=seller'" 
     style="padding:12px;border:1px solid #eee;border-radius:10px;margin-bottom:8px;cursor:pointer;background:#f0f7ff">
-      <b>${c.product_name}</b> <small style="float:right">${new Date(c.created_at).toLocaleTimeString()}</small>
+      <b>${c.product_name}</b> <small style="float:right">${new Date(c.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</small>
       <div style="font-size:13px;margin-top:4px;">💬 ${c.last_message || 'New chat'}</div>
       <div style="font-size:11px;color:#0a58ff;margin-top:4px;">Click to reply → private</div>
     </div>`).join('');
 }
+
+// 3. FETCH ADMIN ANNOUNCEMENTS / ALERTS
+async function loadAdminAlerts() {
+  const { data } = await supabaseClient
+    .from('notifications')
+    .select('*')
+    .eq('seller_name', 'ALL_SELLERS')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (data && data.length > 0) {
+    document.getElementById('adminAlertText').textContent = data[0].message;
+    document.getElementById('adminAlertBanner').style.display = 'block';
+  }
+}
+
 // Auto-login if already saved
 if(localStorage.getItem('myShopName')) showInbox();
-// Realtime private updates
-supabaseClient.channel('private-chats').on('postgres_changes',{event:'*',schema:'public',table:'chats'},()=>{ if(localStorage.getItem('myShopName')) loadInbox(); }).subscribe();
 
-// SELL FORM
+// Real-time subscriptions for Order Notifications & Chats
+supabaseClient.channel('seller-realtime')
+  .on('postgres_changes', {event:'*', schema:'public', table:'notifications'}, () => { if(localStorage.getItem('myShopName')) refreshDashboard(); })
+  .on('postgres_changes', {event:'*', schema:'public', table:'chats'}, () => { if(localStorage.getItem('myShopName')) loadInbox(); })
+  .subscribe();
+
+// SELL FORM SUBMISSION
 document.getElementById("sellForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
-  const data = { name: document.getElementById("name").value, phone: document.getElementById("phone").value, product: document.getElementById("product").value, price: document.getElementById("price").value, category: document.getElementById("category").value, desc: document.getElementById("desc").value };
+  const data = { 
+    name: document.getElementById("name").value, 
+    phone: document.getElementById("phone").value, 
+    product: document.getElementById("product").value, 
+    price: document.getElementById("price").value, 
+    category: document.getElementById("category").value, 
+    desc: document.getElementById("desc").value 
+  };
   const waMessage = `*NEW SELLER REQUEST*%0AName: ${data.name}%0APhone: ${data.phone}%0AProduct: ${data.product}%0APrice: KSH ${data.price}%0ACategory: ${data.category}%0ADetails: ${data.desc}`;
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${waMessage}`, "_blank");
 });
