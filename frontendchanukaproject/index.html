@@ -320,7 +320,29 @@
         </div>
     </footer>
 
-    <script src="main.js"></script>
+    <script src="main.js">function openProductModal(product){
+  document.getElementById('modalName').textContent = product.name;
+  document.getElementById('modalPrice').textContent = 'KSH '+product.price;
+  document.getElementById('modalDesc').textContent = product.description || 'Contact seller for details.';
+  document.getElementById('modalCategory').textContent = product.category || 'General';
+  let images = product.images && product.images.length ? product.images : [product.image];
+  let mainImg = document.getElementById('modalMainImg');
+  mainImg.src = images[0];
+  let thumbsDiv = document.getElementById('modalThumbs');
+  thumbsDiv.innerHTML = '';
+  images.forEach(img => {
+    let t = document.createElement('img');
+    t.src = img; t.className = 'w-16 h-16 object-cover rounded-lg border-2 cursor-pointer border-transparent';
+    t.onclick = () => mainImg.src = img;
+    thumbsDiv.appendChild(t);
+  });
+  document.getElementById('productModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeProductModal(){
+  document.getElementById('productModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}</script>
                     <!-- ========== PRODUCT DETAILS MODAL ========== -->
 <div id="productModal" class="fixed inset-0 z-[100] hidden">
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeProductModal()"></div>
