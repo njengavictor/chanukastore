@@ -1,464 +1,380 @@
-/* =========================================================
-   CHANUKA MARKET - MAIN FRONTEND ENGINE WITH SUPABASE CHAT 
-   & COMMISSION / PICKUP STATION NOTIFICATIONS
-   ========================================================= */
+<!DOCTYPE html>
+<html lang="en">
 
-// Initialize Supabase Client Configuration
-const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_kpkKcjiQck7a3hNzqxJtmw_dFJOAV-8"; // Replace with your active Supabase key
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* 1. CHAT WITH SELLER HANDLER */
-window.startChat = async function(productId, productName, sellerId, sellerName, price = "0", image = "", sellerPhone = "") {
-  const buyerId = localStorage.getItem('userId') || 'buyer_' + Date.now();
-  const buyerName = localStorage.getItem('userName') || 'Guest Buyer';
-  localStorage.setItem('userId', buyerId);
+    <title>Chanuka Market Store</title>
 
-  // Safely construct URL parameters to pass item, seller, price, and seller phone details to chat.html
-  const chatUrl = `chat.html?product=${encodeURIComponent(productName)}&price=${encodeURIComponent(price)}&seller=${encodeURIComponent(sellerName)}&image=${encodeURIComponent(image)}&sellerId=${encodeURIComponent(sellerId)}&sellerPhone=${encodeURIComponent(sellerPhone || "0712345678")}`;
-  
-  window.location.href = chatUrl;
-}
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu">
 
-/* 2. HELPER UTILITIES */
-function parsePrice(text) {
-  return Number(String(text).replace(/[^0-9.]/g, "")) || 0;
-}
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
 
-function formatPrice(amount) {
-  return "KSh " + amount.toLocaleString("en-KE");
-}
+<body>
 
-function loadData(key, fallback) {
-  try {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : fallback;
-  } catch (error) {
-    return fallback;
-  }
-}
+    <header class="header">
+        <!-- LOGO -->
+        <div class="logo">
+            <a href="#home">
+                Chanuka<span>-market-store</span>
+            </a>
+        </div>
 
-function saveData(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {}
-}
+        <div class="marketplace-nav-wrap" style="display:flex; justify-content:space-between; align-items:center;">
+            <a href="#products"></a>
+            <div class="auth-wrap">
+                <a href="login.html" class="btn-login">Log In</a>
+                <a href="register.html" class="btn-signup">Sign Up</a>
+            </div>
+        </div>
 
-let toastTimer;
-function showToast(message) {
-  let toast = document.getElementById("toast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "toast";
-    toast.setAttribute("role", "status");
-    Object.assign(toast.style, {
-      position: "fixed", left: "50%", bottom: "24px",
-      transform: "translateX(-50%)", background: "rgb(59, 59, 173)",
-      color: "white", padding: "0.8rem 1.2rem", borderRadius: "0.5rem",
-      fontWeight: "600", zIndex: "200", boxShadow: "0 10px 30px rgb(0 0 0 / 0.3)",
-      transition: "opacity 0.3s ease", opacity: "0"
-    });
-    document.body.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.style.opacity = "1";
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function () { toast.style.opacity = "0"; }, 3500);
-}
-
-function normalizePhoneFrontend(phone){
-  let n = String(phone).replace(/[^0-9]/g,"");
-  if(n.startsWith("0")) n = "254" + n.slice(1);
-  if(n.startsWith("7") || n.startsWith("1")) n = "254" + n;
-  return n.length === 12 ? n : null;
-}
-
-/* 3. INITIALIZE APP ON DOM LOAD */
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
-} else { 
-  init(); 
-}
-
-function init() {
-  const menuButton = document.getElementById("menuButton");
-  const navMenu = document.getElementById("nav");
-
-  if (menuButton && navMenu) {
-    menuButton.addEventListener("click", function () {
-      navMenu.classList.toggle("show");
-    });
-  }
-
-  if (navMenu) {
-    navMenu.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () { navMenu.classList.remove("show"); });
-    });
-  }
-
-  document.addEventListener("click", function (event) {
-    if (navMenu && !event.target.closest(".header")) { navMenu.classList.remove("show"); }
-  });
-
-  /* Smooth Scrolling */
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener("click", function (event) {
-      const id = link.getAttribute("href").slice(1);
-      if (!id) return;
-      const target = document.getElementById(id) || Array.from(document.querySelectorAll("[id]")).find(function (element) {
-        return element.id.toLowerCase() === id.toLowerCase();
-      });
-      event.preventDefault();
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-        history.replaceState(null, "", "#" + target.id);
-      } else { 
-        showToast(link.textContent.trim() + " section is coming soon!"); 
-      }
-    });
-  });
-
-  /* Search & Category Filter Logic */
-  const searchInput = document.getElementById("searchinput");
-  const searchButton = document.getElementById("searchButon");
-  const categoryButtons = document.querySelectorAll(".category-btn");
-  const productsGrid = document.getElementById("productsGrid");
-  const productCards = document.querySelectorAll(".product-card");
-  let activeCategory = "All";
-
-  const noResults = document.createElement("p");
-  noResults.textContent = "No products found. Try another search or category.";
-  Object.assign(noResults.style, { gridColumn: "1 / -1", textAlign: "center", padding: "2rem", fontWeight: "600", display: "none" });
-  if (productsGrid) productsGrid.appendChild(noResults);
-
-  function filterProducts() {
-    const searchText = searchInput ? searchInput.value.trim().toLowerCase() : "";
-    let visibleCount = 0;
-    productCards.forEach(function (card) {
-      const category = card.dataset.category || "";
-      const text = ((card.dataset.name || "") + " " + card.textContent).toLowerCase();
-      const matchesCategory = activeCategory === "All" || category === activeCategory;
-      const matchesSearch = searchText === "" || text.includes(searchText);
-      if (matchesCategory && matchesSearch) { 
-        card.style.display = ""; 
-        visibleCount++; 
-      } else { 
-        card.style.display = "none"; 
-      }
-    });
-    noResults.style.display = visibleCount === 0 ? "block" : "none";
-    return visibleCount;
-  }
-
-  if (searchInput) searchInput.addEventListener("input", filterProducts);
-
-  function runSearch() {
-    const count = filterProducts();
-    const productsSection = document.getElementById("products") || productsGrid;
-    if (productsSection) productsSection.scrollIntoView({ behavior: "smooth" });
-    if (searchInput && searchInput.value.trim() !== "") {
-      showToast(count + (count === 1 ? " product" : " products") + " found");
-    }
-  }
-
-  if (searchButton) searchButton.addEventListener("click", runSearch);
-  if (searchInput) searchInput.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") { event.preventDefault(); runSearch(); }
-  });
-
-  categoryButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      categoryButtons.forEach(function (btn) { btn.classList.remove("active"); });
-      button.classList.add("active");
-      activeCategory = button.dataset.category || button.textContent.trim();
-      filterProducts();
-    });
-  });
-
-  /* Product Card Attachments: Chat Buttons & Favorites */
-  productCards.forEach(function(card) {
-    const chatBtn = card.querySelector(".chat-with-seller-btn, [data-action='chat']");
-    if (chatBtn) {
-    e.stopPropagation();  chatBtn.addEventListener("click", function(e) {
-        e.preventDefault();
-        const pId = card.dataset.id || "prod_" + Date.now();
-        const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
-        const pSellerId = card.dataset.sellerId || "merchant_default";
-        const pSellerName = card.dataset.seller || card.querySelector(".product-seller")?.textContent.trim() || "Merchant Store";
-        const pSellerPhone = card.dataset.sellerPhone || "0712345678";
-        const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
-        const pImg = card.querySelector("img")?.src || "";
-         card.style.cursor = 'pointer';
-card.onclick = function() {
-  openProductModal({
-    id: pId,
-    name: pName,
-    price: pPrice,
-    image: pImg,
-    images: [pImg],
-    description: card.dataset.description || "",
-    category: card.dataset.category || "General",
-    pickup_station: card.dataset.pickup || "Rongai Central"
-  });
-};
-
-        window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
-      });
-    }
-  });
-
-  /* Favorites Logic */
-  let favorites = loadData("chanukaFavorites", []);
-  document.querySelectorAll(".favorite-button").forEach(function (button) {
-    const card = button.closest(".product-card");
-    if (!card) return;
-    const name = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
-    button.setAttribute("aria-label", "Add " + name + " to favorites");
-    if (favorites.includes(name)) { button.classList.add("liked"); }
-    button.addEventListener("click", function () {
-      const isLiked = favorites.includes(name);
-      if (isLiked) {
-        favorites = favorites.filter(function (item) { return item !== name; });
-        showToast(name + " removed from favorites");
-      } else {
-        favorites.push(name);
-        showToast(name + " added to favorites");
-      }
-      saveData("chanukaFavorites", favorites);
-      document.querySelectorAll(".product-card").forEach(function (otherCard) {
-        const otherButton = otherCard.querySelector(".favorite-button");
-        if (otherCard.dataset.name === name && otherButton) {
-          otherButton.classList.toggle("liked", !isLiked);
-        }
-      });
-    });
-  });
-
-  /* 4. SHOPPING CART & CHECKOUT DRAWER */
-  const cartButton = document.getElementById("cart-button");
-  const cartCount = document.getElementById("cartcount");
-  let cart = loadData("chanukaCart", []);
-
-  const cartOverlay = document.createElement("div");
-  Object.assign(cartOverlay.style, { position: "fixed", inset: "0", background: "rgb(0 0 0 / 0.5)", zIndex: "100", display: "none" });
-
-  const cartPanel = document.createElement("aside");
-  cartPanel.setAttribute("aria-label", "Shopping cart");
-  Object.assign(cartPanel.style, {
-    position: "absolute", top: "0", right: "0", width: "min(380px, 100%)", height: "100%",
-    background: "whitesmoke", display: "flex", flexDirection: "column", boxShadow: "-10px 0 30px rgb(0 0 0 / 0.3)"
-  });
-
-  cartPanel.innerHTML =
-    '<div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background-color:rgb(159, 62, 78);color:white;">' +
-        '<h3>Your Cart</h3>' +
-        '<button data-cart-close aria-label="Close cart" style="border:none;background:none;color:white;font-size:24px;">&times;</button>' +
-    '</div>' +
-    '<div data-cart-items style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.8rem;"></div>' +
-    '<div style="padding:1rem;border-top:1px solid #ccc;display:flex;flex-direction:column;gap:0.8rem;">' +
-        '<div style="display:flex;justify-content:space-between;font-size:18px;"><strong>Total</strong><strong data-cart-total style="color:green;">KSh 0</strong></div>' +
-        '<button data-cart-checkout style="border:none;background-color:#2e37d1;color:white;padding:0.8rem;border-radius:0.5rem;font-weight:600;">Checkout</button>' +
-        '<button data-cart-clear style="border:1px solid #2e37d1;background:none;color:#2e37d1;padding:0.6rem;border-radius:0.5rem;font-weight:600;">Clear cart</button>' +
-    '</div>';
-
-  cartOverlay.appendChild(cartPanel);
-  document.body.appendChild(cartOverlay);
-
-  const cartItemsBox = cartPanel.querySelector("[data-cart-items]");
-  const cartTotal = cartPanel.querySelector("[data-cart-total]");
-
-  function renderCart() {
-    const totalItems = cart.reduce(function (sum, item) { return sum + item.quantity; }, 0);
-    const totalPrice = cart.reduce(function (sum, item) { return sum + item.price * item.quantity; }, 0);
-    if (cartCount) cartCount.textContent = totalItems;
-    cartTotal.textContent = formatPrice(totalPrice);
-    cartItemsBox.innerHTML = "";
-
-    if (cart.length === 0) {
-      cartItemsBox.innerHTML = '<p style="text-align:center;padding:2rem 0;">Your cart is empty.</p>'; 
-      return;
-    }
-
-    cart.forEach(function (item, index) {
-      const row = document.createElement("div");
-      Object.assign(row.style, { background: "white", border: "1px solid blue", borderRadius: "0.5rem", padding: "0.8rem", display: "flex", flexDirection: "column", gap: "0.5rem" });
-      const title = document.createElement("strong"); 
-      title.textContent = item.name + (item.seller ? ` (Seller: ${item.seller})` : "");
-      
-      const controls = document.createElement("div");
-      Object.assign(controls.style, { display: "flex", justifyContent: "space-between", alignItems: "center" });
-      const buttonStyle = "border:none;background-color:rgb(59, 59, 173);color:white;width:30px;height:30px;border-radius:0.3rem;font-weight:600;";
-      
-      controls.innerHTML = '<div style="display:flex;align-items:center;gap:0.5rem;">' + '<button data-action="decrease" style="' + buttonStyle + '">-</button>' + '<span>' + item.quantity + '</span>' + '<button data-action="increase" style="' + buttonStyle + '">+</button>' + '</div>' + '<span style="color:green;font-weight:bold;">' + formatPrice(item.price * item.quantity) + '</span>' + '<button data-action="remove" style="border:none;background:none;color:#d03030;font-weight:600;">Remove</button>';
-      
-      controls.querySelectorAll("button").forEach(function (button) {
-        button.addEventListener("click", function () {
-          const action = button.dataset.action;
-          if (action === "increase") { item.quantity++; } else if (action === "decrease") { item.quantity--; }
-          if (action === "remove" || item.quantity <= 0) { cart.splice(index, 1); }
-          saveData("chanukaCart", cart); renderCart();
-        });
-      });
-      row.appendChild(title); 
-      row.appendChild(controls); 
-      cartItemsBox.appendChild(row);
-    });
-  }
-
-  document.querySelectorAll(".add-to-cart").forEach(function (button) {
-    button.addEventListener("click", function () {
-      const card = button.closest(".product-card");
-      const name = button.dataset.name || (card && card.dataset.name) || "Product";
-      const price = parsePrice(button.dataset.price || (card && card.querySelector(".price, .product-price, strong")?.textContent) || 0);
-      const seller = button.dataset.seller || (card && card.dataset.seller) || "Merchant Store";
-      const sellerPhone = button.dataset.sellerPhone || (card && card.dataset.sellerPhone) || "0712345678";
-      
-      const existing = cart.find(function (item) { return item.name === name; });
-      if (existing) { 
-        existing.quantity++; 
-      } else { 
-        cart.push({ name: name, price: price, quantity: 1, seller: seller, sellerPhone: sellerPhone }); 
-      }
-
-      saveData("chanukaCart", cart); 
-      renderCart(); 
-      showToast(name + " added to cart");
-
-      if (cartButton) { 
-        cartButton.style.transform = "scale(1.15)"; 
-        setTimeout(function () { cartButton.style.transform = ""; }, 160); 
-      }
-    });
-  });
-
-  function openCart() { cartOverlay.style.display = "block"; document.body.style.overflow = "hidden"; }
-  function closeCart() { cartOverlay.style.display = "none"; document.body.style.overflow = ""; }
-
-  if (cartButton) cartButton.addEventListener("click", openCart);
-  cartPanel.querySelector("[data-cart-close]").addEventListener("click", closeCart);
-  cartOverlay.addEventListener("click", function (event) { if (event.target === cartOverlay) { closeCart(); } });
-  
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") { closeCart(); if (navMenu) navMenu.classList.remove("show"); }
-  });
-
-  cartPanel.querySelector("[data-cart-clear]").addEventListener("click", function () {
-    cart = []; saveData("chanukaCart", cart); renderCart();
-  });
-
-  /* 5. CHECKOUT & STK PUSH WITH COMMISSION AND PICKUP DESTINATION NOTIFICATIONS */
-  cartPanel.querySelector("[data-cart-checkout]").addEventListener("click", async () => {
-    if (cart.length === 0) { showToast("Your cart is empty"); return; }
-
-    const loggedUser = localStorage.getItem("chanuka_user") || localStorage.getItem("chanukaUser") || localStorage.getItem("userId");
-    if (!loggedUser) {
-      showToast("Please create an account first");
-      localStorage.setItem("redirectAfterLogin", "cart");
-      window.location.href = "register.html";
-      return;
-    }
-
-    const stations = ["cooperative on campus", "Gataka - Destiny", "G-place Gataka", "Eldoret - Zion mall", "Delivery within gataka (Ksh 150)"];
-    let choice = prompt("Choose pickup station:\n" + stations.map((s,i) => `${i+1}. ${s}`).join("\n") + "\n\nEnter number (1-5):");
-    if (!choice) return;
-    
-    const idx = parseInt(choice) - 1;
-    if (isNaN(idx) || idx < 0 || idx >= stations.length) { showToast("Invalid station"); return; }
-    const selectedStation = stations[idx];
-
-    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    
-    // Commission System: Calculate 5% Platform Cut
-    const commissionRate = 0.05; 
-    const platformCommission = totalPrice * commissionRate;
-    const sellerPayout = totalPrice - platformCommission;
-
-    let phone = prompt("Enter M-Pesa number to pay: " + formatPrice(totalPrice) + " | Pickup: " + selectedStation + "\n(e.g. 0712345678)");
-    if (!phone) return;
-    
-    const normalized = normalizePhoneFrontend(phone);
-    if (!normalized) { showToast("Invalid phone. Use 07... or 2547..."); return; }
-    
-    const checkoutBtn = cartPanel.querySelector("[data-cart-checkout]");
-    const originalText = checkoutBtn.textContent;
-
-    try {
-      checkoutBtn.textContent = "Sending...";
-      checkoutBtn.disabled = true;
-      showToast("Sending STK push to " + normalized + "...");
-
-      const BACKEND_URL = "https://chanukamarket.onrender.com";
-
-      // STK Push Request to Render Backend
-      const res = await fetch(`${BACKEND_URL}/stkpush`, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ 
-          phone: normalized, 
-          amount: totalPrice, 
-          station: selectedStation,
-          commission: platformCommission,
-          sellerPayout: sellerPayout,
-          items: cart
-        })
-      });
-
-      const data = await res.json();
-      console.log("Server response:", data);
-
-      if (data.ResponseCode == '0' || data.ResponseCode == 0) {
-        showToast("STK Sent! Check your phone " + normalized + " and enter PIN");
-
-        // Push real-time item-level destination tracking & seller contact sharing to Supabase
-        if (typeof supabase !== 'undefined' && SUPABASE_KEY !== "Your_Supabase_Key_Here") {
-          const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          for (const item of cart) {
-            const sellerName = item.seller || "Merchant Store";
-            const sellerPhone = item.sellerPhone || "0712345678";
-            try {
-              // 1. Notify Seller with precise delivery station & buyer phone
-              await client.from('notifications').insert([{
-                seller_name: sellerName,
-                message: `🎉 Sale Confirmed! Item: "${item.name}" (Qty: ${item.quantity}). 📍 Deliver to: ${selectedStation}. 📞 Buyer Contact: ${normalized}`,
-              is_read: false
-              }]);
-
-              // 2. Save active order record containing delivery station, buyer phone, and seller phone for real-time chat routing
-              await client.from('orders').insert([{
-                product_name: item.name,
-                amount: item.price * item.quantity,
-                buyer_phone: normalized,
-                seller_phone: sellerPhone,
-                pickup_station: selectedStation,
-                status: 'PAID'
-              }]);
-            } catch (notifErr) {
-              console.warn("Supabase sync error:", notifErr);
+        <style>
+            .auth-wrap {
+                display: flex;
+                gap: 10px;
+                align-items: center;
             }
-          }
-        }
+            .btn-login {
+                padding: 8px 18px;
+                border: 1.5px solid #111;
+                border-radius: 25px;
+                color: #fdf8f8;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 14px;
+                transition: all 0.2s;
+                background: #6366f1;
+            }
+            .btn-login:hover {
+                background: #111;
+                color: #fff;
+            }
+            .btn-signup {
+                padding: 8px 20px;
+                background: #EAB308;
+                border: 1.5px solid #EAB308;
+                border-radius: 25px;
+                color: #111;
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 14px;
+                transition: all 0.2s;
+            }
+            .btn-signup:hover {
+                background: #111;
+                color: #EAB308;
+                border-color: #111;
+            }
+        </style>
 
-        // Store last order details so buyer can view delivery station & seller contact
-        saveData("chanukaLastOrder", {
-          station: selectedStation,
-          items: cart,
-          buyerPhone: normalized
+        <nav class="nav" id="nav">
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#categories">Categories</a>
+            <a href="#sell">Sell Products</a>
+            <a href="about.html" class="px-3 py-1.5 rounded-lg text-sm font-medium text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 hover:text-blue-300 transition-all">
+                About Us
+            </a>
+        </nav>
+
+        <div class="header-actions">
+            <!-- CART -->
+            <button class="cart-button" id="cart-button">
+                Cart
+                <span id="cartcount">0</span>
+            </button>
+
+            <button class="menu-button" id="menuButton">
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h2>Welcome To Chanuka Market Store</h2>
+                <h3>Buy And Sell Your Products <span>Near You</span></h3>
+
+                <p>
+                    Discover a wide range of products from people around you at affordable prices and guaranteed quality <br>BEI YAKO BEI POA!!
+                </p>
+                <div class="heroBtn">
+                    <a href="#products" class="makebtn">Browse Products</a>
+                    <a href="sell.html" class="sellbtn">Sell Your Products</a>
+                </div>
+            </div>
+        </section>
+        <!-- SECURITY BAR - WHITE BG / BLACK TEXT / YELLOW ICONS - NO GRADIENT -->
+<div style="background:#FFFFFF; border:1px solid #E5E7EB; border-radius:12px; margin:12px; padding:16px 8px;">
+
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; text-align:center;">
+    
+    <!-- 1 - M-Pesa -->
+    <div>
+      <div style="color:#FACC15; font-size:26px;">🔒</div>
+      <div style="color:#000000; font-weight:700; font-size:12px; margin-top:8px; line-height:1.2;">M-Pesa<br>Escrow Safe</div>
+    </div>
+
+    <!-- 2 - Payment held -->
+    <div>
+      <div style="background:#FACC15; color:#000000; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto; font-weight:bold; font-size:14px;">✓</div>
+      <div style="color:#000000; font-weight:700; font-size:12px; margin-top:8px; line-height:1.2;">Payment held<br>until delivery</div>
+    </div>
+
+    <!-- 3 - Return policy -->
+    <div>
+      <div style="background:#FACC15; color:#000000; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto; font-weight:bold; font-size:14px;">✓</div>
+      <div style="color:#000000; font-weight:700; font-size:12px; margin-top:8px; line-height:1.2;">Return policy<br>on substandard goods</div>
+    </div>
+
+    <!-- 4 - Chat Seller -->
+    <div>
+      <div style="color:#FACC15; font-size:22px;">💬</div>
+      <div style="color:#000000; font-weight:700; font-size:12px; margin-top:8px; line-height:1.2;">Chat Seller<br>Before Pay</div>
+      <a href="about.html" style="color:#000000; font-size:10px; font-weight:700; text-decoration:underline;">How it works?</a>
+    </div>
+
+  </div>
+</div>
+  
+
+        <section class="searchsection">
+            <div class="search-box">
+                <input 
+                    type="search" id="searchinput"
+                    placeholder="Search for products"
+                    aria-label="search products"
+                >
+                <button id="searchButon">Search</button>
+            </div>
+        </section>
+
+        <!-- Category Section -->
+        <section class="categories" id="categories">
+            <div class="section-heading">
+                <p>Shop By Categories</p>
+                <h3>Explore Categories</h3>
+            </div>
+
+            <div class="category-buttons">
+                <button class="category-btn active" data-category="All">All</button>
+                <button class="category-btn" data-category="Electronics">Electronics</button>
+                <button class="category-btn" data-category="Fashion">Fashion</button>
+                <button class="category-btn" data-category="Beauty products">Beauty products</button>  
+                <button class="category-btn" data-category="Food Stuff">Food Stuff</button>
+                <button class="category-btn" data-category="Furniture">Furniture</button>
+                <button class="category-btn" data-category="Books & Stationery">Books & Stationery</button>
+                <button class="category-btn" data-category="Jewlry & Watches">Jewelry & Watches</button>
+                <button class="category-btn" data-category="Groceries & household">Groceries & household</button>
+                <button class="category-btn" data-category="Liquor & Dinks">Liquor & Drinks</button>
+                <button class="category-btn" data-category="Other Accessories">Other Accessories</button>
+            </div>
+        </section>
+
+        <section class="products-section" id="products">
+            <div class="section-heading">
+                <p>Products In The Market</p>
+                 Featured Products
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                
+                <!-- PRODUCT 1: Vitron Subwoofer -->
+                <div class="product-card" data-category="Electronics" data-name="Vitron V619-12 3.1CH Sub Woofer System" onclick="openProductModal({name: 'Vitron V619-12 3.1CH Sub Woofer System', price: '5,199', category: 'Electronics', description: 'Vitron V619-12 3.1CH Sub Woofer System Surround Sound Multimedia Speaker System with Super Bass and Quality Stereo. Brand: Vitron', image: 'https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/91/6253723/1.jpg?5227'})" style="cursor: pointer;">
+                    <div class="products-image">
+                        <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/91/6253723/1.jpg?5227" alt="Vitron V619-12 3.1CH Sub Woofer System">
+                        <button class="favorite-button" onclick="event.stopPropagation()">❤️</button>
+                    </div>
+
+                    <div class="product-information">
+                        <p class="product-category">Electronics</p>
+                        <h3>Vitron Sub Woofer System</h3>
+                        <p class="product-description">
+                            Vitron V619-12 3.1CH Sub Woofer System Surround Sound Multimedia Speaker System with Super Bass and Quality Stereo. Brand: Vitron 
+                        </p>
+                        
+                        <!-- UPDATED DYNAMIC LINK FOR SUBWOOFER -->
+                        <a href="chat.html?product=Vitron%20V619-12%20Sub%20Woofer&price=5199&seller=Vitron%20Store&image=https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/91/6253723/1.jpg?5227" 
+                            onclick="event.stopPropagation()"
+                            style="display: inline-block; width: 100%; margin-top: 10px; padding: 4px; background-color: #3b82f6; color: white; text-align: center; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 10px;">
+                            💬 Chat with Seller
+                        </a>
+                    </div>
+
+                    <div class="product-button">
+                        <strong>KSh 5,199</strong>
+                        <button class="add-to-cart" onclick="event.stopPropagation()" data-name="Vitron V619-12 3.1CH Sub Woofer System" data-price="KSh 5199">
+                            Add to cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PRODUCT 2: Home Office Set -->
+                <div class="product-card" data-category="Furniture" data-name="Home Office Set" onclick="openProductModal({name: 'Home Office Set', price: '18,500', category: 'Furniture', description: 'Home office set creates a productive and stylish home office. Order yours today and start working from home in comfort and style.', image: 'https://kentyfurnitures.co.ke/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-04-at-9.06.37-AM.jpeg'})" style="cursor: pointer;">
+                    <div class="products-image">
+                        <img src="https://kentyfurnitures.co.ke/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-04-at-9.06.37-AM.jpeg" alt="Home Office Set">
+                        <button class="favorite-button" onclick="event.stopPropagation()">❤️</button>
+                    </div>
+
+                    <div class="product-information">
+                        <p class="product-category">Furniture</p>
+                        <h3>Home office set</h3>
+                        <p class="product-description">
+                            Home office set creates a productive and stylish home office. Order yours today and start working from home in comfort and style.
+                        </p>
+
+                        <!-- UPDATED DYNAMIC LINK FOR FURNITURE -->
+                        <a href="chat.html?product=Home%20Office%20Set&price=18500&seller=Kenty%20Furnitures&image=https://kentyfurnitures.co.ke/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-04-at-9.06.37-AM.jpeg" 
+                            onclick="event.stopPropagation()"
+                            style="display: inline-block; width: 100%; margin-top: 10px; padding: 4px; background-color: #3b82f6; color: white; text-align: center; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 10px;">
+                            💬 Chat with Seller
+                        </a>
+                    </div>
+
+                    <div class="product-button">
+                        <strong>KSh18,500</strong>
+                        <button class="add-to-cart" onclick="event.stopPropagation()" data-name="Home Office Set" data-price="KSh 18,500.00">
+                            Add to cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PRODUCT 3: Liquor & Drinks -->
+                <div class="product-card" data-category="Liquor & Dinks" data-name="Jameson Irish Whiskey" onclick="openProductModal({name: 'Jameson Irish Whiskey', price: '3,199', category: 'Liquor & Drinks', description: 'Jameson Irish whiskey is a triple-distilled blended Irish whiskey...', image: 'https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/47/283585/1.jpg?6599'})" style="cursor: pointer;">
+                    <div class="products-image">
+                        <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/47/283585/1.jpg?6599" alt="Jameson Irish Whiskey">
+                        <button class="favorite-button" onclick="event.stopPropagation()">❤️</button>
+                    </div>
+
+                    <div class="product-information">
+                        <p class="product-category">Liquor & Drinks</p>
+                        <h3>Jameson Irish whiskey</h3>
+                        <p class="product-description">
+                            Jameson Irish whiskey is a triple-distilled blended Irish whiskey...
+                        </p>
+
+                        <!-- UPDATED DYNAMIC LINK FOR LIQUOR -->
+                        <a href="chat.html?product=Jameson%20Irish%20Whiskey&price=3199&seller=Jameson%20Distributors&image=https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/47/283585/1.jpg?6599" 
+                            onclick="event.stopPropagation()"
+                            style="display: inline-block; width: 100%; margin-top: 10px; padding: 4px; background-color: #3b82f6; color: white; text-align: center; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 10px;">
+                            💬 Chat with Seller
+                        </a>
+                    </div>
+
+                    <div class="product-button">
+                        <strong>KSh 3,199</strong>
+                        <button class="add-to-cart" onclick="event.stopPropagation()" data-name="Liquor & Dinks" data-price="KSh 3,199">
+                            Add to cart
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3 style="color:#FFD700;">Chanuka-market-store</h3>
+                <p>Affordable products for students, families and businesses in Rongai, Gataka & selected areas. M-Pesa & Cash on Delivery.</p>
+                <div class="socials">iG | its_Victo_r | WhatsApp | 0107474332</div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#Home">Home</a>
+                <a href="#Products">Shop</a>
+                <a href="about.html">About Us</a>
+                <a href="#Contacts">Contact</a>
+                <a href="#FAQs">FAQs</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <a href="#">Electronics</a>
+                <a href="#">Fashion</a>
+                <a href="#">Furniture</a>
+                <a href="#">Groceries</a>
+                <a href="#">Jewelry & Watches</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Help & Contact</h4>
+                <p>📍 Rongai, Nairobi, Kenya</p>
+                <p>📞 +254 114 044 517</p>
+                <p>✉️ njengavictor@92.gmai.com</p>
+                <p>🕒 Mon-Sat 8am-8pm</p>
+                <a href="#Shipping Policy"></a>
+                <a href="#Return Policy"></a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Chanuka Market Store. All Rights Reserved | Pay with M-Pesa | Cash on Delivery Available</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script> 
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="productModal" class="fixed inset-0 z-[100] hidden" style="position: fixed; inset: 0; z-index: 100; display: none;">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeProductModal()" style="position: absolute; inset: 0; background: rgba(0,0,0,0.7);"></div>
+        <div class="relative max-w-4xl mx-auto mt-6 md:mt-12 bg-white rounded-2xl overflow-hidden max-h-[92vh] overflow-y-auto mx-4" style="background: white; border-radius: 16px; max-width: 700px; margin: 40px auto; padding: 24px; position: relative; z-index: 101;">
+            <button onclick="closeProductModal()" style="position: absolute; top: 16px; right: 16px; background: #111; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: bold;">✕</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <img id="modalMainImg" src="" style="width: 100%; height: 280px; object-fit: cover; border-radius: 12px;">
+                    <div id="modalThumbs" style="display: flex; gap: 8px; margin-top: 10px; overflow-x: auto;"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <span id="modalCategory" style="font-size: 11px; font-weight: bold; background: #fef3c7; color: #b45309; padding: 4px 10px; border-radius: 20px; width: max-content;"></span>
+                    <h2 id="modalName" style="font-size: 22px; font-weight: bold; color: #0f172a; margin: 0;"></h2>
+                    <p id="modalPrice" style="font-size: 20px; font-weight: 800; color: #2563eb; margin: 0;"></p>
+                    <p id="modalDesc" style="font-size: 13px; color: #475569; line-height: 1.5; margin: 0;"></p>
+                    <div style="display: flex; gap: 10px; margin-top: auto;">
+                        <button id="modalAddCart" style="flex: 1; background: #0f172a; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">Add to Cart</button>
+                        <a id="modalWhatsapp" target="_blank" style="padding: 12px 18px; background: #16a34a; color: white; border-radius: 10px; font-weight: bold; text-decoration: none; text-align: center;">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openProductModal(product){
+        document.getElementById('modalName').textContent = product.name;
+        document.getElementById('modalPrice').textContent = 'KSH ' + product.price;
+        document.getElementById('modalDesc').textContent = product.description || '';
+        document.getElementById('modalCategory').textContent = product.category || 'General';
+        let images = product.images && product.images.length ? product.images : [product.image];
+        let mainImg = document.getElementById('modalMainImg');
+        mainImg.src = images[0];
+        let thumbsDiv = document.getElementById('modalThumbs');
+        thumbsDiv.innerHTML = '';
+        images.forEach(img => {
+            let t = document.createElement('img');
+            t.src = img; 
+            t.style.cssText = 'width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 2px solid #cbd5e1; cursor: pointer;';
+            t.onclick = () => mainImg.src = img;
+            thumbsDiv.appendChild(t);
         });
-
-        cart = []; 
-        saveData("chanukaCart", cart); 
-        renderCart(); 
-        closeCart();
-      } else {
-        showToast("Failed: " + (data.errorMessage || data.error || data.ResultDesc || "Try again"));
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Backend connection note: " + err.message);
-    } finally {
-      checkoutBtn.textContent = originalText;
-      checkoutBtn.disabled = false;
+        document.getElementById('productModal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
     }
-  });
+    function closeProductModal(){
+        document.getElementById('productModal').style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    </script>
 
-  renderCart();
-}
+</body>
+</html>
