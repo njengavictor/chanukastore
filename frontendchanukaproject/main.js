@@ -187,6 +187,8 @@ function init() {
         const pSellerPhone = card.dataset.sellerPhone || "0712345678";
         const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
         const pImg = card.querySelector("img")?.src || "";
+         card.style.cursor = 'pointer';
+card.onclick = () => openProductModal(product);
 
         window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
       });
