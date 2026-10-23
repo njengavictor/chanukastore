@@ -225,7 +225,6 @@ function init() {
       });
     }
   });
-};
 
         window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
       });
