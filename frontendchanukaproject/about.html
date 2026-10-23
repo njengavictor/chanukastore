@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>About Us | Chanuka Market Store</title>
-  <meta name="description" content="Chanuka connects student entrepreneurs and local vendors to buyers in Rongai, Gataka & Eldoret. Created by Victor Njenga (Makaveli).">
+  <meta name="description" content="Chanuka connects student entrepreneurs and local vendors to buyers in Rongai, Gataka & Eldoret. Created by Victor Njenga (Makaveli). M-Pesa Verified & Escrow Protected.">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ========== SOLID COLOR PALETTE (MUTED & PROFESSIONAL) ========== */
+    /* ========== SOLID COLOR PALETTE (MUTED SLATE, LIGHT BLUE & GOLD) ========== */
     :root {
       --bg-slate: #f8fafc;
       --card-bg: #ffffff;
@@ -21,11 +21,15 @@
       
       --brand-dark: #1e293b;
       --brand-blue: #2563eb;
-      --brand-blue-hover: #1d4ed8;
-      --brand-amber: #d97706;
-      --brand-amber-light: #fef3c7;
+      --brand-blue-light: #eff6ff;
+      --brand-blue-border: #93c5fd;
       
-      --success-green: #16a34a;
+      --brand-gold: #d97706;
+      --brand-yellow-light: #fef3c7;
+      --brand-yellow-accent: #f59e0b;
+      
+      --mpesa-green: #16a34a;
+      --mpesa-light: #f0fdf4;
       --radius: 12px;
     }
 
@@ -94,7 +98,7 @@
       color: #ffffff;
     }
     .nav-link.active {
-      background-color: var(--brand-amber);
+      background-color: var(--brand-yellow-accent);
       color: #ffffff;
       font-weight: 600;
     }
@@ -142,44 +146,57 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
     .badge {
-      display: inline-block;
-      background-color: var(--brand-amber-light);
-      color: var(--brand-amber);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.75rem;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       text-transform: uppercase;
     }
+    .badge-amber { background-color: var(--brand-yellow-light); color: var(--brand-gold); }
+    .badge-mpesa { background-color: var(--mpesa-light); color: var(--mpesa-green); border: 1px solid #bbf7d0; }
+    .badge-blue { background-color: var(--brand-blue-light); color: var(--brand-blue); border: 1px solid var(--brand-blue-border); }
 
     h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
     h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; color: var(--text-main); }
-    h3 { font-size: 1rem; font-weight: 600; color: var(--text-main); }
+    h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-main); }
     p { color: var(--text-muted); font-size: 0.925rem; margin-bottom: 12px; }
 
     /* Grid Layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr; gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
     
     @media (min-width: 768px) {
       .grid-2 { grid-template-columns: 1.4fr 1fr; }
-      .grid-3 { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* Attributes & Stats */
+    /* Attributes & Light Blue Features */
     .attribution-box {
-      background-color: #f1f5f9;
+      background-color: var(--brand-blue-light);
       border-left: 4px solid var(--brand-blue);
       padding: 14px 18px;
       border-radius: 0 8px 8px 0;
       margin: 16px 0;
     }
     .feature-box {
-      background-color: var(--bg-slate);
+      background-color: #f8fafc;
       border: 1px solid var(--border-color);
+      padding: 16px;
+      border-radius: 10px;
+    }
+    .feature-box-blue {
+      background-color: var(--brand-blue-light);
+      border: 1px solid var(--brand-blue-border);
       padding: 16px;
       border-radius: 10px;
     }
@@ -214,39 +231,47 @@
     .policy-list li {
       font-size: 0.875rem;
       color: var(--text-muted);
-      padding: 6px 0;
+      padding: 8px 0;
       border-bottom: 1px solid #f1f5f9;
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
 
-    /* ========== SOCIAL CARDS & CONTACT FORM ========== */
+    /* ========== SVG SOCIAL CARDS ========== */
     .social-card {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px;
-      background-color: var(--bg-slate);
+      padding: 12px 16px;
+      background-color: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 10px;
       text-decoration: none;
       color: var(--text-main);
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background-color 0.2s;
     }
-    .social-card:hover { border-color: var(--brand-blue); }
-    .social-icon {
+    .social-card:hover { 
+      border-color: var(--brand-blue); 
+      background-color: var(--brand-blue-light);
+    }
+    .social-icon-box {
       width: 40px;
       height: 40px;
       border-radius: 8px;
-      background-color: var(--brand-dark);
-      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
       flex-shrink: 0;
     }
+    .social-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
+
+    /* Social Brand Colors */
+    .icon-instagram { background-color: #fdf2f8; color: #db2777; }
+    .icon-whatsapp { background-color: var(--mpesa-light); color: var(--mpesa-green); }
+    .icon-phone { background-color: var(--brand-blue-light); color: var(--brand-blue); }
+    .icon-tiktok { background-color: #f1f5f9; color: #0f172a; }
+    .icon-facebook { background-color: #eff6ff; color: #1d4ed8; }
 
     /* Form Control */
     .form-group { margin-bottom: 14px; }
@@ -259,201 +284,3 @@
       font-family: inherit;
       font-size: 0.875rem;
       background-color: #ffffff;
-    }
-    .form-control:focus { outline: 2px solid var(--brand-blue); border-color: transparent; }
-    .btn-submit {
-      width: 100%;
-      padding: 12px;
-      background-color: var(--brand-blue);
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .btn-submit:hover { background-color: var(--brand-blue-hover); }
-
-    /* ========== FOOTER ========== */
-    .footer {
-      background-color: var(--brand-dark);
-      color: #94a3b8;
-      padding: 32px 20px;
-      margin-top: 40px;
-      border-top: 1px solid #334155;
-    }
-    .footer-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      justify-content: space-between;
-      font-size: 0.825rem;
-    }
-    @media (min-width: 640px) {
-      .footer-container { flex-direction: row; align-items: center; }
-      .menu-btn { display: none; }
-    }
-    @media (max-width: 639px) {
-      .nav-links { display: none; }
-      .menu-btn { display: flex; align-items: center; justify-content: center; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- ========== NAVBAR ========== -->
-  <header class="header">
-    <div class="nav-container">
-      <a href="index.html" class="logo">
-        <span class="logo-badge">C</span>
-        Chanuka<span style="color: var(--brand-amber);">Market</span>
-      </a>
-      <nav class="nav-links">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="index.html#products" class="nav-link">Products</a>
-        <a href="about.html" class="nav-link active">About Us</a>
-      </nav>
-      <button id="menuBtn" class="menu-btn" aria-label="Toggle menu">☰</button>
-    </div>
-    <div id="mobileMenu" class="mobile-menu">
-      <a href="index.html">Home</a>
-      <a href="index.html#products">Products</a>
-      <a href="seller.html" style="color: var(--brand-amber); font-weight: 600;">Sell Products</a>
-    </div>
-  </header>
-
-  <!-- ========== MAIN CONTENT ========== -->
-  <main class="main-layout">
-
-    <!-- 1. OVERVIEW & CREATOR SECTION -->
-    <section class="card">
-      <span class="badge">Bei Yako, Bei Poa</span>
-      <h1>Empowering Student Hustlers & Local Business Vendors</h1>
-      
-      <div class="grid-2" style="margin-top: 16px;">
-        <div>
-          <p><strong>Chanuka Market Store</strong> is a local e-commerce platform designed to remove barriers for student entrepreneurs, small business vendors, and everyday shoppers across Rongai, Gataka, and Eldoret.</p>
-          <p>We saw that small business owners and student vendors often struggled with high courier delivery fees, middleman cuts, and distrust in online transactions. Chanuka provides a low-commission marketplace backed by escrow vault security and verified local pickup points.</p>
-          
-          <div class="attribution-box">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--brand-blue); text-transform: uppercase;">Platform Developer & Founder</div>
-            <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;">Victor Njenga (Makaveli)</div>
-            <div style="font-size: 0.825rem; color: var(--text-muted);">Built to provide safe, affordable, and accessible local commerce for everyone.</div>
-          </div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <div class="feature-box">
-            <h3>🎓 Student Hustlers</h3>
-            <p style="margin: 4px 0 0 0; font-size: 0.825rem;">Turn your side hustle into a real brand. Zero listing fees, instant setup.</p>
-          </div>
-          <div class="feature-box">
-            <h3>🏪 Verified Vendors</h3>
-            <p style="margin: 4px 0 0 0; font-size: 0.825rem;">Keep 95% of every sale. We charge a flat, transparent 5% platform fee.</p>
-          </div>
-          <div class="feature-box">
-            <h3>🛡️ Escrow Protection</h3>
-            <p style="margin: 4px 0 0 0; font-size: 0.825rem;">Payments are safely held in escrow until the item is delivered and inspected.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. CORE MARKETPLACE POLICIES (TABBED) -->
-    <section class="card">
-      <h2>Platform Policies & Guidelines</h2>
-      <p style="margin-bottom: 20px;">Review how we handle escrow transactions, delivery pickups, and buyer/seller protections.</p>
-
-      <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab(event, 'escrow-policy')">Shield Escrow & Payouts</button>
-        <button class="tab-btn" onclick="switchTab(event, 'pickup-policy')">Delivery & Pickup Points</button>
-        <button class="tab-btn" onclick="switchTab(event, 'returns-policy')">Returns & Dispute Policy</button>
-      </div>
-
-      <!-- Tab 1: Escrow -->
-      <div id="escrow-policy" class="tab-content active">
-        <ul class="policy-list">
-          <li><span>✓</span> <strong>Vault Security:</strong> When a buyer pays via M-Pesa, funds enter the Chanuka Escrow Vault first.</li>
-          <li><span>✓</span> <strong>5% Platform Fee:</strong> Sellers receive 95% net payout automatically upon order confirmation.</li>
-          <li><span>✓</span> <strong>No Monthly Charges:</strong> Listing products is completely free for all verified sellers.</li>
-        </ul>
-      </div>
-
-      <!-- Tab 2: Delivery -->
-      <div id="pickup-policy" class="tab-content">
-        <ul class="policy-list">
-          <li><span>📍</span> <strong>Cooperative on Campus:</strong> Centralized drop-off and pickup point for students.</li>
-          <li><span>📍</span> <strong>Gataka Stations:</strong> Pickup available at Gataka - Destiny and G-place Gataka.</li>
-          <li><span>📍</span> <strong>Eldoret Station:</strong> Eldoret - Zion Mall pickup center.</li>
-          <li><span>📍</span> <strong>Gataka Door Delivery:</strong> Flat Ksh 150 delivery fee option within Gataka.</li>
-        </ul>
-      </div>
-
-      <!-- Tab 3: Returns -->
-      <div id="returns-policy" class="tab-content">
-        <ul class="policy-list">
-          <li><span>⚠️</span> <strong>Inspection at Pickup:</strong> Buyers must inspect items at the pickup station before confirming receipt.</li>
-          <li><span>⚠️</span> <strong>Dispute Window:</strong> If an item is defective or incorrect, buyers can flag it before escrow release.</li>
-          <li><span>⚠️</span> <strong>Refund Guarantee:</strong> Valid unfulfilled or incorrect orders are 100% refunded to the buyer's M-Pesa.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 3. SOCIAL HANDLES & FEEDBACK FORM -->
-    <section class="grid-2">
-      <!-- Social Media Links -->
-      <div class="card">
-        <h2>Connect With Us</h2>
-        <p>Reach out directly for seller onboarding, support, or community inquiries.</p>
-
-        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
-          <a href="https://instagram.com/its_victo_r" target="_blank" class="social-card">
-            <div class="social-icon">📷</div>
-            <div>
-              <h3>Instagram</h3>
-              <div style="font-size: 0.8rem; color: var(--brand-blue);">@its_victo_r</div>
-            </div>
-          </a>
-
-          <a href="https://wa.me/254107474332" target="_blank" class="social-card">
-            <div class="social-icon" style="background-color: var(--success-green);">💬</div>
-            <div>
-              <h3>WhatsApp Support</h3>
-              <div style="font-size: 0.8rem; color: var(--success-green);">0107474332 / +254 114 044 517</div>
-            </div>
-          </a>
-
-          <a href="tel:0107474332" class="social-card">
-            <div class="social-icon" style="background-color: var(--brand-blue);">📞</div>
-            <div>
-              <h3>Phone Call</h3>
-              <div style="font-size: 0.8rem; color: var(--text-muted);">0107474332</div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Admin Feedback Form -->
-      <div class="card">
-        <h2>Send Direct Feedback</h2>
-        <p>Have suggestions or need assistance? Drop a line to the admin team.</p>
-
-        <form id="feedbackForm" style="margin-top: 16px;">
-          <div class="form-group">
-            <label for="fbName">Full Name</label>
-            <input type="text" id="fbName" class="form-control" placeholder="Your name" required>
-          </div>
-          <div class="form-group">
-            <label for="fbPhone">Phone Number</label>
-            <input type="tel" id="fbPhone" class="form-control" placeholder="07... or 01..." required>
-          </div>
-          <div class="form-group">
-            <label for="fbMessage">Message or Suggestion</label>
-            <textarea id="fbMessage" rows="3" class="form-control" placeholder="How can we improve Chanuka Market?" required></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Submit Message</button>
-        </form>
-      </div>
-    </section>
