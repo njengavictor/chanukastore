@@ -8,13 +8,13 @@ const SUPABASE_URL = "https://altpysjlcjifckilnomq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_kpkKcjiQck7a3hNzqxJtmw_dFJOAV-8"; // Replace with your active Supabase key
 
 /* 1. CHAT WITH SELLER HANDLER */
-window.startChat = async function(productId, productName, sellerId, sellerName, price = "0", image = "") {
+window.startChat = async function(productId, productName, sellerId, sellerName, price = "0", image = "", sellerPhone = "") {
   const buyerId = localStorage.getItem('userId') || 'buyer_' + Date.now();
   const buyerName = localStorage.getItem('userName') || 'Guest Buyer';
   localStorage.setItem('userId', buyerId);
 
-  // Safely construct URL parameters to pass item, seller, and price details to chat.html
-  const chatUrl = `chat.html?product=${encodeURIComponent(productName)}&price=${encodeURIComponent(price)}&seller=${encodeURIComponent(sellerName)}&image=${encodeURIComponent(image)}&sellerId=${encodeURIComponent(sellerId)}`;
+  // Safely construct URL parameters to pass item, seller, price, and seller phone details to chat.html
+  const chatUrl = `chat.html?product=${encodeURIComponent(productName)}&price=${encodeURIComponent(price)}&seller=${encodeURIComponent(sellerName)}&image=${encodeURIComponent(image)}&sellerId=${encodeURIComponent(sellerId)}&sellerPhone=${encodeURIComponent(sellerPhone || "0712345678")}`;
   
   window.location.href = chatUrl;
 }
@@ -184,10 +184,11 @@ function init() {
         const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
         const pSellerId = card.dataset.sellerId || "merchant_default";
         const pSellerName = card.dataset.seller || card.querySelector(".product-seller")?.textContent.trim() || "Merchant Store";
+        const pSellerPhone = card.dataset.sellerPhone || "0712345678";
         const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
         const pImg = card.querySelector("img")?.src || "";
 
-        window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg);
+        window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
       });
     }
   });
@@ -296,12 +297,13 @@ function init() {
       const name = button.dataset.name || (card && card.dataset.name) || "Product";
       const price = parsePrice(button.dataset.price || (card && card.querySelector(".price, .product-price, strong")?.textContent) || 0);
       const seller = button.dataset.seller || (card && card.dataset.seller) || "Merchant Store";
+      const sellerPhone = button.dataset.sellerPhone || (card && card.dataset.sellerPhone) || "0712345678";
       
       const existing = cart.find(function (item) { return item.name === name; });
       if (existing) { 
         existing.quantity++; 
       } else { 
-        cart.push({ name: name, price: price, quantity: 1, seller: seller }); 
+        cart.push({ name: name, price: price, quantity: 1, seller: seller, sellerPhone: sellerPhone }); 
       }
 
       saveData("chanukaCart", cart); 
@@ -382,7 +384,8 @@ function init() {
           amount: totalPrice, 
           station: selectedStation,
           commission: platformCommission,
-          sellerPayout: sellerPayout
+          sellerPayout: sellerPayout,
+          items: cart
         })
       });
 
@@ -392,22 +395,41 @@ function init() {
       if (data.ResponseCode == '0' || data.ResponseCode == 0) {
         showToast("STK Sent! Check your phone " + normalized + " and enter PIN");
 
-        // Safely notify Sellers in Supabase without breaking execution
+        // Push real-time item-level destination tracking & seller contact sharing to Supabase
         if (typeof supabase !== 'undefined' && SUPABASE_KEY !== "Your_Supabase_Key_Here") {
           const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
           for (const item of cart) {
             const sellerName = item.seller || "Merchant Store";
+            const sellerPhone = item.sellerPhone || "0712345678";
             try {
+              // 1. Notify Seller with precise delivery station & buyer phone
               await client.from('notifications').insert([{
                 seller_name: sellerName,
-                message: `🎉 Order Paid! "${item.name}" (Qty: ${item.quantity}). Deliver to station: ${selectedStation}. Contact Buyer: ${normalized}`,
-                is_read: false
+                message: `🎉 Sale Confirmed! Item: "${item.name}" (Qty: ${item.quantity}). 📍 Deliver to: ${selectedStation}. 📞 Buyer Contact: ${normalized}`,
+              is_read: false
+              }]);
+
+              // 2. Save active order record containing delivery station, buyer phone, and seller phone for real-time chat routing
+              await client.from('orders').insert([{
+                product_name: item.name,
+                amount: item.price * item.quantity,
+                buyer_phone: normalized,
+                seller_phone: sellerPhone,
+                pickup_station: selectedStation,
+                status: 'PAID'
               }]);
             } catch (notifErr) {
-              console.warn("Notification error:", notifErr);
+              console.warn("Supabase sync error:", notifErr);
             }
           }
         }
+
+        // Store last order details so buyer can view delivery station & seller contact
+        saveData("chanukaLastOrder", {
+          station: selectedStation,
+          items: cart,
+          buyerPhone: normalized
+        });
 
         cart = []; 
         saveData("chanukaCart", cart); 
