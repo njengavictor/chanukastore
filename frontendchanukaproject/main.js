@@ -174,34 +174,54 @@ function init() {
     });
   });
 
-  /* Product Card Attachments: Chat Buttons & Favorites */
+  /* Product Card Attachments: Modal Click, Chat Buttons & Favorites */
   productCards.forEach(function(card) {
+    const pId = card.dataset.id || "prod_" + Date.now();
+    const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
+    const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
+    const pImg = card.querySelector("img")?.src || "";
+    const pDesc = card.dataset.description || card.querySelector(".product-description")?.textContent.trim() || "";
+    const pCategory = card.dataset.category || card.querySelector(".product-category")?.textContent.trim() || "General";
+    const pSeller = card.dataset.seller || "Chanuka Verified Seller";
+
+    // Extract multi-image URLs (up to 4) from data-images attribute or fallback to card image
+    let pImages = [];
+    if (card.dataset.images) {
+      pImages = card.dataset.images.split(",").map(url => url.trim()).filter(Boolean);
+    }
+    if (pImages.length === 0 && pImg) {
+      pImages = [pImg];
+    }
+
+    // Attach card click modal trigger
+    card.style.cursor = 'pointer';
+    card.addEventListener("click", function(e) {
+      if (e.target.closest(".add-to-cart") || e.target.closest(".favorite-button") || e.target.closest(".chat-with-seller-btn") || e.target.closest("a")) {
+        return;
+      }
+      if (typeof openProductModal === "function") {
+        openProductModal({
+          id: pId,
+          name: pName,
+          price: pPrice,
+          image: pImg,
+          images: pImages.slice(0, 4),
+          description: pDesc,
+          category: pCategory,
+          seller: pSeller
+        });
+      }
+    });
+
+    // Chat Button Handler
     const chatBtn = card.querySelector(".chat-with-seller-btn, [data-action='chat']");
     if (chatBtn) {
-    e.stopPropagation();  chatBtn.addEventListener("click", function(e) {
+      chatBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
         e.preventDefault();
-        const pId = card.dataset.id || "prod_" + Date.now();
-        const pName = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
         const pSellerId = card.dataset.sellerId || "merchant_default";
-        const pSellerName = card.dataset.seller || card.querySelector(".product-seller")?.textContent.trim() || "Merchant Store";
         const pSellerPhone = card.dataset.sellerPhone || "0712345678";
-        const pPrice = card.dataset.price || parsePrice(card.querySelector(".product-button strong")?.textContent || "0");
-        const pImg = card.querySelector("img")?.src || "";
-         card.style.cursor = 'pointer';
-card.onclick = function() {
-  openProductModal({
-    id: pId,
-    name: pName,
-    price: pPrice,
-    image: pImg,
-    images: [pImg],
-    description: card.dataset.description || "",
-    category: card.dataset.category || "General",
-    pickup_station: card.dataset.pickup || "Rongai Central"
-  });
-};
-
-        window.startChat(pId, pName, pSellerId, pSellerName, pPrice, pImg, pSellerPhone);
+        window.startChat(pId, pName, pSellerId, pSeller, pPrice, pImg, pSellerPhone);
       });
     }
   });
@@ -214,7 +234,8 @@ card.onclick = function() {
     const name = card.dataset.name || card.querySelector("h3, h2")?.textContent.trim() || "Product";
     button.setAttribute("aria-label", "Add " + name + " to favorites");
     if (favorites.includes(name)) { button.classList.add("liked"); }
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (e) {
+      e.stopPropagation();
       const isLiked = favorites.includes(name);
       if (isLiked) {
         favorites = favorites.filter(function (item) { return item !== name; });
@@ -304,11 +325,13 @@ card.onclick = function() {
     });
   }
 
+  // Original Card Add to Cart Buttons Handler
   document.querySelectorAll(".add-to-cart").forEach(function (button) {
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (e) {
+      e.stopPropagation();
       const card = button.closest(".product-card");
       const name = button.dataset.name || (card && card.dataset.name) || "Product";
-      const price = parsePrice(button.dataset.price || (card && card.querySelector(".price, .product-price, strong")?.textContent) || 0);
+      const price = parsePrice(button.dataset.price || (card && card.dataset.price) || (card && card.querySelector("strong")?.textContent) || 0);
       const seller = button.dataset.seller || (card && card.dataset.seller) || "Merchant Store";
       const sellerPhone = button.dataset.sellerPhone || (card && card.dataset.sellerPhone) || "0712345678";
       
@@ -367,7 +390,6 @@ card.onclick = function() {
 
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     
-    // Commission System: Calculate 5% Platform Cut
     const commissionRate = 0.05; 
     const platformCommission = totalPrice * commissionRate;
     const sellerPayout = totalPrice - platformCommission;
@@ -388,7 +410,6 @@ card.onclick = function() {
 
       const BACKEND_URL = "https://chanukamarket.onrender.com";
 
-      // STK Push Request to Render Backend
       const res = await fetch(`${BACKEND_URL}/stkpush`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
@@ -408,21 +429,18 @@ card.onclick = function() {
       if (data.ResponseCode == '0' || data.ResponseCode == 0) {
         showToast("STK Sent! Check your phone " + normalized + " and enter PIN");
 
-        // Push real-time item-level destination tracking & seller contact sharing to Supabase
         if (typeof supabase !== 'undefined' && SUPABASE_KEY !== "Your_Supabase_Key_Here") {
           const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
           for (const item of cart) {
             const sellerName = item.seller || "Merchant Store";
             const sellerPhone = item.sellerPhone || "0712345678";
             try {
-              // 1. Notify Seller with precise delivery station & buyer phone
               await client.from('notifications').insert([{
                 seller_name: sellerName,
                 message: `🎉 Sale Confirmed! Item: "${item.name}" (Qty: ${item.quantity}). 📍 Deliver to: ${selectedStation}. 📞 Buyer Contact: ${normalized}`,
-              is_read: false
+                is_read: false
               }]);
 
-              // 2. Save active order record containing delivery station, buyer phone, and seller phone for real-time chat routing
               await client.from('orders').insert([{
                 product_name: item.name,
                 amount: item.price * item.quantity,
@@ -437,7 +455,6 @@ card.onclick = function() {
           }
         }
 
-        // Store last order details so buyer can view delivery station & seller contact
         saveData("chanukaLastOrder", {
           station: selectedStation,
           items: cart,
