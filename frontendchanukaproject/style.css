@@ -820,3 +820,8 @@ button,
 .btn-signup {
   max-width: 100%;
 }
+.product-card,
+.product-card * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
